@@ -1,96 +1,80 @@
-import * as Clipboard from "expo-clipboard";
-import { Account, Group } from "jazz-tools";
-import { useState } from "react";
+import * as Clipboard from "expo-clipboard"
+import { Account, Group } from "jazz-tools"
+import { useState } from "react"
 import React, {
+  Alert,
   Button,
   FlatList,
   KeyboardAvoidingView,
   SafeAreaView,
+  StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
   View,
-  Alert,
-  StyleSheet,
-} from "react-native";
+} from "react-native"
 
-import { useAccount, useCoState } from "jazz-tools/expo";
-import { Chat, Message } from "./schema";
+import { useAccount, useCoState } from "jazz-tools/expo"
+import { Chat, Message } from "./schema"
 
 export default function ChatScreen() {
-  const { me, logOut } = useAccount(Account, { resolve: { profile: true } });
-  const [chatId, setChatId] = useState<string>();
-  const [chatIdInput, setChatIdInput] = useState<string>();
-  const loadedChat = useCoState(Chat, chatId, { resolve: { $each: true } });
-  const [message, setMessage] = useState("");
+  const { me, logOut } = useAccount(Account, { resolve: { profile: true } })
+  const [chatId, setChatId] = useState<string>()
+  const [chatIdInput, setChatIdInput] = useState<string>()
+  const loadedChat = useCoState(Chat, chatId, { resolve: { $each: true } })
+  const [message, setMessage] = useState("")
 
   function handleLogOut() {
-    setChatId(undefined);
-    logOut();
+    setChatId(undefined)
+    logOut()
   }
 
   const createChat = () => {
-    const group = Group.create();
-    group.addMember("everyone", "writer");
-    const chat = Chat.create([], group);
-    setChatId(chat.id);
-  };
+    const group = Group.create()
+    group.addMember("everyone", "writer")
+    const chat = Chat.create([], group)
+    setChatId(chat.id)
+  }
 
   const joinChat = () => {
     if (chatIdInput) {
       if (chatIdInput.startsWith("https://chat.jazz.tools/#/chat/")) {
-        setChatId(chatIdInput.split("/").pop());
+        setChatId(chatIdInput.split("/").pop())
       } else {
-        setChatId(chatIdInput);
+        setChatId(chatIdInput)
       }
     } else {
-      Alert.alert("Error", "Chat ID cannot be empty.");
+      Alert.alert("Error", "Chat ID cannot be empty.")
     }
-  };
+  }
 
   const sendMessage = () => {
-    if (!loadedChat) return;
+    if (!loadedChat) return
     if (message.trim()) {
-      loadedChat.push(
-        Message.create({ text: message }, { owner: loadedChat?._owner }),
-      );
-      setMessage("");
+      loadedChat.push(Message.create({ text: message }, { owner: loadedChat?._owner }))
+      setMessage("")
     }
-  };
+  }
 
   const renderMessageItem = ({ item }: { item: Message }) => {
-    const isMe = item._edits?.text?.by?.isMe;
+    const isMe = item._edits?.text?.by?.isMe
     return (
-      <View
-        style={[
-          styles.messageContainer,
-          isMe ? styles.myMessage : styles.otherMessage,
-        ]}
-      >
+      <View style={[styles.messageContainer, isMe ? styles.myMessage : styles.otherMessage]}>
         {!isMe ? (
-          <Text
-            style={[
-              styles.messageSender,
-              { textAlign: isMe ? "right" : "left" },
-            ]}
-          >
+          <Text style={[styles.messageSender, { textAlign: isMe ? "right" : "left" }]}>
             {item?._edits?.text?.by?.profile?.name}
           </Text>
         ) : null}
         <View style={styles.messageContent}>
           <Text style={styles.messageText}>{item.text}</Text>
           <Text style={[styles.messageTime, { marginTop: !isMe ? 8 : 4 }]}>
-            {item?._edits?.text?.madeAt?.getHours().toString().padStart(2, "0")}
-            :
-            {item?._edits?.text?.madeAt
-              ?.getMinutes()
-              .toString()
-              .padStart(2, "0")}
+            {item?._edits?.text?.madeAt?.getHours().toString().padStart(2, "0")}:
+            {item?._edits?.text?.madeAt?.getMinutes().toString().padStart(2, "0")}
           </Text>
         </View>
       </View>
-    );
-  };
+    )
+  }
 
   return (
     <View style={styles.container}>
@@ -102,7 +86,7 @@ export default function ChatScreen() {
             value={me?.profile.name ?? ""}
             onChangeText={(value) => {
               if (me?.profile) {
-                me.profile.name = value;
+                me.profile.name = value
               }
             }}
             textAlignVertical="center"
@@ -118,21 +102,17 @@ export default function ChatScreen() {
             placeholder="Chat ID"
             value={chatIdInput ?? ""}
             onChangeText={(value) => {
-              setChatIdInput(value);
+              setChatIdInput(value)
             }}
             textAlignVertical="center"
             onSubmitEditing={() => {
               if (chatIdInput) {
-                setChatId(chatIdInput);
+                setChatId(chatIdInput)
               }
             }}
             testID="chat-id-input"
           />
-          <TouchableOpacity
-            testID="join-chat-button"
-            onPress={joinChat}
-            style={styles.joinChatButton}
-          >
+          <TouchableOpacity testID="join-chat-button" onPress={joinChat} style={styles.joinChatButton}>
             <Text style={styles.newChatButtonText}>Join chat</Text>
           </TouchableOpacity>
         </View>
@@ -142,13 +122,8 @@ export default function ChatScreen() {
             <Button
               onPress={() => {
                 if (loadedChat?.id) {
-                  Clipboard.setStringAsync(
-                    `https://chat.jazz.tools/#/chat/${loadedChat.id}`,
-                  );
-                  Alert.alert(
-                    "Copied to clipboard",
-                    `Chat ID: ${loadedChat.id}`,
-                  );
+                  Clipboard.setStringAsync(`https://chat.jazz.tools/#/chat/${loadedChat.id}`)
+                  Alert.alert("Copied to clipboard", `Chat ID: ${loadedChat.id}`)
                 }
               }}
               title="Share"
@@ -169,11 +144,7 @@ export default function ChatScreen() {
             renderItem={renderMessageItem}
           />
 
-          <KeyboardAvoidingView
-            keyboardVerticalOffset={110}
-            behavior="padding"
-            style={styles.inputContainer}
-          >
+          <KeyboardAvoidingView keyboardVerticalOffset={110} behavior="padding" style={styles.inputContainer}>
             <SafeAreaView style={styles.inputRow}>
               <TextInput
                 style={styles.messageInput}
@@ -184,11 +155,7 @@ export default function ChatScreen() {
                 onSubmitEditing={sendMessage}
                 testID="message-input"
               />
-              <TouchableOpacity
-                onPress={sendMessage}
-                style={styles.sendButton}
-                testID="send-button"
-              >
+              <TouchableOpacity onPress={sendMessage} style={styles.sendButton} testID="send-button">
                 <Text>↑</Text>
               </TouchableOpacity>
             </SafeAreaView>
@@ -196,7 +163,7 @@ export default function ChatScreen() {
         </>
       )}
     </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -327,4 +294,4 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-});
+})
