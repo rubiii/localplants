@@ -1,8 +1,10 @@
 import { vars } from "nativewind"
 
-const theme = {
-  light: vars({
+export const baseTheme = {
+  light: {
     "--bg-page": "#f3f3f3",
+    "--bg-border": "#999999",
+    "--bg-img": "#999999",
     "--bg-btn-default": "#2da24c",
     "--bg-btn-disabled": "#dddddd",
     "--bg-btn-active": "#2da24c",
@@ -12,9 +14,11 @@ const theme = {
     "--text-failure": "#ff88bd",
     "--text-headline": "#2da24c",
     "--text-success": "#2da24c",
-  }),
-  dark: vars({
+  },
+  dark: {
     "--bg-page": "#1E1E1E",
+    "--bg-border": "#666666",
+    "--bg-img": "#313131",
     "--bg-btn-default": "#31cb5a",
     "--bg-btn-disabled": "#313131",
     "--bg-btn-active": "#31cb5a",
@@ -24,7 +28,11 @@ const theme = {
     "--text-failure": "#ff88bd",
     "--text-headline": "#31cb5a",
     "--text-success": "#31cb5a",
-  }),
+  },
 }
 
-export default theme
+export const nativewindTheme = {
+  light: vars(baseTheme.light),
+  dark: vars(baseTheme.dark),
+}
+export default nativewindTheme

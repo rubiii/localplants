@@ -1,24 +1,22 @@
-import FeatherIcon from "@expo/vector-icons/Feather"
+import Icon from "@/components/Icon"
+import useNavigation from "@/hooks/useNavigation"
+import theme from "@/theme"
 import { clsx } from "clsx"
-import { useRouter } from "expo-router"
-import { cssInterop, useColorScheme } from "nativewind"
+import { useColorScheme } from "nativewind"
 import { useCallback, useEffect, useState } from "react"
-import React, { Platform, Pressable, SafeAreaView, Text, View } from "react-native"
-import { check, openSettings, PERMISSIONS, request } from "react-native-permissions"
+import { Platform, Pressable, SafeAreaView, Text, View } from "react-native"
+import {
+  check,
+  openSettings,
+  PERMISSIONS,
+  request,
+} from "react-native-permissions"
 import { ResultMap } from "react-native-permissions/dist/typescript/results"
-import theme from "./theme"
-
-cssInterop(FeatherIcon, {
-  className: {
-    target: "style",
-    nativeStyleToProp: { color: true },
-  },
-})
 
 type PermissionResult = ResultMap[keyof ResultMap]
 
 export default function Permissions() {
-  const router = useRouter()
+  const { navigate } = useNavigation()
   const { colorScheme } = useColorScheme()
   const [cameraPermission, setCameraPermission] = useState<PermissionResult>()
   const [libraryPermission, setLibraryPermission] = useState<PermissionResult>()
@@ -29,15 +27,14 @@ export default function Permissions() {
     libraryPermission === "granted" ||
     libraryPermission === "limited"
 
-  const gotoFirstPlantScreen = () => router.navigate("./first_plant")
-
   return (
-    <SafeAreaView style={theme[colorScheme || "light"]} className="flex-1 bg-[--bg-page]">
+    <SafeAreaView
+      style={theme[colorScheme || "light"]}
+      className="flex-1 bg-[--bg-page]"
+    >
       <View className="flex-1 pt-12 pb-12 px-8">
         <View className="flex-1">
-          <Text style={theme[colorScheme || "light"]} className="text-5xl text-[--text-headline]">
-            Permissions
-          </Text>
+          <Text className="text-5xl text-[--text-headline]">Permissions</Text>
 
           <Text className="mt-2 text-[--text-copy]">
             The following permissions are needed
@@ -46,18 +43,33 @@ export default function Permissions() {
           </Text>
 
           <View style={{ flex: 1, marginTop: 60, gap: 36 }}>
-            <CameraPermissions status={cameraPermission} setStatus={setCameraPermission} />
-            <LibraryPermissions status={libraryPermission} setStatus={setLibraryPermission} />
+            <CameraPermissions
+              status={cameraPermission}
+              setStatus={setCameraPermission}
+            />
+            <LibraryPermissions
+              status={libraryPermission}
+              setStatus={setLibraryPermission}
+            />
           </View>
         </View>
 
-        <ContinueButton onPress={gotoFirstPlantScreen} disabled={!permissionsGranted} />
+        <ContinueButton
+          onPress={() => navigate("Plants")}
+          disabled={!permissionsGranted}
+        />
       </View>
     </SafeAreaView>
   )
 }
 
-function CameraPermissions({ status, setStatus }: { status?: PermissionResult; setStatus: any }) {
+function CameraPermissions({
+  status,
+  setStatus,
+}: {
+  status?: PermissionResult
+  setStatus: any
+}) {
   const iosPermission = PERMISSIONS.IOS.CAMERA
 
   const setAndLogStatus = useCallback(
@@ -79,7 +91,9 @@ function CameraPermissions({ status, setStatus }: { status?: PermissionResult; s
       case "blocked":
         // permission is denied and not requestable
         console.debug("Opening application settings")
-        openSettings("application").catch(() => console.error("Failed to open application settings"))
+        openSettings("application").catch(() =>
+          console.error("Failed to open application settings"),
+        )
         break
 
       case "granted": // permission already granted
@@ -101,7 +115,11 @@ function CameraPermissions({ status, setStatus }: { status?: PermissionResult; s
       <View className="flex-1">
         <View className="flex-row items-baseline">
           <View className="flex-row flex-grow items-baseline">
-            <FeatherIcon name="camera" className="text-[--text-copy]" size={24} />
+            <Icon.Feather
+              name="camera"
+              className="text-[--text-copy]"
+              size={24}
+            />
             <Text className="ml-3 text-2xl text-[--text-copy]">Camera</Text>
           </View>
 
@@ -118,7 +136,13 @@ function CameraPermissions({ status, setStatus }: { status?: PermissionResult; s
   )
 }
 
-function LibraryPermissions({ status, setStatus }: { status?: PermissionResult; setStatus: any }) {
+function LibraryPermissions({
+  status,
+  setStatus,
+}: {
+  status?: PermissionResult
+  setStatus: any
+}) {
   const iosPermission = PERMISSIONS.IOS.PHOTO_LIBRARY
 
   const setAndLogStatus = useCallback(
@@ -140,7 +164,9 @@ function LibraryPermissions({ status, setStatus }: { status?: PermissionResult; 
       case "blocked":
         // permission is denied and not requestable
         console.debug("Opening application settings")
-        openSettings("application").catch(() => console.error("Failed to open application settings"))
+        openSettings("application").catch(() =>
+          console.error("Failed to open application settings"),
+        )
         break
 
       case "granted": // permission already granted
@@ -162,8 +188,14 @@ function LibraryPermissions({ status, setStatus }: { status?: PermissionResult; 
       <View className="flex-1">
         <View className="flex-row items-baseline">
           <View className="flex-row flex-grow items-baseline">
-            <FeatherIcon name="image" className="text-[--text-copy]" size={24} />
-            <Text className="ml-3 text-2xl text-[--text-copy]">Photo library</Text>
+            <Icon.Feather
+              name="image"
+              className="text-[--text-copy]"
+              size={24}
+            />
+            <Text className="ml-3 text-2xl text-[--text-copy]">
+              Photo library
+            </Text>
           </View>
 
           <ConfigureButton configure={configure} status={status} />
@@ -179,26 +211,53 @@ function LibraryPermissions({ status, setStatus }: { status?: PermissionResult; 
   )
 }
 
-const ConfigureButton = ({ configure, status }: { configure: any; status?: PermissionResult }) => {
+const ConfigureButton = ({
+  configure,
+  status,
+}: {
+  configure: any
+  status?: PermissionResult
+}) => {
   if (status === "granted" || status === "limited") {
-    return <FeatherIcon name="check-circle" className="text-[--text-success]" size={20} />
+    return (
+      <Icon.Feather
+        name="check-circle"
+        className="text-[--text-success]"
+        size={20}
+      />
+    )
   }
 
   if (status === "unavailable") {
-    return <FeatherIcon name="x-circle" className="text-[--text-failure]" size={20} />
+    return (
+      <Icon.Feather
+        name="x-circle"
+        className="text-[--text-failure]"
+        size={20}
+      />
+    )
   }
 
   // status === "denied" || status === "blocked"
   return (
     <View>
-      <Pressable onPress={configure} className="rounded-2xl py-1 px-2.5 bg-[--bg-btn-default]">
+      <Pressable
+        onPress={configure}
+        className="rounded-2xl py-1 px-2.5 bg-[--bg-btn-default]"
+      >
         <Text className="text-[--text-btn-default]">Configure</Text>
       </Pressable>
     </View>
   )
 }
 
-const ContinueButton = ({ onPress, disabled = false }: { onPress: any; disabled?: boolean }) => {
+const ContinueButton = ({
+  onPress,
+  disabled = false,
+}: {
+  onPress: any
+  disabled?: boolean
+}) => {
   return (
     <Pressable
       onPress={onPress}
