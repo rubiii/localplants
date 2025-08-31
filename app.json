@@ -54,7 +54,8 @@
             "PhotoLibrary"
           ]
         }
-      ]
+      ],
+      "expo-sqlite"
     ]
   }
 }
