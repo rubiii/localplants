@@ -1,7 +1,6 @@
 import Icon from "@/components/Icon"
 import Theme from "@/components/Theme"
 import useNavigation from "@/hooks/useNavigation"
-import useTheme from "@/hooks/useTheme"
 import { MyAppAccount, type PlantType } from "@/schema"
 import type { NativeStackNavigationOptions } from "@react-navigation/native-stack"
 import { Image, useAccount } from "jazz-tools/expo"
@@ -17,7 +16,6 @@ export const routeOptions: NativeStackNavigationOptions = {
 }
 
 export function HeaderRight() {
-  const { theme, toggleTheme } = useTheme()
   const { navigate } = useNavigation()
 
   return (
@@ -30,9 +28,12 @@ export function HeaderRight() {
         />
       </Pressable>
 
-      <Pressable className="group p-2 -mr-2" onPress={toggleTheme}>
-        <Icon.Material
-          name={theme === "light" ? "dark-mode" : "light-mode"}
+      <Pressable
+        className="group p-2 -mr-2"
+        onPress={() => navigate("Account")}
+      >
+        <Icon.MaterialCommunity
+          name="account-circle-outline"
           className="text-[--foreground] group-active:text-[--primary]"
           size={24}
         />

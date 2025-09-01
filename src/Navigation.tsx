@@ -1,4 +1,6 @@
+import useDeviceSettings from "@/hooks/useDeviceSettings"
 import useTheme from "@/hooks/useTheme"
+import Account, { routeOptions as accountRouteOptions } from "@/screens/Account"
 import PlantDetails, {
   routeOptions as plantDetailRouteOptions,
 } from "@/screens/PlantDetails"
@@ -12,14 +14,18 @@ import Plants, { routeOptions as plantsRouteOptions } from "@/screens/Plants"
 import AddPlant, {
   routeOptions as addPlantRouteOptions,
 } from "@/screens/Plants/AddPlant"
+import Welcome, { routeOptions as welcomeRouteOptions } from "@/screens/Welcome"
 import { NavigationContainer } from "@react-navigation/native"
 import type { NativeStackNavigationOptions } from "@react-navigation/native-stack"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
+import { useEffect, useState } from "react"
 
 const Stack = createNativeStackNavigator()
 
 export default function Navigation() {
   const { colors } = useTheme()
+  const settings = useDeviceSettings()
+  const [initialRouteName, setInitialRouteName] = useState<string>()
 
   const rootStackOptions: NativeStackNavigationOptions = {
     headerTintColor: colors.foreground,
@@ -27,9 +33,27 @@ export default function Navigation() {
     headerBlurEffect: "regular",
   }
 
+  useEffect(() => {
+    settings
+      .hasValue("has-seen-welcome")
+      .then((value) => setInitialRouteName(value ? "Plants" : "Welcome"))
+  }, [])
+
+  if (!initialRouteName) return
+
   return (
     <NavigationContainer>
-      <Stack.Navigator screenOptions={rootStackOptions}>
+      <Stack.Navigator
+        initialRouteName={initialRouteName}
+        screenOptions={rootStackOptions}
+      >
+        <Stack.Screen
+          name="Welcome"
+          component={Welcome}
+          options={welcomeRouteOptions}
+        />
+
+        {/* Home stack */}
         <Stack.Group>
           <Stack.Screen
             name="Plants"
@@ -40,6 +64,12 @@ export default function Navigation() {
             name="PlantDetails"
             component={PlantDetails}
             options={plantDetailRouteOptions}
+          />
+
+          <Stack.Screen
+            name="Account"
+            component={Account}
+            options={accountRouteOptions}
           />
         </Stack.Group>
 

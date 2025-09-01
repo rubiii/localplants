@@ -1,6 +1,8 @@
 import Icon from "@/components/Icon"
+import useDeviceSettings from "@/hooks/useDeviceSettings"
 import useNavigation from "@/hooks/useNavigation"
-import { clsx } from "clsx"
+import type { NativeStackNavigationOptions } from "@react-navigation/native-stack"
+import clsx from "clsx"
 import { useCallback, useEffect, useState } from "react"
 import { Platform, Pressable, SafeAreaView, Text, View } from "react-native"
 import {
@@ -13,8 +15,15 @@ import { ResultMap } from "react-native-permissions/dist/typescript/results"
 
 type PermissionResult = ResultMap[keyof ResultMap]
 
-export default function Permissions() {
-  const { navigate } = useNavigation()
+export const routeOptions: NativeStackNavigationOptions = {
+  title: "Welcome",
+  headerLargeTitle: true,
+}
+
+export default function Welcome() {
+  const navigation = useNavigation()
+  const settings = useDeviceSettings()
+
   const [cameraPermission, setCameraPermission] = useState<PermissionResult>()
   const [libraryPermission, setLibraryPermission] = useState<PermissionResult>()
 
@@ -24,13 +33,16 @@ export default function Permissions() {
     libraryPermission === "granted" ||
     libraryPermission === "limited"
 
-  return (
-    <SafeAreaView className="flex-1 bg-[--bg-page]">
-      <View className="flex-1 pt-12 pb-12 px-8">
-        <View className="flex-1">
-          <Text className="text-5xl text-[--text-headline]">Permissions</Text>
+  const finishWelcome = async () => {
+    await settings.setValue("has-seen-welcome")
+    navigation.replace("Plants")
+  }
 
-          <Text className="mt-2 text-[--text-copy]">
+  return (
+    <SafeAreaView className="flex-1 bg-[--background]">
+      <View className="flex-1 pt-4 pb-12 px-5">
+        <View className="flex-1">
+          <Text className="text-[--foregroundSecondary]">
             The following permissions are needed
             {"\n"}
             for different features of the app.
@@ -49,7 +61,7 @@ export default function Permissions() {
         </View>
 
         <ContinueButton
-          onPress={() => navigate("Plants")}
+          onPress={finishWelcome}
           disabled={!permissionsGranted}
         />
       </View>
@@ -82,16 +94,15 @@ function CameraPermissions({
         request(iosPermission).then(setAndLogStatus)
         break
 
-      case "blocked":
-        // permission is denied and not requestable
+      case "blocked": // permission is denied and not requestable
+      case "granted": // permission already granted
+      case "limited": // permission granted with limitations
         console.debug("Opening application settings")
         openSettings("application").catch(() =>
           console.error("Failed to open application settings"),
         )
         break
 
-      case "granted": // permission already granted
-      case "limited": // permission granted with limitations
       case "unavailable": // feature unavailable on this device or in this context
       default:
         break
@@ -107,20 +118,20 @@ function CameraPermissions({
   return (
     <View className="flex-row">
       <View className="flex-1">
-        <View className="flex-row items-baseline">
+        <View className="flex-row items-end">
           <View className="flex-row flex-grow items-baseline">
             <Icon.Feather
               name="camera"
-              className="text-[--text-copy]"
+              className="text-[--foreground]"
               size={24}
             />
-            <Text className="ml-3 text-2xl text-[--text-copy]">Camera</Text>
+            <Text className="ml-3 text-2xl text-[--foreground]">Camera</Text>
           </View>
 
           <ConfigureButton configure={configure} status={status} />
         </View>
 
-        <Text className="mt-2 text-[--text-copy]">
+        <Text className="mt-2 text-[--foregroundSecondary]">
           Access front and back camera
           {"\n"}
           for taking photos of your plants.
@@ -151,20 +162,19 @@ function LibraryPermissions({
     switch (status) {
       case "denied":
         // permission has not been requested or is denied but requestable
-        console.debug("Requesting library permissions")
+        console.debug("Requesting camera permissions")
         request(iosPermission).then(setAndLogStatus)
         break
 
-      case "blocked":
-        // permission is denied and not requestable
+      case "blocked": // permission is denied and not requestable
+      case "granted": // permission already granted
+      case "limited": // permission granted with limitations
         console.debug("Opening application settings")
         openSettings("application").catch(() =>
           console.error("Failed to open application settings"),
         )
         break
 
-      case "granted": // permission already granted
-      case "limited": // permission granted with limitations
       case "unavailable": // feature unavailable on this device or in this context
       default:
         break
@@ -180,14 +190,14 @@ function LibraryPermissions({
   return (
     <View className="flex-row">
       <View className="flex-1">
-        <View className="flex-row items-baseline">
+        <View className="flex-row items-end">
           <View className="flex-row flex-grow items-baseline">
             <Icon.Feather
               name="image"
-              className="text-[--text-copy]"
+              className="text-[--foreground]"
               size={24}
             />
-            <Text className="ml-3 text-2xl text-[--text-copy]">
+            <Text className="ml-3 text-2xl text-[--foreground]">
               Photo library
             </Text>
           </View>
@@ -195,7 +205,7 @@ function LibraryPermissions({
           <ConfigureButton configure={configure} status={status} />
         </View>
 
-        <Text className="mt-2 text-[--text-copy]">
+        <Text className="mt-2 text-[--foregroundSecondary]">
           Access your photo library to select
           {"\n"}
           existing photos of your plants.
@@ -212,36 +222,32 @@ const ConfigureButton = ({
   configure: any
   status?: PermissionResult
 }) => {
-  if (status === "granted" || status === "limited") {
+  if (status === "denied" || status === "blocked") {
     return (
-      <Icon.Feather
-        name="check-circle"
-        className="text-[--text-success]"
-        size={20}
-      />
-    )
-  }
-
-  if (status === "unavailable") {
-    return (
-      <Icon.Feather
-        name="x-circle"
-        className="text-[--text-failure]"
-        size={20}
-      />
-    )
-  }
-
-  // status === "denied" || status === "blocked"
-  return (
-    <View>
       <Pressable
         onPress={configure}
-        className="rounded-2xl py-1 px-2.5 bg-[--bg-btn-default]"
+        className="rounded-2xl py-1 px-2.5 bg-[--primary]"
       >
-        <Text className="text-[--text-btn-default]">Configure</Text>
+        <Text className="text-[--primaryForeground]">Configure</Text>
       </Pressable>
-    </View>
+    )
+  }
+
+  const icon = status == "unavailable" ? "error-outline" : "check-circle"
+
+  let className
+  if (status == "unavailable") {
+    className = "text-[--error]"
+  } else if (status == "granted") {
+    className = "text-[--success]"
+  } else if (status == "limited") {
+    className = "text-[--warning]"
+  }
+
+  return (
+    <Pressable onPress={configure}>
+      <Icon.Feather name={icon as any} className={className} size={26} />
+    </Pressable>
   )
 }
 
@@ -257,14 +263,14 @@ const ContinueButton = ({
       onPress={onPress}
       disabled={disabled}
       className={clsx("rounded-2xl py-6 px-8", {
-        "bg-[--bg-btn-default]": !disabled,
-        "bg-[--bg-btn-disabled]": disabled,
+        "bg-[--primary]": !disabled,
+        "bg-[--backgroundSecondary]": disabled,
       })}
     >
       <Text
         className={clsx("text-xl", {
-          "text-[--text-btn-default]": !disabled,
-          "text-[--text-btn-disabled]": disabled,
+          "text-[--primaryForeground]": !disabled,
+          "text-[--background]": disabled,
         })}
       >
         Continue
