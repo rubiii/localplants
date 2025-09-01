@@ -1,4 +1,5 @@
 import Icon from "@/components/Icon"
+import Theme from "@/components/Theme"
 import useNavigation from "@/hooks/useNavigation"
 import { Plant, type PlantImage } from "@/schema"
 import { Zoomable } from "@likashefqet/react-native-image-zoom"
@@ -25,14 +26,14 @@ export function HeaderRight({ plantId }: { plantId: string }) {
   const { navigate } = useNavigation()
 
   return (
-    <View className="flex-row justify-end">
+    <Theme style={{ flex: 0 }} className="flex-row">
       <Pressable
         className="group p-2"
         onPress={() => navigate("AddPlantImage", { plantId })}
       >
         <Icon.Material
           name="add-a-photo"
-          className="text-[--text-headline] group-active:text-[--text-copy]"
+          className="text-[--foreground] group-active:text-[--primary]"
           size={24}
         />
       </Pressable>
@@ -43,11 +44,11 @@ export function HeaderRight({ plantId }: { plantId: string }) {
       >
         <Icon.MaterialCommunity
           name="trash-can-outline"
-          className="text-[--text-headline] group-active:text-[--text-copy]"
+          className="text-[--foreground] group-active:text-[--primary]"
           size={24}
         />
       </Pressable>
-    </View>
+    </Theme>
   )
 }
 
@@ -69,7 +70,7 @@ export default function PlantDetails() {
   })
 
   return (
-    <SafeAreaView className="flex-1 flex-col bg-[--bg-page]">
+    <SafeAreaView className="flex-1 flex-col bg-[--background]">
       {plant ? (
         <FlatList
           data={plant.images}
@@ -103,7 +104,7 @@ const Row = ({ image }: { image: PlantImage }) => {
   return (
     <View className="flex-row items-start">
       <View className="basis-[25%] pl-2">
-        <Text className="text-sm text-right text-[--text-copy]">
+        <Text className="text-sm text-right text-[--foregroundSecondary]">
           {weekday}
           {"\n"}
           {day}. {month}
@@ -114,7 +115,7 @@ const Row = ({ image }: { image: PlantImage }) => {
         </Text>
       </View>
 
-      <View className="basis-[1px] ml-2 mr-6 border-r border-[--bg-border]">
+      <View className="basis-[1px] ml-2 mr-6 border-r border-[--border]">
         <View className="flex-1 w-px" />
       </View>
 
@@ -136,7 +137,7 @@ const Row = ({ image }: { image: PlantImage }) => {
         ) : null}
 
         {image.note ? (
-          <Text className="text-[--text-copy]">{image.note}</Text>
+          <Text className="text-[--foregroundSecondary]">{image.note}</Text>
         ) : null}
       </View>
     </View>

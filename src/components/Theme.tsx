@@ -1,10 +1,8 @@
-import theme from "@/theme"
-import { useColorScheme } from "nativewind"
+import useTheme from "@/hooks/useTheme"
 import { View, type ViewProps } from "react-native"
 
 export default function Theme({ style, ...props }: ViewProps) {
-  const { colorScheme } = useColorScheme()
-  const themeStyle = theme[colorScheme ?? "dark"]
+  const { nativewindStyles } = useTheme()
 
-  return <View style={[{ flex: 1 }, themeStyle, style]} {...props} />
+  return <View style={[{ flex: 1 }, nativewindStyles, style]} {...props} />
 }

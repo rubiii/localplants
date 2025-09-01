@@ -1,3 +1,4 @@
+import useTheme from "@/hooks/useTheme"
 import PlantDetails, {
   routeOptions as plantDetailRouteOptions,
 } from "@/screens/PlantDetails"
@@ -11,21 +12,17 @@ import Plants, { routeOptions as plantsRouteOptions } from "@/screens/Plants"
 import AddPlant, {
   routeOptions as addPlantRouteOptions,
 } from "@/screens/Plants/AddPlant"
-import { baseTheme } from "@/theme"
 import { NavigationContainer } from "@react-navigation/native"
 import type { NativeStackNavigationOptions } from "@react-navigation/native-stack"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
-import { useColorScheme } from "nativewind"
 
 const Stack = createNativeStackNavigator()
 
 export default function Navigation() {
-  const { colorScheme } = useColorScheme()
-  const theme = baseTheme[colorScheme || "light"]
+  const { colors } = useTheme()
 
   const rootStackOptions: NativeStackNavigationOptions = {
-    // headerStyle: { backgroundColor: theme["--bg-page"] },
-    headerTintColor: theme["--text-headline"],
+    headerTintColor: colors.foreground,
     headerTransparent: true,
     headerBlurEffect: "regular",
   }

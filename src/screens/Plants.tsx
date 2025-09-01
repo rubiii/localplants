@@ -1,18 +1,12 @@
 import Icon from "@/components/Icon"
 import Theme from "@/components/Theme"
 import useNavigation from "@/hooks/useNavigation"
+import useTheme from "@/hooks/useTheme"
 import { MyAppAccount, type PlantType } from "@/schema"
 import type { NativeStackNavigationOptions } from "@react-navigation/native-stack"
 import { Image, useAccount } from "jazz-tools/expo"
-import { useColorScheme } from "nativewind"
-import {
-  Appearance,
-  FlatList,
-  Pressable,
-  SafeAreaView,
-  Text,
-  View,
-} from "react-native"
+
+import { FlatList, Pressable, SafeAreaView, Text, View } from "react-native"
 
 const PLANT_ITEM_HEIGHT = 200
 
@@ -23,27 +17,23 @@ export const routeOptions: NativeStackNavigationOptions = {
 }
 
 export function HeaderRight() {
-  const { colorScheme } = useColorScheme()
+  const { theme, toggleTheme } = useTheme()
   const { navigate } = useNavigation()
 
-  const toggleTheme = () => {
-    Appearance.setColorScheme(colorScheme === "dark" ? "light" : "dark")
-  }
-
   return (
-    <Theme className="flex-row justify-end">
+    <Theme style={{ flex: 0 }} className="flex-row">
       <Pressable className="group p-2" onPress={() => navigate("AddPlant")}>
         <Icon.Material
           name="add-circle-outline"
-          className="text-[--text-headline] group-active:text-[--text-copy]"
+          className="text-[--foreground] group-active:text-[--primary]"
           size={24}
         />
       </Pressable>
 
       <Pressable className="group p-2 -mr-2" onPress={toggleTheme}>
         <Icon.Material
-          name={colorScheme === "light" ? "dark-mode" : "light-mode"}
-          className="text-[--text-headline] group-active:text-[--text-copy]"
+          name={theme === "light" ? "dark-mode" : "light-mode"}
+          className="text-[--foreground] group-active:text-[--primary]"
           size={24}
         />
       </Pressable>
@@ -67,7 +57,7 @@ export default function Plants() {
   })
 
   return (
-    <SafeAreaView className="flex-1 flex-col bg-[--bg-page]">
+    <SafeAreaView className="flex-1 flex-col bg-[--background]">
       <FlatList
         data={me?.root.plants || []}
         renderItem={({ item }) => <PlantItem plant={item} />}
@@ -81,8 +71,10 @@ export default function Plants() {
         contentContainerStyle={{ gap: 36 }}
         columnWrapperStyle={{
           gap: 16,
+          marginLeft: 16,
+          marginRight: 16,
         }}
-        className="pt-6 mx-5"
+        className="pt-6"
       />
     </SafeAreaView>
   )
@@ -102,7 +94,7 @@ const PlantItem = ({ plant }: { plant: PlantType }) => {
         }
       >
         <View
-          className="rounded-lg bg-[--bg-img]"
+          className="rounded-lg bg-[--background-secondary]"
           style={{ height: 180, width: "100%" }}
         >
           {plant.primaryImage?.thumbnail && (
@@ -120,7 +112,7 @@ const PlantItem = ({ plant }: { plant: PlantType }) => {
           )}
         </View>
 
-        <Text className="my-2 text-[--text-copy]">{plant.name}</Text>
+        <Text className="my-2 text-[--foregroundSecondary]">{plant.name}</Text>
       </Pressable>
     </View>
   )

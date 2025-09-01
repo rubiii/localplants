@@ -110,34 +110,34 @@ export default function AddPlant() {
   }
 
   return (
-    <SafeAreaView className="flex-1 bg-[--bg-page]">
+    <SafeAreaView className="flex-1 bg-[--background]">
       <View className="flex-1 w-full pt-12 px-8 pb-24 gap-6 justify-center items-center">
         {!plant && !uploading ? (
           <>
             <Pressable
               onPress={addPhotoViaCamera}
-              className="flex-row gap-2 py-6 px-8 w-3/4 justify-center items-center rounded-2xl bg-[--bg-btn-default]"
+              className="flex-row gap-2 py-6 px-8 w-3/4 justify-center items-center rounded-2xl bg-[--primary]"
             >
               <Icon.Feather
                 name="camera"
-                className="text-[--text-btn-default]"
+                className="text-[--primaryForeground]"
                 size={24}
               />
-              <Text className="text-xl text-[--text-btn-default] text-lg">
+              <Text className="text-xl text-[--primaryForeground] text-lg">
                 Take a photo
               </Text>
             </Pressable>
 
             <Pressable
               onPress={addPhotoFromGallery}
-              className="flex-row gap-2 py-6 px-8 w-3/4 justify-center items-center rounded-2xl bg-[--bg-btn-default]"
+              className="flex-row gap-2 py-6 px-8 w-3/4 justify-center items-center rounded-2xl bg-[--primary]"
             >
               <Icon.Feather
                 name="image"
-                className="text-[--text-btn-default]"
+                className="text-[--primaryForeground]"
                 size={24}
               />
-              <Text className="text-xl text-[--text-btn-default] text-lg">
+              <Text className="text-xl text-[--primaryForeground] text-lg">
                 Pick from gallery
               </Text>
             </Pressable>
