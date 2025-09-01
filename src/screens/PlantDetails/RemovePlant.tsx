@@ -14,7 +14,7 @@ export default function RemovePlant() {
   const route = useRoute()
   const plantId = (route.params as any).plantId
 
-  const { navigate } = useNavigation()
+  const navigation = useNavigation()
 
   const { me } = useAccount(MyAppAccount, {
     resolve: {
@@ -43,7 +43,7 @@ export default function RemovePlant() {
     if (!me || !plant) return
 
     me.root.plants.$jazz.remove((p) => p.$jazz.id === plant.$jazz.id)
-    navigate("Plants")
+    navigation.popToTop()
   }
 
   return (

@@ -66,6 +66,10 @@ Developer Certificate setup:
 - [Expo](https://docs.expo.dev/)
 - [React Navigation](https://reactnavigation.org/docs/getting-started)
 
+### React Native
+
+- [Core components](https://reactnative.dev/docs/components-and-apis)
+
 ## Dependencies
 
 - [Tamagui](https://tamagui.dev/docs/intro/introduction) for styling

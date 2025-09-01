@@ -912,7 +912,7 @@ const suffixes: string[] = [
   "profusion",
 ]
 
-export default function randomName(): string {
+export default function randomPlantName(): string {
   const prefix = prefixes[Math.floor(Math.random() * prefixes.length)]
   const suffix = suffixes[Math.floor(Math.random() * suffixes.length)]
   return `${prefix} ${suffix}`

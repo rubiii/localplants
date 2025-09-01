@@ -1,18 +1,19 @@
+import Button from "@/components/Button"
 import useNavigation from "@/hooks/useNavigation"
 import { Plant } from "@/schema"
 import { useRoute } from "@react-navigation/native"
 import type { NativeStackNavigationOptions } from "@react-navigation/native-stack"
-import { clsx } from "clsx"
 import { useCoState } from "jazz-tools/expo"
-import { Controller, useForm } from "react-hook-form"
-import { Pressable, SafeAreaView, Text, TextInput, View } from "react-native"
+import {
+  Controller,
+  useForm,
+  type Control,
+  type FieldErrors,
+} from "react-hook-form"
+import { SafeAreaView, Text, TextInput, View } from "react-native"
 
 export const routeOptions: NativeStackNavigationOptions = {
   title: "Edit plant",
-}
-
-type FormData = {
-  name: string
 }
 
 export default function EditPlant() {
@@ -31,6 +32,7 @@ export default function EditPlant() {
       name: plant?.name,
     },
   })
+
   const onSubmit = (data: FormData) => {
     if (!plant) return
 
@@ -42,47 +44,53 @@ export default function EditPlant() {
     <SafeAreaView className="flex-1 bg-[--background]">
       <View className="flex-1 pt-6 pb-12 px-5">
         <View className="flex-1">
-          <Text className="pb-1.5 text-[--foreground]">Name:</Text>
-
-          <Controller
-            control={control}
-            rules={{
-              required: true,
-            }}
-            render={({ field: { onChange, onBlur, value } }) => (
-              <TextInput
-                placeholder="First name"
-                onBlur={onBlur}
-                onChangeText={onChange}
-                value={value}
-                className="text-xl text-[--foregroundMuted] bg-[--input] px-6 pt-4 pb-6 rounded-xl"
-              />
-            )}
-            name="name"
-          />
-          {errors.name && <Text>This is required.</Text>}
+          <PlantForm control={control} errors={errors} />
         </View>
 
-        <View>
-          <Pressable
-            onPress={handleSubmit(onSubmit)}
-            disabled={!isValid}
-            className={clsx("rounded-2xl py-6 px-8", {
-              "bg-[--primary]": isValid,
-              "bg-[--backgroundSecondary]": !isValid,
-            })}
-          >
-            <Text
-              className={clsx("text-xl", {
-                "text-[--primaryForeground]": isValid,
-                "text-[--background]": !isValid,
-              })}
-            >
-              Save changes
-            </Text>
-          </Pressable>
-        </View>
+        <Button
+          title="Save changes"
+          onPress={handleSubmit(onSubmit)}
+          disabled={!isValid}
+        />
       </View>
     </SafeAreaView>
+  )
+}
+
+type FormData = {
+  name: string
+}
+
+function PlantForm({
+  control,
+  errors,
+}: {
+  control: Control<FormData, any, FormData>
+  errors: FieldErrors<FormData>
+}) {
+  return (
+    <>
+      <Text className="pb-2 text-lg text-[--foregroundSecondary]">
+        Your plant’s name:
+      </Text>
+
+      <Controller
+        control={control}
+        rules={{
+          required: true,
+        }}
+        render={({ field: { onChange, onBlur, value } }) => (
+          <TextInput
+            placeholder="First name"
+            onBlur={onBlur}
+            onChangeText={onChange}
+            value={value}
+            className="text-xl text-[--foreground] bg-[--input] px-6 pt-4 pb-6 rounded-xl"
+          />
+        )}
+        name="name"
+      />
+      {errors.name && <Text>This is required.</Text>}
+    </>
   )
 }

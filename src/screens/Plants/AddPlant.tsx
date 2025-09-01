@@ -1,8 +1,9 @@
+import Button from "@/components/Button"
 import Icon from "@/components/Icon"
 import useCamera from "@/hooks/useCamera"
 import useGallery from "@/hooks/useGallery"
 import useNavigation from "@/hooks/useNavigation"
-import randomName from "@/lib/randomName"
+import randomPlantName from "@/lib/randomPlantName"
 import { MyAppAccount, Plant, PlantImage, type PlantType } from "@/schema"
 import type { NativeStackNavigationOptions } from "@react-navigation/native-stack"
 import { Group } from "jazz-tools"
@@ -10,12 +11,12 @@ import { useAccount } from "jazz-tools/expo"
 import { createImage } from "jazz-tools/media"
 import { useState } from "react"
 import {
-  ActivityIndicator,
-  Pressable,
-  SafeAreaView,
-  Text,
-  View,
-} from "react-native"
+  Controller,
+  useForm,
+  type Control,
+  type FieldErrors,
+} from "react-hook-form"
+import { Pressable, SafeAreaView, Text, TextInput, View } from "react-native"
 import type { Asset } from "react-native-image-picker"
 
 export const routeOptions: NativeStackNavigationOptions = {
@@ -23,8 +24,12 @@ export const routeOptions: NativeStackNavigationOptions = {
 }
 
 export default function AddPlant() {
+  const randomName = randomPlantName()
+
   const [plant, setPlant] = useState<PlantType>()
   const [uploading, setUploading] = useState(false)
+  const [showForm, setShowForm] = useState(false)
+
   const { goBack } = useNavigation()
   const { me } = useAccount(MyAppAccount, {
     resolve: {
@@ -39,6 +44,9 @@ export default function AddPlant() {
       console.debug("[createPlant] does not (yet?) have me or asset.uri")
       return
     }
+
+    setShowForm(true)
+    setUploading(true)
 
     console.debug("[createPlant] creating image")
     const image = await createImage(asset.uri, {
@@ -77,16 +85,17 @@ export default function AddPlant() {
     console.debug("[createPlant] creating plant")
     const plant = Plant.create(
       {
-        name: randomName(),
+        name: randomName,
         primaryImage: plantImage,
         images: [plantImage],
       },
       { owner: Group.create() },
     )
     console.debug("[createPlant] created plant")
-    me.root.plants.$jazz.push(plant)
+    me.root.plants.$jazz.unshift(plant)
 
     setPlant(plant)
+    setUploading(false)
   }
 
   const { takePhoto } = useCamera()
@@ -94,9 +103,7 @@ export default function AddPlant() {
     const asset = await takePhoto()
     if (!asset) return
 
-    setUploading(true)
-    await createPlant(asset)
-    goBack()
+    createPlant(asset)
   }
 
   const { pickPhoto } = useGallery()
@@ -104,48 +111,113 @@ export default function AddPlant() {
     const asset = await pickPhoto()
     if (!asset) return
 
-    setUploading(true)
-    await createPlant(asset)
+    createPlant(asset)
+  }
+
+  const {
+    control,
+    handleSubmit,
+    formState: { isValid, errors },
+  } = useForm<FormData>({
+    defaultValues: {
+      name: randomName,
+    },
+  })
+
+  const onSubmit = (data: FormData) => {
+    if (!plant || !isValid) return
+
+    plant.$jazz.set("name", data.name)
     goBack()
   }
 
   return (
     <SafeAreaView className="flex-1 bg-[--background]">
-      <View className="flex-1 w-full pt-12 px-8 pb-24 gap-6 justify-center items-center">
-        {!plant && !uploading ? (
-          <>
-            <Pressable
-              onPress={addPhotoViaCamera}
-              className="flex-row gap-2 py-6 px-8 w-3/4 justify-center items-center rounded-2xl bg-[--primary]"
-            >
-              <Icon.Feather
-                name="camera"
-                className="text-[--primaryForeground]"
-                size={24}
-              />
-              <Text className="text-xl text-[--primaryForeground] text-lg">
-                Take a photo
-              </Text>
-            </Pressable>
+      {!showForm ? (
+        <View className="flex-1 w-full pt-12 px-8 pb-24 gap-6 justify-center items-center">
+          <Pressable
+            onPress={addPhotoViaCamera}
+            className="flex-row gap-2 py-6 px-8 w-3/4 justify-center items-center rounded-2xl bg-[--primary]"
+          >
+            <Icon.Feather
+              name="camera"
+              className="text-[--primaryForeground]"
+              size={24}
+            />
+            <Text className="text-xl text-[--primaryForeground] text-lg">
+              Take a photo
+            </Text>
+          </Pressable>
 
-            <Pressable
-              onPress={addPhotoFromGallery}
-              className="flex-row gap-2 py-6 px-8 w-3/4 justify-center items-center rounded-2xl bg-[--primary]"
-            >
-              <Icon.Feather
-                name="image"
-                className="text-[--primaryForeground]"
-                size={24}
-              />
-              <Text className="text-xl text-[--primaryForeground] text-lg">
-                Pick from gallery
-              </Text>
-            </Pressable>
-          </>
-        ) : null}
+          <Pressable
+            onPress={addPhotoFromGallery}
+            className="flex-row gap-2 py-6 px-8 w-3/4 justify-center items-center rounded-2xl bg-[--primary]"
+          >
+            <Icon.Feather
+              name="image"
+              className="text-[--primaryForeground]"
+              size={24}
+            />
+            <Text className="text-xl text-[--primaryForeground] text-lg">
+              Pick from gallery
+            </Text>
+          </Pressable>
+        </View>
+      ) : null}
 
-        {uploading ? <ActivityIndicator size="large" /> : null}
-      </View>
+      {showForm ? (
+        <View className="flex-1 pt-6 pb-12 px-5">
+          <View className="flex-1">
+            <PlantForm control={control} errors={errors} />
+          </View>
+
+          <Button
+            title="Add plant"
+            busy={uploading}
+            onPress={handleSubmit(onSubmit)}
+            disabled={uploading || !isValid}
+          />
+        </View>
+      ) : null}
     </SafeAreaView>
+  )
+}
+
+type FormData = {
+  name: string
+}
+
+function PlantForm({
+  control,
+  errors,
+}: {
+  control: Control<FormData, any, FormData>
+  errors: FieldErrors<FormData>
+}) {
+  return (
+    <>
+      <Text className="pb-2 text-lg text-[--foregroundSecondary]">
+        Your plant’s name:
+      </Text>
+
+      <Controller
+        control={control}
+        rules={{
+          required: true,
+        }}
+        render={({ field: { onChange, onBlur, value } }) => (
+          <TextInput
+            placeholder="First name"
+            onBlur={onBlur}
+            onChangeText={onChange}
+            value={value}
+            autoFocus
+            className="text-xl text-[--foreground] bg-[--input] px-6 pt-4 pb-6 rounded-xl"
+          />
+        )}
+        name="name"
+      />
+      {errors.name && <Text>This is required.</Text>}
+    </>
   )
 }

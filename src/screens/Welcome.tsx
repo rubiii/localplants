@@ -1,8 +1,8 @@
+import Button from "@/components/Button"
 import Icon from "@/components/Icon"
 import useDeviceSettings from "@/hooks/useDeviceSettings"
 import useNavigation from "@/hooks/useNavigation"
 import type { NativeStackNavigationOptions } from "@react-navigation/native-stack"
-import { clsx } from "clsx"
 import { useCallback, useEffect, useState } from "react"
 import { Platform, Pressable, SafeAreaView, Text, View } from "react-native"
 import {
@@ -60,7 +60,8 @@ export default function Welcome() {
           </View>
         </View>
 
-        <ContinueButton
+        <Button
+          title="Continue"
           onPress={finishWelcome}
           disabled={!permissionsGranted}
         />
@@ -247,34 +248,6 @@ const ConfigureButton = ({
   return (
     <Pressable onPress={configure}>
       <Icon.Feather name={icon as any} className={className} size={26} />
-    </Pressable>
-  )
-}
-
-const ContinueButton = ({
-  onPress,
-  disabled = false,
-}: {
-  onPress: any
-  disabled?: boolean
-}) => {
-  return (
-    <Pressable
-      onPress={onPress}
-      disabled={disabled}
-      className={clsx("rounded-2xl py-6 px-8", {
-        "bg-[--primary]": !disabled,
-        "bg-[--backgroundSecondary]": disabled,
-      })}
-    >
-      <Text
-        className={clsx("text-xl", {
-          "text-[--primaryForeground]": !disabled,
-          "text-[--background]": disabled,
-        })}
-      >
-        Continue
-      </Text>
     </Pressable>
   )
 }
