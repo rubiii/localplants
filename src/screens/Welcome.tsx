@@ -2,7 +2,7 @@ import Icon from "@/components/Icon"
 import useDeviceSettings from "@/hooks/useDeviceSettings"
 import useNavigation from "@/hooks/useNavigation"
 import type { NativeStackNavigationOptions } from "@react-navigation/native-stack"
-import clsx from "clsx"
+import { clsx } from "clsx"
 import { useCallback, useEffect, useState } from "react"
 import { Platform, Pressable, SafeAreaView, Text, View } from "react-native"
 import {
@@ -233,14 +233,14 @@ const ConfigureButton = ({
     )
   }
 
-  const icon = status == "unavailable" ? "error-outline" : "check-circle"
+  const icon = status === "unavailable" ? "error-outline" : "check-circle"
 
   let className
-  if (status == "unavailable") {
+  if (status === "unavailable") {
     className = "text-[--error]"
-  } else if (status == "granted") {
+  } else if (status === "granted") {
     className = "text-[--success]"
-  } else if (status == "limited") {
+  } else if (status === "limited") {
     className = "text-[--warning]"
   }
 

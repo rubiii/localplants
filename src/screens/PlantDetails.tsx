@@ -10,6 +10,7 @@ import {
 } from "@react-navigation/native"
 import type { NativeStackNavigationOptions } from "@react-navigation/native-stack"
 import { Image, useCoState } from "jazz-tools/expo"
+import { useEffect } from "react"
 import { FlatList, Pressable, SafeAreaView, Text, View } from "react-native"
 
 export const routeOptions = ({
@@ -27,12 +28,23 @@ export function HeaderRight({ plantId }: { plantId: string }) {
 
   return (
     <Theme style={{ flex: 0 }} className="flex-row">
-      <Pressable
+      {/* <Pressable
         className="group p-2"
         onPress={() => navigate("AddPlantImage", { plantId })}
       >
         <Icon.Material
           name="add-a-photo"
+          className="text-[--foreground] group-active:text-[--primary]"
+          size={24}
+        />
+      </Pressable> */}
+
+      <Pressable
+        className="group p-2"
+        onPress={() => navigate("EditPlant", { plantId })}
+      >
+        <Icon.MaterialCommunity
+          name="circle-edit-outline"
           className="text-[--foreground] group-active:text-[--primary]"
           size={24}
         />
@@ -43,8 +55,8 @@ export function HeaderRight({ plantId }: { plantId: string }) {
         onPress={() => navigate("RemovePlant", { plantId })}
       >
         <Icon.MaterialCommunity
-          name="trash-can-outline"
-          className="text-[--foreground] group-active:text-[--primary]"
+          name="delete-circle-outline"
+          className="text-[--foreground] group-active:text-[--error]"
           size={24}
         />
       </Pressable>
@@ -54,6 +66,7 @@ export function HeaderRight({ plantId }: { plantId: string }) {
 
 export default function PlantDetails() {
   const route = useRoute()
+  const navigation = useNavigation()
   const plantId = (route.params as any).plantId
 
   const plant = useCoState(Plant, plantId, {
@@ -68,6 +81,11 @@ export default function PlantDetails() {
       },
     },
   })
+
+  useEffect(() => {
+    if (!plant) return
+    navigation.setOptions({ title: plant.name })
+  }, [plant, navigation])
 
   return (
     <SafeAreaView className="flex-1 flex-col bg-[--background]">

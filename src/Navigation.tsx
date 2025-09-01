@@ -7,6 +7,9 @@ import PlantDetails, {
 import AddPlantImage, {
   routeOptions as addPlantImageRouteOptions,
 } from "@/screens/PlantDetails/AddPlantImage"
+import EditPlant, {
+  routeOptions as editPlantRouteOptions,
+} from "@/screens/PlantDetails/EditPlant"
 import RemovePlant, {
   routeOptions as removePlantRouteOptions,
 } from "@/screens/PlantDetails/RemovePlant"
@@ -37,7 +40,7 @@ export default function Navigation() {
     settings
       .hasValue("has-seen-welcome")
       .then((value) => setInitialRouteName(value ? "Plants" : "Welcome"))
-  }, [])
+  }, [settings])
 
   if (!initialRouteName) return
 
@@ -84,6 +87,11 @@ export default function Navigation() {
 
         {/* PlantDetails modals */}
         <Stack.Group screenOptions={{ presentation: "modal" }}>
+          <Stack.Screen
+            name="EditPlant"
+            component={EditPlant}
+            options={editPlantRouteOptions}
+          />
           <Stack.Screen
             name="AddPlantImage"
             component={AddPlantImage}

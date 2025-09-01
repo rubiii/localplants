@@ -29,9 +29,6 @@ export function HeaderRight() {
 export default function Account() {
   const { isGuest, isAnonymous, isAuthenticated } = useAccount()
 
-  const toggleSwitch = () => {}
-  const isEnabled = true
-
   return (
     <SafeAreaView className="flex-1 bg-[--background]">
       <View className="flex-1 pt-4 pb-12 px-5">
