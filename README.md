@@ -1,6 +1,6 @@
 # 🌱 Greens
 
-A simple plant care app build on [Expo](https://expo.dev).
+Plant care app build with [Expo](https://expo.dev) and [Jazz](https://jazz.tools).
 
 ## Get started
 
@@ -23,20 +23,13 @@ In the output, you'll find options to open the app in a
 - [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
 - [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
-```
-
 ## Get an app on your phone
 
 Build the app locally:
-eas build --platform ios --profile development --local
+
+```bash
+npm run build:ios:dev
+```
 
 - Connect your phone to your mac.
 - Open the Apple Music app, select your phone, then drag the local .ipa file onto the default/general view.
@@ -48,28 +41,13 @@ Activate developer mode on your phone:
 - Navigate to Privacy & Security: Scroll down and tap on Privacy & Security.
 - Activate Developer Mode: Scroll to the bottom and find Developer Mode. Tap it.
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-Setup:
-
-- Need to install fastlane (why?)
-  https://docs.expo.dev/build-reference/ios-builds/#building-ios-projects-with-fastlane
-  https://docs.fastlane.tools/getting-started/ios/setup/
-  brew install fastlane
-
-Developer Certificate setup:
-
-...
-
 ## Docs
 
-- [Expo](https://docs.expo.dev/)
-- [React Navigation](https://reactnavigation.org/docs/getting-started)
-
-### React Native
-
-- [Core components](https://reactnative.dev/docs/components-and-apis)
-
-## Dependencies
-
-- [Tamagui](https://tamagui.dev/docs/intro/introduction) for styling
+- React Native
+  - [Core components](https://reactnative.dev/docs/components-and-apis) 
+- Expo
+  - [Guides](https://docs.expo.dev/guides/overview/)
+  - [Reference](https://docs.expo.dev/versions/latest/)
+- React Navigation
+  - [Getting started](https://reactnavigation.org/docs/getting-started)
+  - [Native Stack](https://reactnavigation.org/docs/native-stack-navigator)
