@@ -11,7 +11,7 @@ export const routeOptions: NativeStackNavigationOptions = {
   headerRight: () => <HeaderRight />,
 }
 
-export function HeaderRight() {
+function HeaderRight() {
   const { theme, toggleTheme } = useTheme()
 
   return (

@@ -3,14 +3,18 @@ import { co, z } from "jazz-tools"
 export const PlantImage = co.map({
   image: co.image(),
   thumbnail: co.image(),
-  note: co.plainText(),
+  note: co.optional(co.plainText()),
+  emote: z.optional(z.string()),
+
+  // TODO: remove
   moods: co.map({
     happy: z.boolean(),
     worried: z.boolean(),
   }),
+
   createdAt: z.iso.datetime(),
 })
-export type PlantImage = co.loaded<typeof PlantImage>
+export type PlantImageType = co.loaded<typeof PlantImage>
 
 const PlantImages = co.list(PlantImage)
 export type PlantImages = co.loaded<typeof PlantImages>

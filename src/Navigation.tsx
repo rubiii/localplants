@@ -10,6 +10,9 @@ import AddPlantImage, {
 import EditPlant, {
   routeOptions as editPlantRouteOptions,
 } from "@/screens/PlantDetails/EditPlant"
+import EditPlantImage, {
+  routeOptions as editPlantImageRouteOptions,
+} from "@/screens/PlantDetails/EditPlantImage"
 import RemovePlant, {
   routeOptions as removePlantRouteOptions,
 } from "@/screens/PlantDetails/RemovePlant"
@@ -93,14 +96,19 @@ export default function Navigation() {
             options={editPlantRouteOptions}
           />
           <Stack.Screen
+            name="RemovePlant"
+            component={RemovePlant}
+            options={removePlantRouteOptions}
+          />
+          <Stack.Screen
             name="AddPlantImage"
             component={AddPlantImage}
             options={addPlantImageRouteOptions}
           />
           <Stack.Screen
-            name="RemovePlant"
-            component={RemovePlant}
-            options={removePlantRouteOptions}
+            name="EditPlantImage"
+            component={EditPlantImage}
+            options={editPlantImageRouteOptions}
           />
         </Stack.Group>
       </Stack.Navigator>

@@ -15,7 +15,7 @@ export const routeOptions: NativeStackNavigationOptions = {
   headerRight: () => <HeaderRight />,
 }
 
-export function HeaderRight() {
+function HeaderRight() {
   const { navigate } = useNavigation()
 
   return (

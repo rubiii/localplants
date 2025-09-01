@@ -5,11 +5,13 @@ import { ActivityIndicator, Pressable, Text } from "react-native"
 export default function Button({
   title,
   onPress,
+  size = "medium",
   disabled = false,
   busy = false,
 }: {
   title?: string
   onPress?: any
+  size?: string
   disabled?: boolean
   busy?: boolean
 }) {
@@ -19,15 +21,19 @@ export default function Button({
     <Pressable
       onPress={onPress}
       disabled={disabled}
-      className={clsx("flex-row gap-3 rounded-2xl py-6 px-8", {
-        "bg-[--primary]": !disabled,
+      className={clsx("group flex-row gap-3 rounded-2xl", {
+        "py-2 px-4": size === "small",
+        "py-4 px-6": size === "medium",
+        "py-6 px-8": size === "large",
+        "bg-[--primary] group-active:text-[--foreground]": !disabled,
         "bg-[--backgroundSecondary]": disabled,
       })}
     >
       {busy ? <ActivityIndicator size="small" color={colors.primary} /> : null}
 
       <Text
-        className={clsx("text-xl", {
+        className={clsx({
+          "text-xl": size === "large",
           "text-[--primaryForeground]": !disabled,
           "text-[--background]": disabled,
         })}

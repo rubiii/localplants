@@ -53,8 +53,8 @@ export default function RemovePlant() {
           onPress={deletePlant}
           className="flex-row gap-2 py-6 px-8 w-3/4 justify-center items-center rounded-2xl bg-[--error]"
         >
-          <Icon.Feather
-            name="camera"
+          <Icon.MaterialCommunity
+            name="delete-outline"
             className="text-[--primaryForeground]"
             size={24}
           />

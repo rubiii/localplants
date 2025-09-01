@@ -62,6 +62,7 @@ export default function Welcome() {
 
         <Button
           title="Continue"
+          size="large"
           onPress={finishWelcome}
           disabled={!permissionsGranted}
         />
