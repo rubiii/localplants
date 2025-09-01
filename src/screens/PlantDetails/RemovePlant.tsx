@@ -2,8 +2,13 @@ import Icon from "@/components/Icon"
 import useNavigation from "@/hooks/useNavigation"
 import { MyAppAccount, Plant } from "@/schema"
 import { useRoute } from "@react-navigation/native"
+import type { NativeStackNavigationOptions } from "@react-navigation/native-stack"
 import { useAccount, useCoState } from "jazz-tools/expo"
 import { Pressable, SafeAreaView, Text, View } from "react-native"
+
+export const routeOptions: NativeStackNavigationOptions = {
+  title: "Remove plant",
+}
 
 export default function RemovePlant() {
   const route = useRoute()

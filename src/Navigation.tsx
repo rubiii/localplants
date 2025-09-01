@@ -1,10 +1,16 @@
 import PlantDetails, {
   routeOptions as plantDetailRouteOptions,
 } from "@/screens/PlantDetails"
-import AddPlantImage from "@/screens/PlantDetails/AddPlantImage"
-import RemovePlant from "@/screens/PlantDetails/RemovePlant"
+import AddPlantImage, {
+  routeOptions as addPlantImageRouteOptions,
+} from "@/screens/PlantDetails/AddPlantImage"
+import RemovePlant, {
+  routeOptions as removePlantRouteOptions,
+} from "@/screens/PlantDetails/RemovePlant"
 import Plants, { routeOptions as plantsRouteOptions } from "@/screens/Plants"
-import AddPlant from "@/screens/Plants/AddPlant"
+import AddPlant, {
+  routeOptions as addPlantRouteOptions,
+} from "@/screens/Plants/AddPlant"
 import { baseTheme } from "@/theme"
 import { NavigationContainer } from "@react-navigation/native"
 import type { NativeStackNavigationOptions } from "@react-navigation/native-stack"
@@ -42,13 +48,25 @@ export default function Navigation() {
 
         {/* Plants modals */}
         <Stack.Group screenOptions={{ presentation: "modal" }}>
-          <Stack.Screen name="AddPlant" component={AddPlant} />
+          <Stack.Screen
+            name="AddPlant"
+            component={AddPlant}
+            options={addPlantRouteOptions}
+          />
         </Stack.Group>
 
         {/* PlantDetails modals */}
         <Stack.Group screenOptions={{ presentation: "modal" }}>
-          <Stack.Screen name="AddPlantImage" component={AddPlantImage} />
-          <Stack.Screen name="RemovePlant" component={RemovePlant} />
+          <Stack.Screen
+            name="AddPlantImage"
+            component={AddPlantImage}
+            options={addPlantImageRouteOptions}
+          />
+          <Stack.Screen
+            name="RemovePlant"
+            component={RemovePlant}
+            options={removePlantRouteOptions}
+          />
         </Stack.Group>
       </Stack.Navigator>
     </NavigationContainer>

@@ -4,6 +4,7 @@ import useGallery from "@/hooks/useGallery"
 import useNavigation from "@/hooks/useNavigation"
 import randomName from "@/lib/randomName"
 import { MyAppAccount, Plant, PlantImage, type PlantType } from "@/schema"
+import type { NativeStackNavigationOptions } from "@react-navigation/native-stack"
 import { Group } from "jazz-tools"
 import { useAccount } from "jazz-tools/expo"
 import { createImage } from "jazz-tools/media"
@@ -16,6 +17,10 @@ import {
   View,
 } from "react-native"
 import type { Asset } from "react-native-image-picker"
+
+export const routeOptions: NativeStackNavigationOptions = {
+  title: "Add plant",
+}
 
 export default function AddPlant() {
   const [plant, setPlant] = useState<PlantType>()
