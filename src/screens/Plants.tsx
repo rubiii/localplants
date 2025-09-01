@@ -1,7 +1,7 @@
 import Icon from "@/components/Icon"
+import Theme from "@/components/Theme"
 import useNavigation from "@/hooks/useNavigation"
 import { MyAppAccount, type PlantType } from "@/schema"
-import theme from "@/theme"
 import type { NativeStackNavigationOptions } from "@react-navigation/native-stack"
 import { Image, useAccount } from "jazz-tools/expo"
 import { useColorScheme } from "nativewind"
@@ -31,7 +31,7 @@ export function HeaderRight() {
   }
 
   return (
-    <View style={theme[colorScheme || "light"]} className="flex-row">
+    <Theme className="flex-row justify-end">
       <Pressable className="group p-2" onPress={() => navigate("AddPlant")}>
         <Icon.Material
           name="add-circle-outline"
@@ -47,12 +47,11 @@ export function HeaderRight() {
           size={24}
         />
       </Pressable>
-    </View>
+    </Theme>
   )
 }
 
 export default function Plants() {
-  const { colorScheme } = useColorScheme()
   const { me } = useAccount(MyAppAccount, {
     resolve: {
       root: {
@@ -68,10 +67,7 @@ export default function Plants() {
   })
 
   return (
-    <SafeAreaView
-      style={theme[colorScheme || "light"]}
-      className="flex-1 flex-col bg-[--bg-page]"
-    >
+    <SafeAreaView className="flex-1 flex-col bg-[--bg-page]">
       <FlatList
         data={me?.root.plants || []}
         renderItem={({ item }) => <PlantItem plant={item} />}

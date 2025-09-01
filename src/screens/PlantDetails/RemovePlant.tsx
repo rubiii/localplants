@@ -1,10 +1,8 @@
 import Icon from "@/components/Icon"
 import useNavigation from "@/hooks/useNavigation"
 import { MyAppAccount, Plant } from "@/schema"
-import theme from "@/theme"
 import { useRoute } from "@react-navigation/native"
 import { useAccount, useCoState } from "jazz-tools/expo"
-import { useColorScheme } from "nativewind"
 import { Pressable, SafeAreaView, Text, View } from "react-native"
 
 export default function RemovePlant() {
@@ -12,7 +10,6 @@ export default function RemovePlant() {
   const plantId = (route.params as any).plantId
 
   const { navigate } = useNavigation()
-  const { colorScheme } = useColorScheme()
 
   const { me } = useAccount(MyAppAccount, {
     resolve: {
@@ -45,10 +42,7 @@ export default function RemovePlant() {
   }
 
   return (
-    <SafeAreaView
-      style={theme[colorScheme || "light"]}
-      className="flex-1 bg-[--bg-page]"
-    >
+    <SafeAreaView className="flex-1 bg-[--bg-page]">
       <View className="flex-1 w-full pt-12 px-8 pb-24 gap-6 justify-center items-center">
         <Pressable
           onPress={deletePlant}

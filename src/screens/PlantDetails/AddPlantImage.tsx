@@ -3,12 +3,10 @@ import useCamera from "@/hooks/useCamera"
 import useGallery from "@/hooks/useGallery"
 import useNavigation from "@/hooks/useNavigation"
 import { MyAppAccount, Plant, PlantImage } from "@/schema"
-import theme from "@/theme"
 import { useRoute } from "@react-navigation/native"
 import { Group } from "jazz-tools"
 import { useAccount, useCoState } from "jazz-tools/expo"
 import { createImage } from "jazz-tools/media"
-import { useColorScheme } from "nativewind"
 import { useState } from "react"
 import {
   ActivityIndicator,
@@ -26,7 +24,6 @@ export default function AddPlantImage() {
   const [uploading, setUploading] = useState(false)
 
   const { goBack } = useNavigation()
-  const { colorScheme } = useColorScheme()
 
   const { me } = useAccount(MyAppAccount, {
     resolve: {
@@ -107,10 +104,7 @@ export default function AddPlantImage() {
   }
 
   return (
-    <SafeAreaView
-      style={theme[colorScheme || "light"]}
-      className="flex-1 bg-[--bg-page]"
-    >
+    <SafeAreaView className="flex-1 bg-[--bg-page]">
       <View className="flex-1 w-full pt-12 px-8 pb-24 gap-6 justify-center items-center">
         {!uploading ? (
           <>

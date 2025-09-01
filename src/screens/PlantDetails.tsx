@@ -1,7 +1,6 @@
 import Icon from "@/components/Icon"
 import useNavigation from "@/hooks/useNavigation"
 import { Plant, type PlantImage } from "@/schema"
-import theme from "@/theme"
 import { Zoomable } from "@likashefqet/react-native-image-zoom"
 import {
   useRoute,
@@ -10,7 +9,6 @@ import {
 } from "@react-navigation/native"
 import type { NativeStackNavigationOptions } from "@react-navigation/native-stack"
 import { Image, useCoState } from "jazz-tools/expo"
-import { useColorScheme } from "nativewind"
 import { FlatList, Pressable, SafeAreaView, Text, View } from "react-native"
 
 export const routeOptions = ({
@@ -24,11 +22,10 @@ export const routeOptions = ({
 })
 
 export function HeaderRight({ plantId }: { plantId: string }) {
-  const { colorScheme } = useColorScheme()
   const { navigate } = useNavigation()
 
   return (
-    <View style={theme[colorScheme || "light"]} className="flex-row">
+    <View className="flex-row justify-end">
       <Pressable
         className="group p-2"
         onPress={() => navigate("AddPlantImage", { plantId })}
@@ -58,8 +55,6 @@ export default function PlantDetails() {
   const route = useRoute()
   const plantId = (route.params as any).plantId
 
-  const { colorScheme } = useColorScheme()
-
   const plant = useCoState(Plant, plantId, {
     resolve: {
       primaryImage: {
@@ -74,10 +69,7 @@ export default function PlantDetails() {
   })
 
   return (
-    <SafeAreaView
-      style={theme[colorScheme || "light"]}
-      className="flex-1 flex-col bg-[--bg-page]"
-    >
+    <SafeAreaView className="flex-1 flex-col bg-[--bg-page]">
       {plant ? (
         <FlatList
           data={plant.images}

@@ -1,3 +1,4 @@
+import Theme from "@/components/Theme"
 import "@/global.css"
 import Navigation from "@/Navigation"
 import { MyAppAccount } from "@/schema"
@@ -18,7 +19,9 @@ export default function App() {
         }}
       >
         <GestureHandlerRootView>
-          <Navigation />
+          <Theme>
+            <Navigation />
+          </Theme>
         </GestureHandlerRootView>
       </JazzExpoProvider>
     </StrictMode>

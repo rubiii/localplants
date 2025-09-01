@@ -1,8 +1,6 @@
 import Icon from "@/components/Icon"
 import useNavigation from "@/hooks/useNavigation"
-import theme from "@/theme"
 import { clsx } from "clsx"
-import { useColorScheme } from "nativewind"
 import { useCallback, useEffect, useState } from "react"
 import { Platform, Pressable, SafeAreaView, Text, View } from "react-native"
 import {
@@ -17,7 +15,6 @@ type PermissionResult = ResultMap[keyof ResultMap]
 
 export default function Permissions() {
   const { navigate } = useNavigation()
-  const { colorScheme } = useColorScheme()
   const [cameraPermission, setCameraPermission] = useState<PermissionResult>()
   const [libraryPermission, setLibraryPermission] = useState<PermissionResult>()
 
@@ -28,10 +25,7 @@ export default function Permissions() {
     libraryPermission === "limited"
 
   return (
-    <SafeAreaView
-      style={theme[colorScheme || "light"]}
-      className="flex-1 bg-[--bg-page]"
-    >
+    <SafeAreaView className="flex-1 bg-[--bg-page]">
       <View className="flex-1 pt-12 pb-12 px-8">
         <View className="flex-1">
           <Text className="text-5xl text-[--text-headline]">Permissions</Text>
