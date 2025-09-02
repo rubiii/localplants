@@ -25,8 +25,7 @@
     "production": {
       "ios": {
         "appleId": "dharrington@posteo.de",
-        "appleTeamId": "N8Q5XQ3444",
-        "bundleIdentifier": "app.localplants"
+        "appleTeamId": "N8Q5XQ3444"
       }
     }
   }
