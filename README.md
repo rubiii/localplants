@@ -1,4 +1,4 @@
-# 🌱 Greens
+# 🌱 Local Plants
 
 Plant care app build with [Expo](https://expo.dev) and [Jazz](https://jazz.tools).
 
@@ -44,7 +44,7 @@ Activate developer mode on your phone:
 ## Docs
 
 - React Native
-  - [Core components](https://reactnative.dev/docs/components-and-apis) 
+  - [Core components](https://reactnative.dev/docs/components-and-apis)
 - Expo
   - [Guides](https://docs.expo.dev/guides/overview/)
   - [Reference](https://docs.expo.dev/versions/latest/)

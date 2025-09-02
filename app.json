@@ -11,7 +11,7 @@
     "ios": {
       "userInterfaceStyle": "automatic",
       "supportsTablet": true,
-      "bundleIdentifier": "net.greens",
+      "bundleIdentifier": "app.localplants",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false,
         "NSCameraUsageDescription": "$(PRODUCT_NAME) needs access to your Camera.",
@@ -31,17 +31,12 @@
         "android.permission.READ_MEDIA_IMAGES",
         "android.permission.VIBRATE"
       ],
-      "package": "net.greens"
+      "package": "app.localplants"
     },
     "web": {
       "bundler": "metro",
       "output": "static",
       "favicon": "./assets/favicon.png"
-    },
-    "extra": {
-      "eas": {
-        "projectId": "f62d250b-64b5-4031-99b5-b5c41960a10d"
-      }
     },
     "plugins": [
       "expo-secure-store",
@@ -55,7 +50,14 @@
           ]
         }
       ],
-      "expo-sqlite"
-    ]
+      "expo-sqlite",
+      "expo-font"
+    ],
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "f4589529-4aa8-4231-8aff-9281ac83de0c"
+      }
+    }
   }
 }
