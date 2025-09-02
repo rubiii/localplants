@@ -40,6 +40,7 @@ function HeaderRight() {
     },
   })
 
+  // TODO: maybe add a confirm dialog somehow?
   const removePlantImage = () => {
     if (!plant) return
 

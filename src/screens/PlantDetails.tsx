@@ -80,6 +80,7 @@ export default function PlantDetails() {
     navigation.setOptions({ title: plant.name })
 
     // scroll list to top when an image was added
+    // TODO: change to scrollToIndex when images get sorted by date
     listRef.current?.scrollToOffset({ offset: 0 })
   }, [plant, navigation])
 
@@ -113,6 +114,7 @@ export default function PlantDetails() {
 
           <FlatList
             ref={listRef}
+            // TODO: we store the image's createdAt so we should order this list
             data={plant.images}
             renderItem={({ item }) =>
               item ? <Row plantId={plant.$jazz.id} image={item} /> : null
