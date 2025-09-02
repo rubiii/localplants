@@ -1,12 +1,12 @@
 {
   "expo": {
-    "name": "greens",
-    "slug": "greens",
+    "name": "Local Plants",
+    "slug": "localplants",
     "owner": "rubiii",
     "orientation": "portrait",
     "version": "0.0.1",
     "icon": "./assets/icon.png",
-    "scheme": "greens",
+    "scheme": "localplants",
     "userInterfaceStyle": "automatic",
     "ios": {
       "userInterfaceStyle": "automatic",
