@@ -1,11 +1,13 @@
 import Button from "@/components/Button"
+import Icon from "@/components/Icon"
 import useNavigation from "@/hooks/useNavigation"
 import { MyAppAccount, Plant } from "@/schema"
 import type { NativeStackNavigationOptions } from "@react-navigation/native-stack"
+import * as Clipboard from "expo-clipboard"
 import * as Linking from "expo-linking"
 import { createInviteLink, useAccount, useCoState } from "jazz-tools/expo"
 import { useState } from "react"
-import { SafeAreaView, ScrollView, Text, View } from "react-native"
+import { Pressable, SafeAreaView, ScrollView, Text, View } from "react-native"
 import QRCode from "react-qr-code"
 
 export const routeOptions: NativeStackNavigationOptions = {
@@ -84,13 +86,36 @@ function InfoView({ generateInvite }: { generateInvite: () => void }) {
 }
 
 function QRCodeView({ inviteLink }: { inviteLink: string }) {
-  return (
-    <View className="mx-auto">
-      <QRCode size={300} value={inviteLink} />
+  const copyLink = () => Clipboard.setStringAsync(inviteLink)
 
-      <Text className="text-[--foregroundMuted]">
-        You can also copy and share this link:
-      </Text>
+  return (
+    <View className="gap-12">
+      <View className="mx-auto">
+        <QRCode size={300} value={inviteLink} />
+      </View>
+
+      <View className="gap-2">
+        <Text className="text-[--foregroundSecondary]">
+          You can also copy and share this link:
+        </Text>
+
+        <View className="px-5 py-0.5 rounded-xl bg-[--input]">
+          <Pressable
+            className="group flex-row items-center py-3"
+            onPress={copyLink}
+          >
+            <Text className="flex-1 text-xs text-[--foreground]">
+              {inviteLink}
+            </Text>
+
+            <Icon.Material
+              name="content-copy"
+              size={20}
+              className="ml-3 text-[--foreground] group-active:text-[--background]"
+            />
+          </Pressable>
+        </View>
+      </View>
     </View>
   )
 }
