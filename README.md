@@ -10,7 +10,9 @@ Plant care app build with [Expo](https://expo.dev) and [Jazz](https://jazz.tools
 [x] - Allow plant collections for sharing  
 [x] - Enable sharing a plant via QR code / URL  
 [x] - Enable sharing a collection  
+[ ] - Allow custom theming  
 [ ] - Make images zoomable  
+[ ] - Maybe use a component library like https://gluestack.io
 [ ] - Make lists orderable by createdAt/addedAt/name?  
 [ ] - Let users update their profile.name  
 [ ] - Expo [Updates](https://docs.expo.dev/versions/latest/sdk/updates/)  
