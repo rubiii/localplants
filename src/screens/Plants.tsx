@@ -1,11 +1,13 @@
+import Button from "@/components/Button"
 import Icon from "@/components/Icon"
 import Theme from "@/components/Theme"
 import useNavigation from "@/hooks/useNavigation"
-import { MyAppAccount, type PlantType } from "@/schema"
+import { MyAppAccount, PlantCollection, PlantType } from "@/schema"
 import type { NativeStackNavigationOptions } from "@react-navigation/native-stack"
-import { Image, useAccount } from "jazz-tools/expo"
-
-import { FlatList, Pressable, SafeAreaView, Text, View } from "react-native"
+import { clsx } from "clsx"
+import { Image, useAccount, useCoState } from "jazz-tools/expo"
+import { Pressable, SafeAreaView, Text, View } from "react-native"
+import { ScrollView } from "react-native-gesture-handler"
 
 const PLANT_ITEM_HEIGHT = 200
 
@@ -16,21 +18,21 @@ export const routeOptions: NativeStackNavigationOptions = {
 }
 
 function HeaderRight() {
-  const { navigate } = useNavigation()
+  const { navigation } = useNavigation()
 
   return (
     <Theme style={{ flex: 0 }} className="flex-row">
-      <Pressable className="group p-2" onPress={() => navigate("AddPlant")}>
+      {/* <Pressable className="group p-2" onPress={() => navigate("AddPlant")}>
         <Icon.Material
           name="add-circle-outline"
-          className="text-[--foreground] group-active:text-[--primary]"
+          className="text-[--primaryForeground] group-active:text-[--foreground]"
           size={24}
         />
-      </Pressable>
+      </Pressable> */}
 
       <Pressable
         className="group p-2 -mr-2"
-        onPress={() => navigate("Account")}
+        onPress={() => navigation.navigate("Account")}
       >
         <Icon.MaterialCommunity
           name="account-circle-outline"
@@ -44,77 +46,123 @@ function HeaderRight() {
 
 export default function Plants() {
   const { me } = useAccount(MyAppAccount, {
-    resolve: {
-      root: {
-        plants: {
-          $each: {
-            primaryImage: {
-              thumbnail: true,
-            },
-          },
-        },
-      },
-    },
+    resolve: { root: { collections: { $each: true } } },
   })
 
+  const addCollection = () => {}
+
   return (
-    <SafeAreaView className="flex-1 flex-col bg-[--background]">
-      <FlatList
-        data={me?.root.plants || []}
-        renderItem={({ item }) => <PlantItem plant={item} />}
-        keyExtractor={(plant) => plant.$jazz.id.toString()}
-        getItemLayout={(_data, index) => ({
-          length: PLANT_ITEM_HEIGHT,
-          offset: PLANT_ITEM_HEIGHT * index,
-          index,
-        })}
-        numColumns={2}
-        contentContainerStyle={{ gap: 36 }}
-        columnWrapperStyle={{
-          gap: 16,
-          marginLeft: 16,
-          marginRight: 16,
-        }}
-        className="pt-6"
-      />
+    <SafeAreaView className="flex-1 bg-[--background]">
+      <ScrollView className="py-8 px-5">
+        <View className="flex flex-row justify-end">
+          <Button
+            title="Add collection"
+            onPress={addCollection}
+            icon="add-circle-outline"
+            size="small"
+          />
+        </View>
+
+        <View className="gap-8">
+          {me?.root.collections.map((collection) => (
+            <PlantCollectionView
+              key={collection.$jazz.id}
+              collectionId={collection.$jazz.id}
+            />
+          ))}
+        </View>
+      </ScrollView>
     </SafeAreaView>
   )
 }
 
-const PlantItem = ({ plant }: { plant: PlantType }) => {
-  const { navigate } = useNavigation()
+function PlantCollectionView({ collectionId }: { collectionId: string }) {
+  const { navigation } = useNavigation()
+  const collection = useCoState(PlantCollection, collectionId, {
+    resolve: {
+      sharedBy: true,
+      plants: { $each: { primaryImage: { image: true } } },
+    },
+  })
+
+  const addPlant = () => navigation.navigate("AddPlant", { collectionId })
+  const gotoPlant = (plant: PlantType) => {
+    if (!collection) return
+
+    navigation.navigate("PlantDetails", {
+      title: plant.name,
+      plantId: plant.$jazz.id,
+      collectionId,
+      readOnly: !!collection.sharedBy,
+    })
+  }
 
   return (
-    <View style={{ height: PLANT_ITEM_HEIGHT, flex: 1, maxWidth: "100%" }}>
-      <Pressable
-        onPress={() =>
-          navigate("PlantDetails", {
-            plantId: plant.$jazz.id,
-            name: plant.name,
-          })
-        }
-      >
-        <View
-          className="rounded-lg bg-[--background-secondary]"
-          style={{ height: 180, width: "100%" }}
-        >
-          {plant.primaryImage?.thumbnail && (
-            <Image
-              imageId={plant.primaryImage.thumbnail.$jazz.id}
-              resizeMode="cover"
-              style={{
-                width: "100%",
-                height: 180,
-                borderRadius: 6,
-              }}
-              height={180}
-              width={400}
-            />
-          )}
-        </View>
+    <View>
+      <Text className="text-lg text-[--foreground]">{collection?.name}</Text>
 
-        <Text className="my-2 text-[--foregroundSecondary]">{plant.name}</Text>
-      </Pressable>
+      <View className="flex-row flex-wrap -m-1 mt-2">
+        {(collection?.plants || []).map((plant) => (
+          <PlantItem key={plant.$jazz.id} plant={plant} gotoPlant={gotoPlant} />
+        ))}
+
+        {!collection || collection.sharedBy ? null : (
+          <AddPlantButton onPress={addPlant} />
+        )}
+      </View>
     </View>
+  )
+}
+
+function PlantItem({
+  plant,
+  gotoPlant,
+}: {
+  plant: PlantType
+  gotoPlant: (plant: PlantType) => void
+}) {
+  if (!plant.primaryImage?.image) return
+
+  return (
+    <Pressable
+      onPress={() => gotoPlant(plant)}
+      key={plant.primaryImage.image.$jazz.id}
+      className="w-4/12 p-1 aspect-square"
+    >
+      <Image
+        imageId={plant.primaryImage.image.$jazz.id}
+        resizeMode="cover"
+        style={{
+          width: "100%",
+          height: "100%",
+          borderRadius: 12,
+        }}
+        className="aspect-ratio"
+        height={140}
+        width={140}
+      />
+    </Pressable>
+  )
+}
+
+function AddPlantButton({ onPress }: { onPress: () => void }) {
+  return (
+    <Pressable
+      onPress={onPress}
+      className="group w-4/12 p-1 aspect-square items-center justify-center"
+    >
+      <View
+        className={clsx(
+          "h-full w-full flex items-center justify-center rounded-xl border border-[--border]",
+          "group-active:bg-[--primary] group-active:border-[--primary]",
+        )}
+      >
+        <Icon.MaterialCommunity
+          name="plus"
+          className="text-[--primary] group-active:text-[--background]"
+          size={42}
+        />
+      </View>
+    </Pressable>
   )
 }

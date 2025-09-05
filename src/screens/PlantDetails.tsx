@@ -1,13 +1,9 @@
 import Button from "@/components/Button"
 import Icon from "@/components/Icon"
 import Theme from "@/components/Theme"
-import useNavigation from "@/hooks/useNavigation"
+import useNavigation, { RootStackParamList } from "@/hooks/useNavigation"
 import { Plant, type PlantImageType } from "@/schema"
-import {
-  useRoute,
-  type ParamListBase,
-  type RouteProp,
-} from "@react-navigation/native"
+import { type RouteProp } from "@react-navigation/native"
 import type { NativeStackNavigationOptions } from "@react-navigation/native-stack"
 import { Image, useCoState } from "jazz-tools/expo"
 import { useEffect, useRef } from "react"
@@ -16,33 +12,52 @@ import { FlatList, Pressable, SafeAreaView, Text, View } from "react-native"
 export const routeOptions = ({
   route,
 }: {
-  route: RouteProp<ParamListBase, "PlantDetails">
+  route: RouteProp<RootStackParamList, "PlantDetails">
 }): NativeStackNavigationOptions => ({
-  title: (route.params as any).name,
+  title: route.params.title,
   headerLargeTitle: true,
-  headerRight: () => <HeaderRight plantId={(route.params as any).plantId} />,
+  headerRight: () => {
+    const plantId = route.params.plantId
+    const collectionId = route.params.collectionId
+    const readOnly = route.params.readOnly
+    return (
+      <HeaderRight
+        plantId={plantId}
+        collectionId={collectionId}
+        readOnly={readOnly}
+      />
+    )
+  },
 })
 
-function HeaderRight({ plantId }: { plantId: string }) {
-  const { navigate } = useNavigation()
+function HeaderRight({
+  plantId,
+  collectionId,
+  readOnly,
+}: {
+  plantId: string
+  collectionId: string
+  readOnly: boolean
+}) {
+  const { navigation } = useNavigation()
+
+  const gotoSharePlant = () => navigation.navigate("SharePlant", { plantId })
+  const gotoRemovePlant = () =>
+    navigation.navigate("RemovePlant", { plantId, collectionId })
+
+  if (readOnly) return
 
   return (
     <Theme style={{ flex: 0 }} className="flex-row">
-      <Pressable
-        className="group p-2"
-        onPress={() => navigate("EditPlant", { plantId })}
-      >
-        <Icon.MaterialCommunity
-          name="circle-edit-outline"
+      <Pressable className="group p-2" onPress={gotoSharePlant}>
+        <Icon.Material
+          name="share"
           className="text-[--foreground] group-active:text-[--primary]"
           size={24}
         />
       </Pressable>
 
-      <Pressable
-        className="group p-2 -mr-2"
-        onPress={() => navigate("RemovePlant", { plantId })}
-      >
+      <Pressable className="group p-2 -mr-2" onPress={gotoRemovePlant}>
         <Icon.MaterialCommunity
           name="delete-circle-outline"
           className="text-[--foreground] group-active:text-[--error]"
@@ -54,22 +69,17 @@ function HeaderRight({ plantId }: { plantId: string }) {
 }
 
 export default function PlantDetails() {
-  const route = useRoute()
-  const plantId = (route.params as any).plantId
+  const { route } = useNavigation<"PlantDetails">()
+  const plantId = route.params.plantId
+  const readOnly = route.params.readOnly
 
-  const navigation = useNavigation()
+  const { navigation } = useNavigation()
   const listRef = useRef<FlatList>(null)
 
   const plant = useCoState(Plant, plantId, {
     resolve: {
-      primaryImage: {
-        thumbnail: true,
-      },
-      images: {
-        $each: {
-          thumbnail: true,
-        },
-      },
+      primaryImage: { image: true },
+      images: { $each: { image: true } },
     },
   })
 
@@ -88,36 +98,43 @@ export default function PlantDetails() {
     <SafeAreaView className="flex-1 flex-col bg-[--background]">
       {plant ? (
         <>
-          <View className="flex-row items-start">
-            <View className="flex items-center w-[26] min-w-[26] ml-5 mr-6">
-              <View className="h-[16] w-px border-r border-[--border]" />
+          {!readOnly ? (
+            <View className="flex-row items-start">
+              <View className="flex items-center w-[26] min-w-[26] ml-5 mr-6">
+                <View className="h-[16] w-px border-r border-[--border]" />
 
-              <Icon.Material
-                name="add-a-photo"
-                className="text-[--primary]"
-                size={24}
-              />
+                <Icon.Material
+                  name="add-a-photo"
+                  className="text-[--primary]"
+                  size={24}
+                />
 
-              <View className="w-px min-h-[42] border-r border-[--border]" />
+                <View className="w-px min-h-[42] border-r border-[--border]" />
+              </View>
+
+              <View className="pt-4 pb-3">
+                <Button
+                  title="Add a photo"
+                  size="small"
+                  onPress={() =>
+                    navigation.navigate("AddPlantImage", { plantId })
+                  }
+                />
+              </View>
             </View>
-
-            <View className="pt-4 pb-3">
-              <Button
-                title="Add a photo"
-                size="small"
-                onPress={() =>
-                  navigation.navigate("AddPlantImage", { plantId })
-                }
-              />
+          ) : (
+            <View className="flex-row items-start">
+              <View className="flex items-center w-[26] min-w-[26] ml-5 mr-6">
+                <View className="h-[32] w-px border-r border-[--border]"></View>
+              </View>
             </View>
-          </View>
+          )}
 
           <FlatList
             ref={listRef}
-            // TODO: we store the image's createdAt so we should order this list
             data={plant.images}
             renderItem={({ item }) =>
-              item ? <Row plantId={plant.$jazz.id} image={item} /> : null
+              item ? <Row plantId={plant.$jazz.id} plantImage={item} /> : null
             }
             keyExtractor={(image) =>
               image ? image.$jazz.id.toString() : "none"
@@ -131,14 +148,12 @@ export default function PlantDetails() {
 
 const Row = ({
   plantId,
-  image,
+  plantImage,
 }: {
   plantId: string
-  image: PlantImageType
+  plantImage: PlantImageType
 }) => {
-  const { navigate } = useNavigation()
-
-  const createdAt = new Date(image.createdAt)
+  const createdAt = new Date(plantImage.createdAt)
   const weekday = createdAt.toLocaleString(undefined, { weekday: "long" })
   const day = createdAt.toLocaleString(undefined, { day: "2-digit" })
   const month = createdAt.toLocaleString(undefined, { month: "long" })
@@ -151,11 +166,11 @@ const Row = ({
   return (
     <View className="flex-row items-start">
       <View className="flex items-center w-[26] min-w-[26] ml-5 mr-6">
-        {image.emote ? (
+        {plantImage.emote ? (
           <>
             <View className="h-[10] w-px border-r border-[--border]" />
             <Icon.MaterialCommunity
-              name={`emoticon-${image.emote}-outline` as any}
+              name={`emoticon-${plantImage.emote}-outline` as any}
               className="text-[--primary]"
               size={24}
             />
@@ -176,34 +191,24 @@ const Row = ({
           <Text className="text-[--foregroundMuted]">({time})</Text>
         </Text>
 
-        {image?.thumbnail ? (
-          // TODO: Zoomable doesn't work. do we still need this?
+        {plantImage?.image ? (
           // <Zoomable>
-          <Pressable
-            onPress={() =>
-              navigate("EditPlantImage", {
-                plantId,
-                plantImageId: image.$jazz.id,
-              })
-            }
-          >
-            <Image
-              imageId={image.thumbnail.$jazz.id}
-              resizeMode="cover"
-              style={{
-                width: "100%",
-                height: 180,
-                borderRadius: 6,
-              }}
-              height={180}
-              width={400}
-            />
-          </Pressable>
+          <Image
+            imageId={plantImage.image.$jazz.id}
+            resizeMode="cover"
+            style={{
+              width: "100%",
+              height: 180,
+              borderRadius: 6,
+            }}
+            height={180}
+            width={400}
+          />
         ) : null}
 
-        {image.note?.length ? (
+        {plantImage.note?.length ? (
           <Text className="text-lg mt-2 mb-6 text-[--foregroundSecondary]">
-            {image.note}
+            {plantImage.note}
           </Text>
         ) : null}
       </View>

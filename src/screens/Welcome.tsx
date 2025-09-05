@@ -4,7 +4,7 @@ import useDeviceSettings from "@/hooks/useDeviceSettings"
 import useNavigation from "@/hooks/useNavigation"
 import type { NativeStackNavigationOptions } from "@react-navigation/native-stack"
 import { useCallback, useEffect, useState } from "react"
-import { Platform, Pressable, SafeAreaView, Text, View } from "react-native"
+import { Platform, Pressable, Text, View } from "react-native"
 import {
   check,
   openSettings,
@@ -12,6 +12,7 @@ import {
   request,
 } from "react-native-permissions"
 import { ResultMap } from "react-native-permissions/dist/typescript/results"
+import { SafeAreaView } from "react-native-safe-area-context"
 
 type PermissionResult = ResultMap[keyof ResultMap]
 
@@ -21,7 +22,7 @@ export const routeOptions: NativeStackNavigationOptions = {
 }
 
 export default function Welcome() {
-  const navigation = useNavigation()
+  const { navigation } = useNavigation()
   const settings = useDeviceSettings()
 
   const [cameraPermission, setCameraPermission] = useState<PermissionResult>()
@@ -34,12 +35,17 @@ export default function Welcome() {
     libraryPermission === "limited"
 
   const finishWelcome = async () => {
-    await settings.setValue("has-seen-welcome")
+    await settings.setValue("skip-welcome")
     navigation.replace("Plants")
   }
 
   return (
-    <SafeAreaView className="flex-1 bg-[--background]">
+    <SafeAreaView
+      className="flex-1 bg-[--background]"
+      // style={{
+      //   paddingTop: Platform.OS == "android" ? StatusBar.currentHeight : 0,
+      // }}
+    >
       <View className="flex-1 pt-4 pb-12 px-5">
         <View className="flex-1">
           <Text className="text-[--foregroundSecondary]">
@@ -79,6 +85,8 @@ function CameraPermissions({
   setStatus: any
 }) {
   const iosPermission = PERMISSIONS.IOS.CAMERA
+  const androidPermission = PERMISSIONS.ANDROID.CAMERA
+  const permission = Platform.OS === "ios" ? iosPermission : androidPermission
 
   const setAndLogStatus = useCallback(
     (status: PermissionResult) => {
@@ -93,7 +101,7 @@ function CameraPermissions({
       case "denied":
         // permission has not been requested or is denied but requestable
         console.debug("Requesting camera permissions")
-        request(iosPermission).then(setAndLogStatus)
+        request(permission).then(setAndLogStatus)
         break
 
       case "blocked": // permission is denied and not requestable
@@ -112,13 +120,11 @@ function CameraPermissions({
   }
 
   useEffect(() => {
-    if (Platform.OS === "ios") {
-      check(iosPermission).then(setAndLogStatus)
-    }
-  }, [iosPermission, setAndLogStatus])
+    check(permission).then(setAndLogStatus)
+  }, [permission, setAndLogStatus])
 
   return (
-    <View className="flex-row">
+    <SafeAreaView className="flex-row">
       <View className="flex-1">
         <View className="flex-row items-end">
           <View className="flex-row flex-grow items-baseline">
@@ -139,7 +145,7 @@ function CameraPermissions({
           for taking photos of your plants.
         </Text>
       </View>
-    </View>
+    </SafeAreaView>
   )
 }
 
@@ -151,6 +157,8 @@ function LibraryPermissions({
   setStatus: any
 }) {
   const iosPermission = PERMISSIONS.IOS.PHOTO_LIBRARY
+  const androidPermission = PERMISSIONS.ANDROID.READ_MEDIA_IMAGES
+  const permission = Platform.OS === "ios" ? iosPermission : androidPermission
 
   const setAndLogStatus = useCallback(
     (status: PermissionResult) => {
@@ -165,7 +173,7 @@ function LibraryPermissions({
       case "denied":
         // permission has not been requested or is denied but requestable
         console.debug("Requesting camera permissions")
-        request(iosPermission).then(setAndLogStatus)
+        request(permission).then(setAndLogStatus)
         break
 
       case "blocked": // permission is denied and not requestable
@@ -184,10 +192,8 @@ function LibraryPermissions({
   }
 
   useEffect(() => {
-    if (Platform.OS === "ios") {
-      check(iosPermission).then(setAndLogStatus)
-    }
-  }, [iosPermission, setAndLogStatus])
+    check(permission).then(setAndLogStatus)
+  }, [permission, setAndLogStatus])
 
   return (
     <View className="flex-row">

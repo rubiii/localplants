@@ -1,18 +1,17 @@
-import useDeviceSettings from "@/hooks/useDeviceSettings"
 import useTheme from "@/hooks/useTheme"
+import AcceptPlantInvite, {
+  routeOptions as acceptPlantInviteRouteOptions,
+} from "@/screens/AcceptPlantInvite"
 import Account, { routeOptions as accountRouteOptions } from "@/screens/Account"
+import CustomTheme, {
+  routeOptions as customThemeRouteOptions,
+} from "@/screens/CustomTheme"
 import PlantDetails, {
   routeOptions as plantDetailRouteOptions,
 } from "@/screens/PlantDetails"
 import AddPlantImage, {
   routeOptions as addPlantImageRouteOptions,
 } from "@/screens/PlantDetails/AddPlantImage"
-import EditPlant, {
-  routeOptions as editPlantRouteOptions,
-} from "@/screens/PlantDetails/EditPlant"
-import EditPlantImage, {
-  routeOptions as editPlantImageRouteOptions,
-} from "@/screens/PlantDetails/EditPlantImage"
 import RemovePlant, {
   routeOptions as removePlantRouteOptions,
 } from "@/screens/PlantDetails/RemovePlant"
@@ -24,40 +23,62 @@ import Welcome, { routeOptions as welcomeRouteOptions } from "@/screens/Welcome"
 import { NavigationContainer } from "@react-navigation/native"
 import type { NativeStackNavigationOptions } from "@react-navigation/native-stack"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
-import { useEffect, useState } from "react"
+import * as Linking from "expo-linking"
+import { InviteSecret } from "jazz-tools"
+import { Text } from "react-native"
+import SharePlant, {
+  routeOptions as sharePlantRouteOptions,
+} from "./screens/PlantDetails/SharePlant"
 
-const Stack = createNativeStackNavigator()
+export type RootStackParamList = {
+  Welcome: undefined
+  AcceptPlantInvite: {
+    value_id: string
+    invite_secret: InviteSecret
+    shared_by_id: string
+    shared_by_name: string
+  }
+  Plants: undefined
+  PlantDetails: {
+    title: string
+    plantId: string
+    collectionId: string
+    readOnly: boolean
+  }
+  Account: undefined
+  CustomTheme: { themeId: string }
+  AddPlant: { collectionId: string }
+  SharePlant: { plantId: string }
+  RemovePlant: { plantId: string; collectionId: string }
+  AddPlantImage: { plantId: string }
+}
 
-export default function Navigation() {
+const Stack = createNativeStackNavigator<RootStackParamList>()
+const prefix = Linking.createURL("/")
+
+export default function Navigation({ skipWelcome }: { skipWelcome: boolean }) {
   const { colors } = useTheme()
-  const settings = useDeviceSettings()
-  const [initialRouteName, setInitialRouteName] = useState<string>()
 
   const rootStackOptions: NativeStackNavigationOptions = {
     headerTintColor: colors.foreground,
-    headerTransparent: true,
-    headerBlurEffect: "regular",
+    headerStyle: { backgroundColor: colors.background },
+    // headerTransparent: true,
+    // headerBlurEffect: "regular",
   }
 
-  useEffect(() => {
-    settings
-      .hasValue("has-seen-welcome")
-      .then((value) => setInitialRouteName(value ? "Plants" : "Welcome"))
-  }, [settings])
-
-  if (!initialRouteName) return
-
   return (
-    <NavigationContainer>
-      <Stack.Navigator
-        initialRouteName={initialRouteName}
-        screenOptions={rootStackOptions}
-      >
-        <Stack.Screen
-          name="Welcome"
-          component={Welcome}
-          options={welcomeRouteOptions}
-        />
+    <NavigationContainer
+      linking={{ prefixes: [prefix] }}
+      fallback={<Text>Loading...</Text>}
+    >
+      <Stack.Navigator screenOptions={rootStackOptions}>
+        {!skipWelcome ? (
+          <Stack.Screen
+            name="Welcome"
+            component={Welcome}
+            options={welcomeRouteOptions}
+          />
+        ) : null}
 
         {/* Home stack */}
         <Stack.Group>
@@ -73,10 +94,24 @@ export default function Navigation() {
           />
 
           <Stack.Screen
-            name="Account"
-            component={Account}
-            options={accountRouteOptions}
+            name="AcceptPlantInvite"
+            component={AcceptPlantInvite}
+            options={acceptPlantInviteRouteOptions}
           />
+
+          <Stack.Group>
+            <Stack.Screen
+              name="Account"
+              component={Account}
+              options={accountRouteOptions}
+            />
+
+            <Stack.Screen
+              name="CustomTheme"
+              component={CustomTheme}
+              options={customThemeRouteOptions}
+            />
+          </Stack.Group>
         </Stack.Group>
 
         {/* Plants modals */}
@@ -91,9 +126,9 @@ export default function Navigation() {
         {/* PlantDetails modals */}
         <Stack.Group screenOptions={{ presentation: "modal" }}>
           <Stack.Screen
-            name="EditPlant"
-            component={EditPlant}
-            options={editPlantRouteOptions}
+            name="SharePlant"
+            component={SharePlant}
+            options={sharePlantRouteOptions}
           />
           <Stack.Screen
             name="RemovePlant"
@@ -104,11 +139,6 @@ export default function Navigation() {
             name="AddPlantImage"
             component={AddPlantImage}
             options={addPlantImageRouteOptions}
-          />
-          <Stack.Screen
-            name="EditPlantImage"
-            component={EditPlantImage}
-            options={editPlantImageRouteOptions}
           />
         </Stack.Group>
       </Stack.Navigator>

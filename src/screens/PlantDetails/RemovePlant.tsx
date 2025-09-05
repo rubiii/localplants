@@ -1,9 +1,8 @@
 import Icon from "@/components/Icon"
 import useNavigation from "@/hooks/useNavigation"
-import { MyAppAccount, Plant } from "@/schema"
-import { useRoute } from "@react-navigation/native"
+import { MyAppAccount } from "@/schema"
 import type { NativeStackNavigationOptions } from "@react-navigation/native-stack"
-import { useAccount, useCoState } from "jazz-tools/expo"
+import { useAccount } from "jazz-tools/expo"
 import { Pressable, SafeAreaView, Text, View } from "react-native"
 
 export const routeOptions: NativeStackNavigationOptions = {
@@ -11,38 +10,23 @@ export const routeOptions: NativeStackNavigationOptions = {
 }
 
 export default function RemovePlant() {
-  const route = useRoute()
-  const plantId = (route.params as any).plantId
-
-  const navigation = useNavigation()
+  const { navigation, route } = useNavigation<"RemovePlant">()
+  const plantId = route.params.plantId
+  const collectionId = route.params.collectionId
 
   const { me } = useAccount(MyAppAccount, {
-    resolve: {
-      root: {
-        plants: {
-          $each: true,
-        },
-      },
-    },
-  })
-
-  const plant = useCoState(Plant, plantId, {
-    resolve: {
-      primaryImage: {
-        thumbnail: true,
-      },
-      images: {
-        $each: {
-          thumbnail: true,
-        },
-      },
-    },
+    resolve: { root: { collections: { $each: { plants: { $each: true } } } } },
   })
 
   const deletePlant = () => {
-    if (!me || !plant) return
+    if (!me) return
 
-    me.root.plants.$jazz.remove((p) => p.$jazz.id === plant.$jazz.id)
+    const collection = me.root.collections.find(
+      (c) => c.$jazz.id === collectionId,
+    )
+    if (!collection) return
+
+    collection.plants.$jazz.remove((p) => p.$jazz.id === plantId)
     navigation.popToTop()
   }
 
@@ -58,7 +42,7 @@ export default function RemovePlant() {
             className="text-[--primaryForeground]"
             size={24}
           />
-          <Text className="text-xl text-[--primaryForeground] text-lg">
+          <Text className="text-xl text-[--primaryForeground]">
             Remove this plant
           </Text>
         </Pressable>

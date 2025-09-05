@@ -1,28 +1,41 @@
 import Theme from "@/components/Theme"
 import "@/global.css"
+import useDeviceSettings from "@/hooks/useDeviceSettings"
 import Navigation from "@/Navigation"
 import { MyAppAccount } from "@/schema"
 import "@bam.tech/react-native-image-resizer"
 import { JazzExpoProvider } from "jazz-tools/expo"
-import { StrictMode } from "react"
+import { StrictMode, useEffect, useState } from "react"
 import { GestureHandlerRootView } from "react-native-gesture-handler"
+import { KeyboardProvider } from "react-native-keyboard-controller"
+import { SafeAreaProvider } from "react-native-safe-area-context"
 
-const apiKey = "me@rubiii.com"
+const peer = `wss://cloud.jazz.tools/?key=me@rubiii.com`
 
 export default function App() {
+  const settings = useDeviceSettings()
+  const [skipWelcome, setSkipWelcome] = useState<boolean>()
+
+  useEffect(() => {
+    settings.hasValue("skip-welcome").then(setSkipWelcome)
+  }, [settings])
+
+  if (skipWelcome === undefined) return
+
   return (
     <StrictMode>
       <JazzExpoProvider
         AccountSchema={MyAppAccount}
-        sync={{
-          peer: `wss://cloud.jazz.tools/?key=${apiKey}`,
-          // when: "always", // When to sync: "always", "never", or "signedUp"
-        }}
+        sync={{ peer, when: "always" }}
       >
         <GestureHandlerRootView>
-          <Theme>
-            <Navigation />
-          </Theme>
+          <KeyboardProvider>
+            <SafeAreaProvider>
+              <Theme>
+                <Navigation skipWelcome={skipWelcome} />
+              </Theme>
+            </SafeAreaProvider>
+          </KeyboardProvider>
         </GestureHandlerRootView>
       </JazzExpoProvider>
     </StrictMode>

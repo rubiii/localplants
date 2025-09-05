@@ -2,6 +2,34 @@
 
 Plant care app build with [Expo](https://expo.dev) and [Jazz](https://jazz.tools).
 
+## TODO
+
+[x] - Get on TestFlight
+[x] - Android simulator build
+[x] - Allow rotating device
+[x] - Allow plant collections for sharing
+[x] - Enable sharing a plant via QR code / URL
+[x] - Enable sharing a collection
+[ ] - Make images zoomable
+[ ] - Make lists orderable by createdAt/addedAt/name?
+[ ] - Let users update their profile.name
+[ ] - Expo [Updates](https://docs.expo.dev/versions/latest/sdk/updates/)
+[ ] - Show Jazz-Outage/Connection-Status?
+[ ] - Enable auth via usePassphraseAuth({ wordlist })
+[ ] - Maybe make sync status (never, always, signedUp) explicit
+[ ] - Web build?
+[ ] - Use universal links for invites?
+
+## Features on display
+
+- Stack navigation
+- Deep linking
+- Permissions
+- Camera access
+- Photo library access
+- Keyboard avoiding views
+- Theming with Nativewind
+
 ## Get started
 
 1. Install dependencies
@@ -45,6 +73,7 @@ Activate developer mode on your phone:
 
 - React Native
   - [Core components](https://reactnative.dev/docs/components-and-apis)
+  - [Directory](https://reactnative.directory)
 - Expo
   - [Guides](https://docs.expo.dev/guides/overview/)
   - [Reference](https://docs.expo.dev/versions/latest/)

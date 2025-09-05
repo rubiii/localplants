@@ -1,9 +1,24 @@
+import { RootStackParamList } from "@/Navigation"
 import {
+  RouteProp,
   useNavigation as useReactNativeNavigation,
-  type ParamListBase,
+  useRoute as useReactNativeRoute,
 } from "@react-navigation/native"
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack"
 
-export default function useNavigation() {
-  return useReactNativeNavigation<NativeStackNavigationProp<ParamListBase>>()
+type Keyof<T extends object> = Extract<keyof T, string>
+
+export type { RootStackParamList }
+
+export default function useNavigation<
+  R extends keyof RootStackParamList = Keyof<RootStackParamList>,
+>() {
+  const navigation =
+    useReactNativeNavigation<NativeStackNavigationProp<RootStackParamList>>()
+  const route = useReactNativeRoute<RouteProp<RootStackParamList, R>>()
+
+  return {
+    navigation,
+    route,
+  }
 }

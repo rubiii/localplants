@@ -1,23 +1,17 @@
-import { co, z } from "jazz-tools"
+import { co, Group, z } from "jazz-tools"
 
 export const PlantImage = co.map({
   image: co.image(),
-  thumbnail: co.image(),
-  note: co.optional(co.plainText()),
+  assetUri: z.optional(z.string()),
+  note: z.optional(z.string()),
   emote: z.optional(z.string()),
-
-  // TODO: remove
-  moods: co.map({
-    happy: z.boolean(),
-    worried: z.boolean(),
-  }),
-
   createdAt: z.iso.datetime(),
+  addedAt: z.iso.datetime(),
 })
 export type PlantImageType = co.loaded<typeof PlantImage>
 
-const PlantImages = co.list(PlantImage)
-export type PlantImages = co.loaded<typeof PlantImages>
+export const PlantImages = co.list(PlantImage)
+export type PlantImagesType = co.loaded<typeof PlantImages>
 
 export const Plant = co.map({
   name: z.string(),
@@ -26,18 +20,34 @@ export const Plant = co.map({
 })
 export type PlantType = co.loaded<typeof Plant>
 
-const Plants = co.list(Plant)
+export const Plants = co.list(Plant)
 export type PlantsType = co.loaded<typeof Plants>
 
-const AccountRoot = co.map({
-  plants: Plants,
+const SharedBy = co.map({
+  name: z.string(),
+  accountID: z.string(),
+  sharedAt: z.iso.datetime(),
 })
-export type AccountRoot = co.loaded<typeof AccountRoot>
+
+export const PlantCollection = co.map({
+  name: z.string(),
+  plants: Plants,
+  sharedBy: co.optional(SharedBy),
+})
+export type PlantCollectionType = co.loaded<typeof PlantCollection>
+
+export const PlantCollections = co.list(PlantCollection)
+export type PlantCollectionsType = co.loaded<typeof PlantCollections>
+
+const AccountRoot = co.map({
+  collections: PlantCollections,
+})
+export type AccountRootType = co.loaded<typeof AccountRoot>
 
 const AccountProfile = co.map({
   name: z.string(),
 })
-export type AccountProfile = co.loaded<typeof AccountProfile>
+export type AccountProfileType = co.loaded<typeof AccountProfile>
 
 export const MyAppAccount = co
   .account({
@@ -46,6 +56,14 @@ export const MyAppAccount = co
   })
   .withMigration(async (account) => {
     if (account.root === undefined) {
-      account.$jazz.set("root", { plants: [] })
+      const owner = Group.create()
+      const firstCollection = PlantCollection.create(
+        {
+          name: "Your collection",
+          plants: co.list(Plant).create([], owner),
+        },
+        owner,
+      )
+      account.$jazz.set("root", { collections: [firstCollection] })
     }
   })

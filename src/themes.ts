@@ -2,70 +2,32 @@ import { vars } from "nativewind"
 
 // https://colorwind.dev/app
 type Theme = {
-  /* --- Background Colors (60%) ------------------ */
+  // Background Colors (60%)
+  background: string // Main background color
+  backgroundSecondary: string // Secondary background
+  backgroundMuted: string // Muted background areas
+  card: string // Card background
 
-  // Main background color
-  background: string
+  // Text Colors (30%)
+  foreground: string // Primary text color
+  foregroundSecondary: string // Secondary text
+  foregroundMuted: string // Muted text
+  cardForeground: string // Card text
 
-  // Secondary background
-  backgroundSecondary: string
+  // Interactive Elements (10%)
+  primary: string // Primary brand color
+  primaryForeground: string // Text on primary
+  secondary: string // Secondary color
+  secondaryForeground: string // Text on secondary
 
-  // Muted background areas
-  backgroundMuted: string
-
-  // Card background
-  card: string
-
-  /* --- Text Colors (30%) ------------------ */
-
-  // Primary text color
-  foreground: string
-
-  // Secondary text
-  foregroundSecondary: string
-
-  // Muted text
-  foregroundMuted: string
-
-  // Card text
-  cardForeground: string
-
-  /* --- Interactive Elements (10%) ------------------ */
-
-  // Primary brand color
-  primary: string
-
-  // Text on primary
-  primaryForeground: string
-
-  // Secondary color
-  secondary: string
-
-  // Text on secondary
-  secondaryForeground: string
-
-  /* --- Utility Colors ------------------ */
-
-  // Border color
-  border: string
-
-  // Input background
-  input: string
-
-  // Focus ring color
-  ring: string
-
-  // Success indicator
-  success: string
-
-  // Warning indicator
-  warning: string
-
-  // Error indicator
-  error: string
-
-  // Info indicator
-  info: string
+  // Utility Colors
+  border: string // Border color
+  input: string // Input background
+  ring: string // Focus ring color
+  success: string // Success indicator
+  warning: string // Warning indicator
+  error: string // Error indicator
+  info: string // Info indicator
 }
 
 export const themes: Record<string, Theme> = {
