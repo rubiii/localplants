@@ -50,10 +50,7 @@
       [
         "react-native-permissions",
         {
-          "iosPermissions": [
-            "Camera",
-            "PhotoLibrary"
-          ]
+          "iosPermissions": ["Camera", "PhotoLibrary"]
         }
       ],
       "expo-sqlite",
