@@ -3,9 +3,6 @@ import AcceptPlantInvite, {
   routeOptions as acceptPlantInviteRouteOptions,
 } from "@/screens/AcceptPlantInvite"
 import Account, { routeOptions as accountRouteOptions } from "@/screens/Account"
-import CustomTheme, {
-  routeOptions as customThemeRouteOptions,
-} from "@/screens/CustomTheme"
 import PlantDetails, {
   routeOptions as plantDetailRouteOptions,
 } from "@/screens/PlantDetails"
@@ -46,7 +43,6 @@ export type RootStackParamList = {
     readOnly: boolean
   }
   Account: undefined
-  CustomTheme: { themeId: string }
   AddPlant: { collectionId: string }
   SharePlant: { plantId: string }
   RemovePlant: { plantId: string; collectionId: string }
@@ -104,12 +100,6 @@ export default function Navigation({ skipWelcome }: { skipWelcome: boolean }) {
               name="Account"
               component={Account}
               options={accountRouteOptions}
-            />
-
-            <Stack.Screen
-              name="CustomTheme"
-              component={CustomTheme}
-              options={customThemeRouteOptions}
             />
           </Stack.Group>
         </Stack.Group>
