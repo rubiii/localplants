@@ -6,10 +6,9 @@ import { MyAppAccount, PlantCollection, PlantType } from "@/schema"
 import type { NativeStackNavigationOptions } from "@react-navigation/native-stack"
 import { clsx } from "clsx"
 import { Image, useAccount, useCoState } from "jazz-tools/expo"
-import { Pressable, SafeAreaView, Text, View } from "react-native"
+import { Pressable, Text, View } from "react-native"
 import { ScrollView } from "react-native-gesture-handler"
-
-const PLANT_ITEM_HEIGHT = 200
+import { SafeAreaView } from "react-native-safe-area-context"
 
 export const routeOptions: NativeStackNavigationOptions = {
   title: "Your plants",

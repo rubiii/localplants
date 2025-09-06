@@ -5,7 +5,8 @@ import type { NativeStackNavigationOptions } from "@react-navigation/native-stac
 import { Group, InviteSecret } from "jazz-tools"
 import { useAccount } from "jazz-tools/expo"
 import { useEffect, useState } from "react"
-import { SafeAreaView, Text, View } from "react-native"
+import { Text, View } from "react-native"
+import { SafeAreaView } from "react-native-safe-area-context"
 
 export const routeOptions: NativeStackNavigationOptions = {
   title: "Accept Plant Invite",

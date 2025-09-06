@@ -13,9 +13,10 @@ import { useCoState } from "jazz-tools/expo"
 import { createImage } from "jazz-tools/media"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
-import { SafeAreaView, View } from "react-native"
+import { View } from "react-native"
 import { Asset } from "react-native-image-picker"
 import { KeyboardAwareScrollView } from "react-native-keyboard-controller"
+import { SafeAreaView } from "react-native-safe-area-context"
 
 export const routeOptions: NativeStackNavigationOptions = {
   title: "Add a photo",

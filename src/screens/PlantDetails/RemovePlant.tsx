@@ -3,7 +3,8 @@ import useNavigation from "@/hooks/useNavigation"
 import { MyAppAccount } from "@/schema"
 import type { NativeStackNavigationOptions } from "@react-navigation/native-stack"
 import { useAccount } from "jazz-tools/expo"
-import { Pressable, SafeAreaView, Text, View } from "react-native"
+import { Pressable, Text, View } from "react-native"
+import { SafeAreaView } from "react-native-safe-area-context"
 
 export const routeOptions: NativeStackNavigationOptions = {
   title: "Remove plant",
