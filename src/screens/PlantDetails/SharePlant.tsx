@@ -7,8 +7,7 @@ import * as Clipboard from "expo-clipboard"
 import * as Linking from "expo-linking"
 import { createInviteLink, useAccount, useCoState } from "jazz-tools/expo"
 import { useState } from "react"
-import { Pressable, ScrollView, Text, View } from "react-native"
-import { SafeAreaView } from "react-native-safe-area-context"
+import { Pressable, SafeAreaView, ScrollView, Text, View } from "react-native"
 import QRCode from "react-qr-code"
 
 export const routeOptions: NativeStackNavigationOptions = {
