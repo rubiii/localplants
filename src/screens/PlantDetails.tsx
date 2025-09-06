@@ -3,11 +3,20 @@ import Icon from "@/components/Icon"
 import Theme from "@/components/Theme"
 import useNavigation, { RootStackParamList } from "@/hooks/useNavigation"
 import { Plant, type PlantImageType } from "@/schema"
+import { Zoomable } from "@likashefqet/react-native-image-zoom"
+import { useHeaderHeight } from "@react-navigation/elements"
 import { type RouteProp } from "@react-navigation/native"
 import type { NativeStackNavigationOptions } from "@react-navigation/native-stack"
 import { Image, useCoState } from "jazz-tools/expo"
-import { useEffect, useRef } from "react"
-import { FlatList, Pressable, SafeAreaView, Text, View } from "react-native"
+import { useEffect, useRef, useState } from "react"
+import {
+  Dimensions,
+  FlatList,
+  Pressable,
+  SafeAreaView,
+  Text,
+  View,
+} from "react-native"
 
 export const routeOptions = ({
   route,
@@ -73,6 +82,8 @@ export default function PlantDetails() {
   const plantId = route.params.plantId
   const readOnly = route.params.readOnly
 
+  const [activePlantImage, setActivePlantImage] = useState<PlantImageType>()
+
   const { navigation } = useNavigation()
   const listRef = useRef<FlatList>(null)
 
@@ -83,6 +94,7 @@ export default function PlantDetails() {
     },
   })
 
+  // TODO: do we need this effect?
   useEffect(() => {
     if (!plant) return
 
@@ -134,7 +146,12 @@ export default function PlantDetails() {
             ref={listRef}
             data={plant.images}
             renderItem={({ item }) =>
-              item ? <Row plantId={plant.$jazz.id} plantImage={item} /> : null
+              item ? (
+                <Row
+                  plantImage={item}
+                  setActivePlantImage={setActivePlantImage}
+                />
+              ) : null
             }
             keyExtractor={(image) =>
               image ? image.$jazz.id.toString() : "none"
@@ -142,17 +159,69 @@ export default function PlantDetails() {
           />
         </>
       ) : null}
+
+      {activePlantImage?.image ? (
+        <FullSizePlantImage
+          activePlantImage={activePlantImage}
+          setActivePlantImage={setActivePlantImage}
+        />
+      ) : null}
     </SafeAreaView>
   )
 }
 
-const Row = ({
-  plantId,
-  plantImage,
+function FullSizePlantImage({
+  activePlantImage,
+  setActivePlantImage,
 }: {
-  plantId: string
+  activePlantImage: PlantImageType
+  setActivePlantImage: (plantImage?: PlantImageType) => void
+}) {
+  const headerHeight = useHeaderHeight()
+  const windowHeight = Dimensions.get("window").height
+
+  if (!activePlantImage?.image) return
+
+  return (
+    <>
+      <Pressable
+        className="group absolute z-[99] top-4 right-4"
+        style={{ marginTop: headerHeight }}
+        onPress={() => setActivePlantImage(undefined)}
+      >
+        <Icon.MaterialCommunity
+          name="close-circle-outline"
+          size={42}
+          className="text-[--foreground] group-active:text-[--primary]"
+        />
+      </Pressable>
+
+      <View className="absolute z-[98] h-screen w-screen min-h-full bg-[--background]">
+        <Zoomable minScale={0.5} isDoubleTapEnabled={true} maxPanPointers={1}>
+          <Image
+            imageId={activePlantImage.image.$jazz.id}
+            resizeMode="cover"
+            style={{
+              width: "100%",
+              height: windowHeight - headerHeight,
+              marginTop: headerHeight,
+            }}
+            height={2400}
+            width={2400}
+          />
+        </Zoomable>
+      </View>
+    </>
+  )
+}
+
+function Row({
+  plantImage,
+  setActivePlantImage,
+}: {
   plantImage: PlantImageType
-}) => {
+  setActivePlantImage: (plantImage: PlantImageType) => void
+}) {
   const createdAt = new Date(plantImage.createdAt)
   const weekday = createdAt.toLocaleString(undefined, { weekday: "long" })
   const day = createdAt.toLocaleString(undefined, { day: "2-digit" })
@@ -192,18 +261,19 @@ const Row = ({
         </Text>
 
         {plantImage?.image ? (
-          // <Zoomable>
-          <Image
-            imageId={plantImage.image.$jazz.id}
-            resizeMode="cover"
-            style={{
-              width: "100%",
-              height: 180,
-              borderRadius: 6,
-            }}
-            height={180}
-            width={400}
-          />
+          <Pressable onPress={() => setActivePlantImage(plantImage)}>
+            <Image
+              imageId={plantImage.image.$jazz.id}
+              resizeMode="cover"
+              style={{
+                width: "100%",
+                height: 180,
+                borderRadius: 6,
+              }}
+              height={180}
+              width={400}
+            />
+          </Pressable>
         ) : null}
 
         {plantImage.note?.length ? (
