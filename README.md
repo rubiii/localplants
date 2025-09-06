@@ -11,16 +11,17 @@ Plant care app build with [Expo](https://expo.dev) and [Jazz](https://jazz.tools
 [x] - Enable sharing a plant via QR code / URL  
 [x] - Enable sharing a collection  
 [x] - Make images zoomable  
-[ ] - Allow custom theming  
-[ ] - Maybe use a component library like https://gluestack.io
-[ ] - Make lists orderable by createdAt/addedAt/name?  
 [ ] - Let users update their profile.name  
+[ ] - Improve zoomed image view (fix cut off large images, improve on android, swipe to dismiss)  
+[ ] - Allow custom theming  
+[ ] - Maybe use a component library?  
+[ ] - Make lists orderable by createdAt/addedAt/name?  
 [ ] - Expo [Updates](https://docs.expo.dev/versions/latest/sdk/updates/)  
 [ ] - Show Jazz-Outage/Connection-Status?  
 [ ] - Enable auth via usePassphraseAuth({ wordlist })  
 [ ] - Maybe make sync status (never, always, signedUp) explicit  
 [ ] - Web build?  
-[ ] - Use universal links for invites?
+[ ] - Use universal links for invites?  
 
 ## Features on display
 

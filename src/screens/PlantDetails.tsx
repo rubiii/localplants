@@ -10,11 +10,12 @@ import type { NativeStackNavigationOptions } from "@react-navigation/native-stac
 import { Image, useCoState } from "jazz-tools/expo"
 import { useEffect, useRef, useState } from "react"
 import {
-  Dimensions,
   FlatList,
+  Platform,
   Pressable,
   SafeAreaView,
   Text,
+  useWindowDimensions,
   View,
 } from "react-native"
 
@@ -178,7 +179,8 @@ function FullSizePlantImage({
   setActivePlantImage: (plantImage?: PlantImageType) => void
 }) {
   const headerHeight = useHeaderHeight()
-  const windowHeight = Dimensions.get("window").height
+  const window = useWindowDimensions()
+  const marginTop = Platform.OS === "ios" ? headerHeight : 0
 
   if (!activePlantImage?.image) return
 
@@ -203,8 +205,8 @@ function FullSizePlantImage({
             resizeMode="cover"
             style={{
               width: "100%",
-              height: windowHeight - headerHeight,
-              marginTop: headerHeight,
+              height: window.height - headerHeight,
+              marginTop,
             }}
             height={2400}
             width={2400}
