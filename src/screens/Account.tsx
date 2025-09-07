@@ -50,26 +50,24 @@ export default function Account() {
               className="group flex-row items-center py-3"
               onPress={copyAccountID}
             >
-              <Text className="flex-1 text-[--foreground]">{accountID}</Text>
+              <Text className="flex-1 text-[--foregroundSecondary]">
+                {accountID}
+              </Text>
 
               <Icon.Material
                 name="content-copy"
                 size={20}
-                className="ml-3 text-[--foreground] group-active:text-[--background]"
+                className="ml-3 text-[--foregroundSecondary] group-active:text-[--background]"
               />
             </Pressable>
           </View>
-
-          <Text className="flex-1 text-[--foreground]">
-            You can share your Account ID and send it to a friend to
-          </Text>
         </View>
 
         <View className="gap-2">
           <Text className="text-[--foregroundSecondary]">Account State</Text>
 
           <View className="flex-row items-center pl-5 pr-1 py-4 rounded-xl bg-[--input]">
-            <Text className="flex-1 text-[--foreground]">
+            <Text className="flex-1 text-[--foregroundSecondary]">
               {isGuest && "Guest mode"}
               {isAnonymous && "Anonymous account"}
               {isAuthenticated && "Authenticated"}

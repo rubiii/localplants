@@ -68,7 +68,7 @@ function InitialState({ nextStep }: { nextStep: () => void }) {
         <Icon.MaterialCommunity
           name="image-search"
           size={60}
-          className="text-[--foreground] group-active:text-[--primary]"
+          className="text-[--foregroundSecondary] group-active:text-[--primary]"
         />
       </Pressable>
     </View>
@@ -92,9 +92,9 @@ function ChooseUploadState({
           <Icon.MaterialCommunity
             name="camera-outline"
             size={42}
-            className="text-[--foreground] group-active:text-[--primary]"
+            className="text-[--foregroundSecondary] group-active:text-[--primary]"
           />
-          <Text className="text-[--foreground] group-active:text-[--primary]">
+          <Text className="text-[--foregroundSecondary] group-active:text-[--primary]">
             Take a photo
           </Text>
         </Pressable>
@@ -108,9 +108,9 @@ function ChooseUploadState({
           <Icon.MaterialCommunity
             name="image-outline"
             size={42}
-            className="text-[--foreground] group-active:text-[--primary]"
+            className="text-[--foregroundSecondary] group-active:text-[--primary]"
           />
-          <Text className="text-[--foreground] group-active:text-[--primary]">
+          <Text className="text-[--foregroundSecondary] group-active:text-[--primary]">
             Select a photo
           </Text>
         </Pressable>

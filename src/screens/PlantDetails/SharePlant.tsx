@@ -104,14 +104,14 @@ function QRCodeView({ inviteLink }: { inviteLink: string }) {
             className="group flex-row items-center py-3"
             onPress={copyLink}
           >
-            <Text className="flex-1 text-xs text-[--foreground]">
+            <Text className="flex-1 text-xs text-[--foregroundSecondary]">
               {inviteLink}
             </Text>
 
             <Icon.Material
               name="content-copy"
               size={20}
-              className="ml-3 text-[--foreground] group-active:text-[--background]"
+              className="ml-3 text-[--foregroundSecondary] group-active:text-[--background]"
             />
           </Pressable>
         </View>

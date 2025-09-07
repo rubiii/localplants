@@ -30,7 +30,7 @@ export default function NameField({
               value={value}
               onBlur={onBlur}
               onChangeText={onChange}
-              className="flex-1 pl-6 pr-2 py-4 text-xl leading-tight text-[--foreground] bg-[--input] rounded-tl-xl rounded-bl-xl"
+              className="flex-1 pl-6 pr-2 py-4 text-xl leading-tight text-[--foregroundSecondary] bg-[--input] rounded-tl-xl rounded-bl-xl"
             />
           )}
           name="name"
@@ -43,7 +43,7 @@ export default function NameField({
           <Icon.Material
             name="auto-awesome"
             size={24}
-            className="text-[--foreground] group-active:text-[--primary]"
+            className="text-[--foregroundSecondary] group-active:text-[--primary]"
           />
         </Pressable>
       </View>

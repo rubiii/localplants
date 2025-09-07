@@ -24,7 +24,7 @@ export default function NoteField({ control }: FieldProps) {
             value={value}
             multiline
             numberOfLines={6}
-            className="text-xl text-[--foreground] bg-[--input] px-6 pt-4 pb-6 rounded-xl"
+            className="text-xl text-[--foregroundSecondary] bg-[--input] px-6 pt-4 pb-6 rounded-xl"
           />
         )}
         name="note"
