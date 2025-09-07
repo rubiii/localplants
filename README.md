@@ -11,7 +11,7 @@ Plant care app build with [Expo](https://expo.dev) and [Jazz](https://jazz.tools
 [x] - Enable sharing a plant via QR code / URL  
 [x] - Enable sharing a collection  
 [x] - Make images zoomable  
-[ ] - Let users update their profile.name  
+[x] - Let users update their profile.name  
 [ ] - Improve zoomed image view (fix cut off large images, improve on android, swipe to dismiss)  
 [ ] - Allow custom theming  
 [ ] - Maybe use a component library?  
