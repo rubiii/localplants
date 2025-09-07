@@ -14,7 +14,7 @@ export const routeOptions: NativeStackNavigationOptions = {
   title: "Share plant",
 }
 
-export default function SharePlant() {
+export default function SharePlantScreen() {
   const { route } = useNavigation<"SharePlant">()
   const plantId = route.params.plantId
 

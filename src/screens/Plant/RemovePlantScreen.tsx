@@ -9,7 +9,7 @@ export const routeOptions: NativeStackNavigationOptions = {
   title: "Remove plant",
 }
 
-export default function RemovePlant() {
+export default function RemovePlantScreen() {
   const { navigation, route } = useNavigation<"RemovePlant">()
   const plantId = route.params.plantId
   const collectionId = route.params.collectionId

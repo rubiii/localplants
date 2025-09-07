@@ -2,17 +2,11 @@ import Button from "@/components/Button"
 import DismissKeyboard from "@/components/DismissKeyboard"
 import AddPrimaryImageField from "@/components/PlantForm/AddPrimaryImageField"
 import EmoteField from "@/components/PlantForm/EmoteField"
-import NameField from "@/components/PlantForm/NameField"
 import NoteField from "@/components/PlantForm/NoteField"
 import { PlantFormValues } from "@/components/PlantForm/types"
 import useNavigation from "@/hooks/useNavigation"
 import randomPlantName from "@/lib/randomPlantName"
-import {
-  Plant,
-  PlantCollection,
-  PlantImage,
-  type PlantImageType,
-} from "@/schema"
+import { Plant, PlantImage, type PlantImageType } from "@/schema"
 import type { NativeStackNavigationOptions } from "@react-navigation/native-stack"
 import { Group } from "jazz-tools"
 import { useCoState } from "jazz-tools/expo"
@@ -24,24 +18,21 @@ import { Asset } from "react-native-image-picker"
 import { KeyboardAwareScrollView } from "react-native-keyboard-controller"
 
 export const routeOptions: NativeStackNavigationOptions = {
-  title: "Add a plant",
+  title: "Add a photo",
   headerLargeTitle: true,
 }
 
-export default function AddPlant() {
+export default function AddPlantImageScreen() {
   const [plantImage, setPlantImage] = useState<PlantImageType>()
-  const { navigation, route } = useNavigation<"AddPlant">()
+  const { navigation, route } = useNavigation<"AddPlantImage">()
 
-  const collectionId = route.params.collectionId
-  const collection = useCoState(PlantCollection, collectionId, {
-    resolve: { plants: true },
-  })
+  const plantId = route.params.plantId
+  const plant = useCoState(Plant, plantId, { resolve: { images: true } })
 
   const {
     control,
     handleSubmit,
     setValue,
-    getValues,
     formState: { isValid, errors },
   } = useForm<PlantFormValues>({
     defaultValues: {
@@ -49,25 +40,11 @@ export default function AddPlant() {
     },
   })
 
-  const generatePlantName = () => {
-    const currentName = getValues().name
-    let newName = randomPlantName()
-
-    const maxTries = 5
-    let tries = 0
-    while (currentName === newName && tries <= maxTries) {
-      newName = randomPlantName()
-      tries += 1
-    }
-
-    setValue("name", newName)
-  }
-
   const createPlantImage = async (asset: Asset) => {
-    if (!collection) return
+    if (!plant) return
 
     const imageOwner = Group.create()
-    // imageOwner.addMember(collection.$jazz.owner)
+    imageOwner.addMember(plant.$jazz.owner)
 
     console.debug("[createPlantImage] creating image")
     const image = await createImage(asset.uri as string, {
@@ -84,7 +61,7 @@ export default function AddPlant() {
       : addedAt
 
     const plantImageOwner = Group.create()
-    // plantImageOwner.addMember(collection.$jazz.owner)
+    plantImageOwner.addMember(plant.$jazz.owner)
     const newPlantImage = PlantImage.create(
       {
         image,
@@ -100,27 +77,12 @@ export default function AddPlant() {
   }
 
   const onSubmit = (data: PlantFormValues) => {
-    if (!isValid || !collection || !plantImage?.image) return
-
-    const plantOwner = Group.create()
-    plantOwner.addMember(collection.$jazz.owner)
-
-    plantImage.$jazz.owner.addMember(plantOwner)
-    plantImage.image.$jazz.owner.addMember(plantOwner)
-
-    const plant = Plant.create(
-      {
-        name: data.name,
-        primaryImage: plantImage,
-        // TODO: does the list needs it's own explicit owner?
-        images: [plantImage],
-      },
-      plantOwner,
-    )
+    if (!isValid || !plant || !plantImage) return
 
     plantImage.$jazz.set("emote", data.emote)
     plantImage.$jazz.set("note", data.note)
-    collection.plants.$jazz.unshift(plant)
+    plant.images.$jazz.unshift(plantImage)
+    plant.$jazz.set("primaryImage", plantImage)
 
     navigation.goBack()
   }
@@ -133,11 +95,6 @@ export default function AddPlant() {
             <AddPrimaryImageField
               plantImage={plantImage}
               createPlantImage={createPlantImage}
-            />
-            <NameField
-              control={control}
-              errors={errors}
-              generatePlantName={generatePlantName}
             />
             <EmoteField control={control} errors={errors} />
             <NoteField control={control} errors={errors} />

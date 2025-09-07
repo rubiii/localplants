@@ -1,42 +1,48 @@
 import useTheme from "@/hooks/useTheme"
-import Account, { routeOptions as accountRouteOptions } from "@/screens/Account"
-import IncomingPlantShare, {
-  routeOptions as IncomingPlantShareRouteOptions,
-} from "@/screens/IncomingPlantShare"
-import PlantDetails, {
-  routeOptions as plantDetailRouteOptions,
-} from "@/screens/PlantDetails"
-import AddPlantImage, {
+import AcceptSharedPlantScreen, {
+  routeOptions as acceptSharedPlantRouteOptions,
+} from "@/screens/AcceptSharedPlantScreeen"
+import AccountScreen, {
+  routeOptions as accountRouteOptions,
+} from "@/screens/AccountScreen"
+import AddPlantImageScreen, {
   routeOptions as addPlantImageRouteOptions,
-} from "@/screens/PlantDetails/AddPlantImage"
-import RemovePlant, {
+} from "@/screens/Plant/AddPlantImageScreen"
+import RemovePlantScreen, {
   routeOptions as removePlantRouteOptions,
-} from "@/screens/PlantDetails/RemovePlant"
-import Plants, { routeOptions as plantsRouteOptions } from "@/screens/Plants"
-import AddPlant, {
+} from "@/screens/Plant/RemovePlantScreen"
+import AddPlantScreen, {
   routeOptions as addPlantRouteOptions,
-} from "@/screens/Plants/AddPlant"
-import Welcome, { routeOptions as welcomeRouteOptions } from "@/screens/Welcome"
+} from "@/screens/Plants/AddPlantScreen"
+import PlantScreen, {
+  routeOptions as plantRouteOptions,
+} from "@/screens/PlantScreen"
+import PlantsScreen, {
+  routeOptions as plantsRouteOptions,
+} from "@/screens/PlantsScreen"
+import WelcomeScreen, {
+  routeOptions as welcomeRouteOptions,
+} from "@/screens/WelcomeScreen"
 import { NavigationContainer } from "@react-navigation/native"
 import type { NativeStackNavigationOptions } from "@react-navigation/native-stack"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import * as Linking from "expo-linking"
 import { InviteSecret } from "jazz-tools"
 import { Text } from "react-native"
-import SharePlant, {
+import SharePlantScreen, {
   routeOptions as sharePlantRouteOptions,
-} from "./screens/PlantDetails/SharePlant"
+} from "./screens/Plant/SharePlantScreen"
 
 export type RootStackParamList = {
   Welcome: undefined
-  IncomingPlantShare: {
+  AcceptSharedPlant: {
     value_id: string
     invite_secret: InviteSecret
     shared_by_id: string
     shared_by_name: string
   }
   Plants: undefined
-  PlantDetails: {
+  Plant: {
     title: string
     plantId: string
     collectionId: string
@@ -71,7 +77,7 @@ export default function Navigation({ skipWelcome }: { skipWelcome: boolean }) {
         {!skipWelcome ? (
           <Stack.Screen
             name="Welcome"
-            component={Welcome}
+            component={WelcomeScreen}
             options={welcomeRouteOptions}
           />
         ) : null}
@@ -80,25 +86,26 @@ export default function Navigation({ skipWelcome }: { skipWelcome: boolean }) {
         <Stack.Group>
           <Stack.Screen
             name="Plants"
-            component={Plants}
+            component={PlantsScreen}
             options={plantsRouteOptions}
-          />
-          <Stack.Screen
-            name="PlantDetails"
-            component={PlantDetails}
-            options={plantDetailRouteOptions}
           />
 
           <Stack.Screen
-            name="IncomingPlantShare"
-            component={IncomingPlantShare}
-            options={IncomingPlantShareRouteOptions}
+            name="Plant"
+            component={PlantScreen}
+            options={plantRouteOptions}
+          />
+
+          <Stack.Screen
+            name="AcceptSharedPlant"
+            component={AcceptSharedPlantScreen}
+            options={acceptSharedPlantRouteOptions}
           />
 
           <Stack.Group>
             <Stack.Screen
               name="Account"
-              component={Account}
+              component={AccountScreen}
               options={accountRouteOptions}
             />
           </Stack.Group>
@@ -108,26 +115,26 @@ export default function Navigation({ skipWelcome }: { skipWelcome: boolean }) {
         <Stack.Group screenOptions={{ presentation: "modal" }}>
           <Stack.Screen
             name="AddPlant"
-            component={AddPlant}
+            component={AddPlantScreen}
             options={addPlantRouteOptions}
           />
         </Stack.Group>
 
-        {/* PlantDetails modals */}
+        {/* Plant modals */}
         <Stack.Group screenOptions={{ presentation: "modal" }}>
           <Stack.Screen
             name="SharePlant"
-            component={SharePlant}
+            component={SharePlantScreen}
             options={sharePlantRouteOptions}
           />
           <Stack.Screen
             name="RemovePlant"
-            component={RemovePlant}
+            component={RemovePlantScreen}
             options={removePlantRouteOptions}
           />
           <Stack.Screen
             name="AddPlantImage"
-            component={AddPlantImage}
+            component={AddPlantImageScreen}
             options={addPlantImageRouteOptions}
           />
         </Stack.Group>

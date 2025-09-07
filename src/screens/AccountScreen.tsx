@@ -32,7 +32,7 @@ function HeaderRight() {
   )
 }
 
-export default function Account() {
+export default function AccountScreen() {
   const { me, agent } = useAccount(MyAppAccount)
 
   const updateProfileName = (name: string) =>

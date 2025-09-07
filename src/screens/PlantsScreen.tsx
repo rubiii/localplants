@@ -39,7 +39,7 @@ function HeaderRight() {
   )
 }
 
-export default function Plants() {
+export default function PlantsScreen() {
   const { me } = useAccount(MyAppAccount, {
     resolve: { root: { collections: { $each: { plants: true } } } },
   })
@@ -90,7 +90,7 @@ function PlantCollectionView({
   const gotoPlant = (plant: PlantType) => {
     if (!collection) return
 
-    navigation.navigate("PlantDetails", {
+    navigation.navigate("Plant", {
       title: plant.name,
       plantId: plant.$jazz.id,
       collectionId,

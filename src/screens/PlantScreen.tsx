@@ -26,7 +26,7 @@ import {
 export const routeOptions = ({
   route,
 }: {
-  route: RouteProp<RootStackParamList, "PlantDetails">
+  route: RouteProp<RootStackParamList, "Plant">
 }): NativeStackNavigationOptions => ({
   title: route.params.title,
   headerLargeTitle: true,
@@ -82,8 +82,8 @@ function HeaderRight({
   )
 }
 
-export default function PlantDetails() {
-  const { route } = useNavigation<"PlantDetails">()
+export default function PlantScreeen() {
+  const { route } = useNavigation<"Plant">()
   const plantId = route.params.plantId
   const readOnly = route.params.readOnly
 

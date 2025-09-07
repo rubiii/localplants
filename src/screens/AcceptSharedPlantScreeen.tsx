@@ -11,8 +11,8 @@ export const routeOptions: NativeStackNavigationOptions = {
   headerLargeTitle: true,
 }
 
-export default function IncomingPlantShare() {
-  const { navigation, route } = useNavigation<"IncomingPlantShare">()
+export default function AcceptSharedPlantScreeen() {
+  const { navigation, route } = useNavigation<"AcceptSharedPlant">()
 
   const valueID = route.params.value_id
   const inviteSecret = route.params.invite_secret

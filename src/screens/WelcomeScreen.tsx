@@ -21,7 +21,7 @@ export const routeOptions: NativeStackNavigationOptions = {
   headerLargeTitle: true,
 }
 
-export default function Welcome() {
+export default function WelcomeScreen() {
   const { navigation } = useNavigation()
   const settings = useDeviceSettings()
 
