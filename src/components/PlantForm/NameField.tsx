@@ -15,9 +15,7 @@ export default function NameField({
 }: FieldProps & { generatePlantName: () => void }) {
   return (
     <View className="gap-2">
-      <Text className="text-lg text-[--foregroundSecondary]">
-        What’s their name?
-      </Text>
+      <Text className="text-[--foregroundSecondary]">What’s their name?</Text>
 
       <View className="flex-1 flex-row items-center">
         <Controller

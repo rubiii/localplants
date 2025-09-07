@@ -11,7 +11,7 @@ type FieldProps = {
 export default function EmoteField({ control }: FieldProps) {
   return (
     <View>
-      <Text className="pb-2 text-lg text-[--foregroundSecondary]">
+      <Text className="pb-1.5 text-[--foregroundSecondary]">
         How does she feel?
       </Text>
 

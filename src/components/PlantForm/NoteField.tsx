@@ -10,9 +10,7 @@ type FieldProps = {
 export default function NoteField({ control }: FieldProps) {
   return (
     <View>
-      <Text className="pb-2 text-lg text-[--foregroundSecondary]">
-        Something else?
-      </Text>
+      <Text className="pb-2 text-[--foregroundSecondary]">Something else?</Text>
 
       <Controller
         control={control}

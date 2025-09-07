@@ -1,10 +1,10 @@
-import Button from "@/components/Button"
 import DismissKeyboard from "@/components/DismissKeyboard"
 import AddPrimaryImageField from "@/components/PlantForm/AddPrimaryImageField"
 import EmoteField from "@/components/PlantForm/EmoteField"
 import NameField from "@/components/PlantForm/NameField"
 import NoteField from "@/components/PlantForm/NoteField"
 import { PlantFormValues } from "@/components/PlantForm/types"
+import Theme from "@/components/Theme"
 import useNavigation from "@/hooks/useNavigation"
 import randomPlantName from "@/lib/randomPlantName"
 import {
@@ -14,18 +14,52 @@ import {
   type PlantImageType,
 } from "@/schema"
 import type { NativeStackNavigationOptions } from "@react-navigation/native-stack"
+import { clsx } from "clsx"
 import { Group } from "jazz-tools"
 import { useCoState } from "jazz-tools/expo"
 import { createImage } from "jazz-tools/media"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
-import { SafeAreaView, View } from "react-native"
+import { Platform, Pressable, SafeAreaView, Text, View } from "react-native"
 import { Asset } from "react-native-image-picker"
 import { KeyboardAwareScrollView } from "react-native-keyboard-controller"
 
 export const routeOptions: NativeStackNavigationOptions = {
   title: "Add a plant",
-  headerLargeTitle: true,
+  // On Android, the header title is not centered, but left aligned
+  // and it's also placing a back arrow button if we pass undefined.
+  headerLeft: () => (Platform.OS === "ios" ? <HeaderLeft /> : undefined),
+  headerRight: () => <HeaderRight />,
+}
+
+function HeaderLeft() {
+  const { navigation } = useNavigation()
+  const cancel = () => navigation.goBack()
+
+  return (
+    <Theme style={{ flex: 0 }}>
+      <Pressable className="group p-2" onPress={cancel}>
+        <Text className="text-[--foreground]">Cancel</Text>
+      </Pressable>
+    </Theme>
+  )
+}
+
+function HeaderRight({ onSave }: { onSave?: () => void }) {
+  return (
+    <Theme style={{ flex: 0 }}>
+      <Pressable onPress={onSave}>
+        <Text
+          className={clsx({
+            "text-[--foreground]": onSave,
+            "text-[--foregroundMuted]": !onSave,
+          })}
+        >
+          Save
+        </Text>
+      </Pressable>
+    </Theme>
+  )
 }
 
 export default function AddPlantScreen() {
@@ -66,12 +100,9 @@ export default function AddPlantScreen() {
   const createPlantImage = async (asset: Asset) => {
     if (!collection) return
 
-    const imageOwner = Group.create()
-    // imageOwner.addMember(collection.$jazz.owner)
-
     console.debug("[createPlantImage] creating image")
     const image = await createImage(asset.uri as string, {
-      owner: imageOwner,
+      owner: Group.create(),
       progressive: true,
       placeholder: "blur",
       maxSize: 2400,
@@ -83,8 +114,6 @@ export default function AddPlantScreen() {
       ? new Date(asset.timestamp).toISOString()
       : addedAt
 
-    const plantImageOwner = Group.create()
-    // plantImageOwner.addMember(collection.$jazz.owner)
     const newPlantImage = PlantImage.create(
       {
         image,
@@ -92,7 +121,7 @@ export default function AddPlantScreen() {
         createdAt,
         addedAt,
       },
-      plantImageOwner,
+      Group.create(),
     )
 
     setPlantImage(newPlantImage)
@@ -125,6 +154,14 @@ export default function AddPlantScreen() {
     navigation.goBack()
   }
 
+  navigation.setOptions({
+    headerRight: () => (
+      <HeaderRight
+        onSave={isValid && plantImage ? handleSubmit(onSubmit) : undefined}
+      />
+    ),
+  })
+
   return (
     <SafeAreaView className="flex-1 bg-[--background]">
       <KeyboardAwareScrollView bottomOffset={62} className="py-8 px-5">
@@ -142,13 +179,6 @@ export default function AddPlantScreen() {
             <EmoteField control={control} errors={errors} />
             <NoteField control={control} errors={errors} />
           </View>
-
-          <Button
-            onPress={handleSubmit(onSubmit)}
-            title="Save"
-            size="large"
-            disabled={!plantImage || !isValid}
-          />
         </DismissKeyboard>
       </KeyboardAwareScrollView>
     </SafeAreaView>
