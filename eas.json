@@ -10,7 +10,6 @@
     },
     "preview": {
       "developmentClient": true,
-      "nativePageReloads": true,
       "distribution": "internal",
       "channel": "preview",
       "android": {
