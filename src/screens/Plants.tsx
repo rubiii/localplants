@@ -9,8 +9,6 @@ import { Image, useAccount, useCoState } from "jazz-tools/expo"
 import { Pressable, SafeAreaView, Text, View } from "react-native"
 import { ScrollView } from "react-native-gesture-handler"
 
-const PLANT_ITEM_HEIGHT = 200
-
 export const routeOptions: NativeStackNavigationOptions = {
   title: "Your plants",
   headerLargeTitle: true,
@@ -22,14 +20,6 @@ function HeaderRight() {
 
   return (
     <Theme style={{ flex: 0 }} className="flex-row">
-      {/* <Pressable className="group p-2" onPress={() => navigate("AddPlant")}>
-        <Icon.Material
-          name="add-circle-outline"
-          className="text-[--primaryForeground] group-active:text-[--foreground]"
-          size={24}
-        />
-      </Pressable> */}
-
       <Pressable
         className="group p-2 -mr-2"
         onPress={() => navigation.navigate("Account")}

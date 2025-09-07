@@ -40,12 +40,7 @@ export default function Welcome() {
   }
 
   return (
-    <SafeAreaView
-      className="flex-1 bg-[--background]"
-      // style={{
-      //   paddingTop: Platform.OS == "android" ? StatusBar.currentHeight : 0,
-      // }}
-    >
+    <SafeAreaView className="flex-1 bg-[--background]">
       <View className="flex-1 pt-4 pb-12 px-5">
         <View className="flex-1">
           <Text className="text-[--foregroundSecondary]">
