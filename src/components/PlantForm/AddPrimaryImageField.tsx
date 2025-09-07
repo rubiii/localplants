@@ -4,10 +4,11 @@ import useGallery from "@/hooks/useGallery"
 import { PlantImageType } from "@/schema"
 import { Image } from "jazz-tools/expo"
 import { useState } from "react"
-import { ActivityIndicator, Pressable, Text, View } from "react-native"
+import { ActivityIndicator, View } from "react-native"
+import ContextMenu from "react-native-context-menu-view"
 import { Asset } from "react-native-image-picker"
 
-type Steps = "initial" | "choose-upload" | "upload" | "image"
+type Steps = "initial" | "upload" | "image"
 
 export default function AddPrimaryImageField({
   plantImage,
@@ -39,12 +40,8 @@ export default function AddPrimaryImageField({
   }
 
   if (step === "initial") {
-    return <InitialState nextStep={() => setStep("choose-upload")} />
-  }
-
-  if (step === "choose-upload") {
     return (
-      <ChooseUploadState
+      <InitialState
         viaCamera={addPhotoViaCamera}
         viaLibrary={addPhotoFromLibrary}
       />
@@ -58,24 +55,7 @@ export default function AddPrimaryImageField({
   return <ImageState plantImage={plantImage} />
 }
 
-function InitialState({ nextStep }: { nextStep: () => void }) {
-  return (
-    <View className="h-[180] items-center justify-center bg-[--input] rounded-xl">
-      <Pressable
-        onPress={nextStep}
-        className="group flex-row w-full gap-1 py-6 items-center justify-center"
-      >
-        <Icon.MaterialCommunity
-          name="image-search"
-          size={60}
-          className="text-[--foregroundSecondary] group-active:text-[--primary]"
-        />
-      </Pressable>
-    </View>
-  )
-}
-
-function ChooseUploadState({
+function InitialState({
   viaCamera,
   viaLibrary,
 }: {
@@ -83,46 +63,43 @@ function ChooseUploadState({
   viaLibrary: () => void
 }) {
   return (
-    <View className="h-[180] items-center justify-center bg-[--input] rounded-xl">
-      <View className="flex-row">
-        <Pressable
-          onPress={viaCamera}
-          className="group w-1/2 gap-1 py-6 items-center justify-center"
-        >
+    <ContextMenu
+      onPress={({ nativeEvent: { index } }) => {
+        if (index === 0) {
+          viaCamera()
+        } else if (index === 1) {
+          viaLibrary()
+        }
+      }}
+      onPreviewPress={undefined}
+      dropdownMenuMode={true}
+      actions={[
+        { title: "Take Photo", systemIcon: "camera" },
+        {
+          title: "Choose Photo",
+          systemIcon: "photo.on.rectangle",
+        },
+      ]}
+    >
+      <View className="h-[180] items-center justify-center bg-[--input] rounded-xl">
+        <View className="rounded-full p-6 bg-[--primary]">
           <Icon.MaterialCommunity
-            name="camera-outline"
-            size={42}
-            className="text-[--foregroundSecondary] group-active:text-[--primary]"
+            name="image-search"
+            size={32}
+            className="text-[--background]"
           />
-          <Text className="text-[--foregroundSecondary] group-active:text-[--primary]">
-            Take a photo
-          </Text>
-        </Pressable>
-
-        <View className="my-4 border-r-hairline border-[--border]"></View>
-
-        <Pressable
-          onPress={viaLibrary}
-          className="group w-1/2 gap-1 py-6 items-center justify-center"
-        >
-          <Icon.MaterialCommunity
-            name="image-outline"
-            size={42}
-            className="text-[--foregroundSecondary] group-active:text-[--primary]"
-          />
-          <Text className="text-[--foregroundSecondary] group-active:text-[--primary]">
-            Select a photo
-          </Text>
-        </Pressable>
+        </View>
       </View>
-    </View>
+    </ContextMenu>
   )
 }
 
 function UploadState() {
   return (
     <View className="h-[180] items-center justify-center bg-[--input] rounded-xl">
-      <ActivityIndicator size="large" className="text-[--foreground]" />
+      <View className="rounded-full p-6 bg-[--primary]">
+        <ActivityIndicator size="small" className="text-[--background]" />
+      </View>
     </View>
   )
 }
