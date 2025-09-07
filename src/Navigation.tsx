@@ -1,8 +1,8 @@
 import useTheme from "@/hooks/useTheme"
-import AcceptPlantInvite, {
-  routeOptions as acceptPlantInviteRouteOptions,
-} from "@/screens/AcceptPlantInvite"
 import Account, { routeOptions as accountRouteOptions } from "@/screens/Account"
+import IncomingPlantShare, {
+  routeOptions as IncomingPlantShareRouteOptions,
+} from "@/screens/IncomingPlantShare"
 import PlantDetails, {
   routeOptions as plantDetailRouteOptions,
 } from "@/screens/PlantDetails"
@@ -29,7 +29,7 @@ import SharePlant, {
 
 export type RootStackParamList = {
   Welcome: undefined
-  AcceptPlantInvite: {
+  IncomingPlantShare: {
     value_id: string
     invite_secret: InviteSecret
     shared_by_id: string
@@ -90,9 +90,9 @@ export default function Navigation({ skipWelcome }: { skipWelcome: boolean }) {
           />
 
           <Stack.Screen
-            name="AcceptPlantInvite"
-            component={AcceptPlantInvite}
-            options={acceptPlantInviteRouteOptions}
+            name="IncomingPlantShare"
+            component={IncomingPlantShare}
+            options={IncomingPlantShareRouteOptions}
           />
 
           <Stack.Group>

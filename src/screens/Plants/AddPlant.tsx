@@ -67,7 +67,7 @@ export default function AddPlant() {
     if (!collection) return
 
     const imageOwner = Group.create()
-    imageOwner.addMember(collection.$jazz.owner)
+    // imageOwner.addMember(collection.$jazz.owner)
 
     console.debug("[createPlantImage] creating image")
     const image = await createImage(asset.uri as string, {
@@ -84,7 +84,7 @@ export default function AddPlant() {
       : addedAt
 
     const plantImageOwner = Group.create()
-    plantImageOwner.addMember(collection.$jazz.owner)
+    // plantImageOwner.addMember(collection.$jazz.owner)
     const newPlantImage = PlantImage.create(
       {
         image,
@@ -100,10 +100,14 @@ export default function AddPlant() {
   }
 
   const onSubmit = (data: PlantFormValues) => {
-    if (!isValid || !collection || !plantImage) return
+    if (!isValid || !collection || !plantImage?.image) return
 
     const plantOwner = Group.create()
-    plantOwner.addMember(plantImage.$jazz.owner)
+    plantOwner.addMember(collection.$jazz.owner)
+
+    plantImage.$jazz.owner.addMember(plantOwner)
+    plantImage.image.$jazz.owner.addMember(plantOwner)
+
     const plant = Plant.create(
       {
         name: data.name,

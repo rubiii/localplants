@@ -33,7 +33,7 @@ export default function SharePlant() {
     const sharedByName = me.profile.name
 
     const fullLink = Linking.createURL(
-      `AcceptPlantInvite?value_id=${objectID}&invite_secret=${inviteSecret}&shared_by_id=${sharedById}&shared_by_name=${sharedByName}`,
+      `IncomingPlantShare?value_id=${objectID}&invite_secret=${inviteSecret}&shared_by_id=${sharedById}&shared_by_name=${sharedByName}`,
     )
 
     setInviteLink(fullLink)
