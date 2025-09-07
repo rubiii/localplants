@@ -24,7 +24,7 @@ export default function Button({
     <Pressable
       onPress={onPress}
       disabled={disabled}
-      className={clsx("group flex-row items-center rounded-2xl", {
+      className={clsx("group flex-row items-center rounded-lg", {
         "py-2 px-4 gap-1.5 inline-flex": size === "small",
         "py-4 px-6 gap-2 inline-flex": size === "medium",
         "py-6 px-8 gap-3": size === "large",

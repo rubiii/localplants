@@ -35,7 +35,7 @@ export default function RemovePlantScreen() {
       <View className="flex-1 w-full pt-12 px-8 pb-24 gap-6 justify-center items-center">
         <Pressable
           onPress={deletePlant}
-          className="flex-row gap-2 py-6 px-8 w-3/4 justify-center items-center rounded-2xl bg-[--error]"
+          className="flex-row gap-2 py-6 px-8 w-3/4 justify-center items-center rounded-lg bg-[--error]"
         >
           <Icon.MaterialCommunity
             name="delete-outline"

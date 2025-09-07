@@ -180,7 +180,7 @@ function AddPlantButton({ onPress }: { onPress: () => void }) {
     >
       <View
         className={clsx(
-          "h-full w-full flex items-center justify-center rounded-xl border border-[--border]",
+          "h-full w-full flex items-center justify-center rounded-lg border border-[--border]",
           "group-active:bg-[--primary] group-active:border-[--primary]",
         )}
       >

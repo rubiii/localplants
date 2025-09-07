@@ -68,7 +68,7 @@ function ProfileName({
         value={name}
         onChangeText={setName}
         onBlur={() => onChange(name || "")}
-        className="px-6 py-4 text-xl leading-tight text-[--foregroundSecondary] bg-[--input] rounded-xl"
+        className="px-6 py-4 text-xl leading-tight text-[--foregroundSecondary] bg-[--input] rounded-lg"
       />
     </View>
   )
@@ -87,7 +87,7 @@ function AccountState({
     <View className="gap-2">
       <Text className="text-[--foregroundSecondary]">Account State</Text>
 
-      <View className="flex-row items-center pl-5 pr-1 py-4 rounded-xl bg-[--input]">
+      <View className="flex-row items-center pl-5 pr-1 py-4 rounded-lg bg-[--input]">
         <Text className="flex-1 text-[--foregroundMuted]">
           {isGuest && "Guest mode"}
           {isAnonymous && "Anonymous account"}
@@ -105,7 +105,7 @@ function AccountID({ accountID }: { accountID?: string }) {
     <View className="gap-2">
       <Text className="text-[--foregroundSecondary]">Account ID</Text>
 
-      <View className="px-5 py-0.5 rounded-xl bg-[--input]">
+      <View className="px-5 py-0.5 rounded-lg bg-[--input]">
         <Pressable
           className="group flex-row items-center py-3"
           onPress={copyAccountID}

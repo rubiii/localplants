@@ -81,7 +81,7 @@ function InitialState({
         },
       ]}
     >
-      <View className="h-[180] items-center justify-center bg-[--input] rounded-xl">
+      <View className="h-[180] items-center justify-center bg-[--input] rounded-lg">
         <View className="rounded-full p-6 bg-[--primary]">
           <Icon.MaterialCommunity
             name="image-search"
@@ -96,7 +96,7 @@ function InitialState({
 
 function UploadState() {
   return (
-    <View className="h-[180] items-center justify-center bg-[--input] rounded-xl">
+    <View className="h-[180] items-center justify-center bg-[--input] rounded-lg">
       <View className="rounded-full p-6 bg-[--primary]">
         <ActivityIndicator size="small" className="text-[--background]" />
       </View>

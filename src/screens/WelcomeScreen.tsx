@@ -229,7 +229,7 @@ const ConfigureButton = ({
     return (
       <Pressable
         onPress={configure}
-        className="rounded-2xl py-1 px-2.5 bg-[--primary]"
+        className="rounded-lg py-1 px-2.5 bg-[--primary]"
       >
         <Text className="text-[--primaryForeground]">Configure</Text>
       </Pressable>

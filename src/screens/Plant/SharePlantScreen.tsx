@@ -99,7 +99,7 @@ function QRCodeView({ inviteLink }: { inviteLink: string }) {
           You can also copy and share this link:
         </Text>
 
-        <View className="px-5 py-0.5 rounded-xl bg-[--input]">
+        <View className="px-5 py-0.5 rounded-lg bg-[--input]">
           <Pressable
             className="group flex-row items-center py-3"
             onPress={copyLink}
