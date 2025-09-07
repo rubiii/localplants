@@ -2,7 +2,12 @@ import Button from "@/components/Button"
 import Icon from "@/components/Icon"
 import Theme from "@/components/Theme"
 import useNavigation from "@/hooks/useNavigation"
-import { MyAppAccount, PlantCollection, PlantType } from "@/schema"
+import {
+  MyAppAccount,
+  PlantCollection,
+  PlantCollectionType,
+  PlantType,
+} from "@/schema"
 import type { NativeStackNavigationOptions } from "@react-navigation/native-stack"
 import { clsx } from "clsx"
 import { Image, useAccount, useCoState } from "jazz-tools/expo"
@@ -36,7 +41,7 @@ function HeaderRight() {
 
 export default function Plants() {
   const { me } = useAccount(MyAppAccount, {
-    resolve: { root: { collections: { $each: true } } },
+    resolve: { root: { collections: { $each: { plants: true } } } },
   })
 
   const addCollection = () => {}
@@ -57,7 +62,7 @@ export default function Plants() {
           {me?.root.collections.map((collection) => (
             <PlantCollectionView
               key={collection.$jazz.id}
-              collectionId={collection.$jazz.id}
+              shallowCollection={collection}
             />
           ))}
         </View>
@@ -66,7 +71,13 @@ export default function Plants() {
   )
 }
 
-function PlantCollectionView({ collectionId }: { collectionId: string }) {
+function PlantCollectionView({
+  shallowCollection,
+}: {
+  shallowCollection: PlantCollectionType
+}) {
+  const collectionId = shallowCollection.$jazz.id
+
   const { navigation } = useNavigation()
   const collection = useCoState(PlantCollection, collectionId, {
     resolve: {
@@ -87,17 +98,32 @@ function PlantCollectionView({ collectionId }: { collectionId: string }) {
     })
   }
 
+  const plantsLoaded =
+    collection?.plants !== null && collection?.plants !== undefined
+
   return (
     <View>
-      <Text className="text-lg text-[--foreground]">{collection?.name}</Text>
+      <Text className="text-lg text-[--foreground]">
+        {collection?.name || shallowCollection.name}
+      </Text>
 
       <View className="flex-row flex-wrap -m-1 mt-2">
-        {(collection?.plants || []).map((plant) => (
-          <PlantItem key={plant.$jazz.id} plant={plant} gotoPlant={gotoPlant} />
-        ))}
+        {plantsLoaded ? (
+          <>
+            {collection.plants.map((plant) => (
+              <PlantItem
+                key={plant.$jazz.id}
+                plant={plant}
+                gotoPlant={gotoPlant}
+              />
+            ))}
 
-        {!collection || collection.sharedBy ? null : (
-          <AddPlantButton onPress={addPlant} />
+            {collection.sharedBy ? null : <AddPlantButton onPress={addPlant} />}
+          </>
+        ) : (
+          Array.from(Array(shallowCollection.plants?.length)).map(
+            (_value, index) => <PlantItemSkeleton key={index} />,
+          )
         )}
       </View>
     </View>
@@ -132,6 +158,17 @@ function PlantItem({
         width={140}
       />
     </Pressable>
+  )
+}
+
+function PlantItemSkeleton() {
+  return (
+    <View className="w-4/12 h-[140] p-1 aspect-square">
+      <View
+        className="w-full h-full animate-pulse bg-[--card]"
+        style={{ borderRadius: 12 }}
+      ></View>
+    </View>
   )
 }
 
