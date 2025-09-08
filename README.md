@@ -32,6 +32,7 @@ Plant care app build with [Expo](https://expo.dev) and [Jazz](https://jazz.tools
 - Photo library access
 - Keyboard avoiding views
 - Theming with Nativewind
+- Handling system/auto theming
 - Sharing with Jazz
 
 ## Get started

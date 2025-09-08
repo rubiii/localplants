@@ -1,6 +1,7 @@
-import Button from "@/components/Button"
+import HeaderIconButton from "@/components/HeaderIconButton"
+import HeaderView from "@/components/HeaderView"
 import Icon from "@/components/Icon"
-import Theme from "@/components/Theme"
+import ScrollableScreenContainer from "@/components/ScrollableScreenContainer"
 import useNavigation from "@/hooks/useNavigation"
 import {
   MyAppAccount,
@@ -9,33 +10,23 @@ import {
   PlantType,
 } from "@/schema"
 import type { NativeStackNavigationOptions } from "@react-navigation/native-stack"
-import { clsx } from "clsx"
 import { Image, useAccount, useCoState } from "jazz-tools/expo"
-import { Pressable, SafeAreaView, Text, View } from "react-native"
-import { ScrollView } from "react-native-gesture-handler"
+import { Pressable, Text, View } from "react-native"
 
 export const routeOptions: NativeStackNavigationOptions = {
   title: "Your plants",
-  headerLargeTitle: true,
   headerRight: () => <HeaderRight />,
 }
 
 function HeaderRight() {
   const { navigation } = useNavigation()
 
+  const openAccount = () => navigation.navigate("Account")
+
   return (
-    <Theme style={{ flex: 0 }} className="flex-row">
-      <Pressable
-        className="group p-2 -mr-2"
-        onPress={() => navigation.navigate("Account")}
-      >
-        <Icon.MaterialCommunity
-          name="account-circle-outline"
-          className="text-[--foreground] group-active:text-[--primary]"
-          size={24}
-        />
-      </Pressable>
-    </Theme>
+    <HeaderView>
+      <HeaderIconButton icon="account" community={true} onPress={openAccount} />
+    </HeaderView>
   )
 }
 
@@ -44,30 +35,15 @@ export default function PlantsScreen() {
     resolve: { root: { collections: { $each: { plants: true } } } },
   })
 
-  const addCollection = () => {}
-
   return (
-    <SafeAreaView className="flex-1 bg-[--background]">
-      <ScrollView className="py-8 px-5">
-        <View className="flex flex-row justify-end">
-          <Button
-            title="Add collection"
-            onPress={addCollection}
-            icon="add-circle-outline"
-            size="small"
-          />
-        </View>
-
-        <View className="gap-8">
-          {me?.root.collections.map((collection) => (
-            <PlantCollectionView
-              key={collection.$jazz.id}
-              shallowCollection={collection}
-            />
-          ))}
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+    <ScrollableScreenContainer className="px-4 pt-6 pb-4 gap-8">
+      {me?.root.collections.map((collection) => (
+        <PlantCollectionView
+          key={collection.$jazz.id}
+          shallowCollection={collection}
+        />
+      ))}
+    </ScrollableScreenContainer>
   )
 }
 
@@ -85,9 +61,9 @@ function PlantCollectionView({
       plants: { $each: { primaryImage: { image: true } } },
     },
   })
+  const collectionName = collection?.name || shallowCollection.name
 
-  const addPlant = () => navigation.navigate("AddPlant", { collectionId })
-  const gotoPlant = (plant: PlantType) => {
+  const openPlant = (plant: PlantType) => {
     if (!collection) return
 
     navigation.navigate("Plant", {
@@ -97,28 +73,43 @@ function PlantCollectionView({
       readOnly: !!collection.sharedBy,
     })
   }
+  const openCollection = () => {
+    if (!collection) return
+
+    navigation.navigate("Collection", {
+      title: collectionName,
+      collectionId,
+      readOnly: !!collection.sharedBy,
+    })
+  }
 
   const plantsLoaded =
     collection?.plants !== null && collection?.plants !== undefined
 
   return (
-    <View>
-      <Text className="text-lg text-[--foreground]">
-        {collection?.name || shallowCollection.name}
-      </Text>
+    <View className="gap-1">
+      <Pressable onPress={openCollection} className="flex-row items-center">
+        <Text className="font-bold text-xl text-[--foreground]">
+          {collectionName}
+        </Text>
 
-      <View className="flex-row flex-wrap -m-1 mt-2">
+        <Icon.MaterialCommunity
+          name="chevron-right"
+          size={28}
+          className="-ml-1 text-[--foregroundMuted]"
+        />
+      </Pressable>
+
+      <View className="flex-row flex-wrap -m-1">
         {plantsLoaded ? (
           <>
             {collection.plants.map((plant) => (
               <PlantItem
                 key={plant.$jazz.id}
                 plant={plant}
-                gotoPlant={gotoPlant}
+                openPlant={openPlant}
               />
             ))}
-
-            {collection.sharedBy ? null : <AddPlantButton onPress={addPlant} />}
           </>
         ) : (
           Array.from(Array(shallowCollection.plants?.length)).map(
@@ -132,18 +123,18 @@ function PlantCollectionView({
 
 function PlantItem({
   plant,
-  gotoPlant,
+  openPlant,
 }: {
   plant: PlantType
-  gotoPlant: (plant: PlantType) => void
+  openPlant: (plant: PlantType) => void
 }) {
   if (!plant.primaryImage?.image) return
 
   return (
     <Pressable
-      onPress={() => gotoPlant(plant)}
+      onPress={() => openPlant(plant)}
       key={plant.primaryImage.image.$jazz.id}
-      className="w-4/12 p-1 aspect-square"
+      className="w-4/12 p-1.5 aspect-square"
     >
       <Image
         imageId={plant.primaryImage.image.$jazz.id}
@@ -163,33 +154,11 @@ function PlantItem({
 
 function PlantItemSkeleton() {
   return (
-    <View className="w-4/12 h-[140] p-1 aspect-square">
+    <View className="w-4/12 h-[140] p-1.5 aspect-square">
       <View
         className="w-full h-full animate-pulse bg-[--card]"
         style={{ borderRadius: 12 }}
       ></View>
     </View>
-  )
-}
-
-function AddPlantButton({ onPress }: { onPress: () => void }) {
-  return (
-    <Pressable
-      onPress={onPress}
-      className="group w-4/12 p-1 aspect-square items-center justify-center"
-    >
-      <View
-        className={clsx(
-          "h-full w-full flex items-center justify-center rounded-lg border border-[--border]",
-          "group-active:bg-[--primary] group-active:border-[--primary]",
-        )}
-      >
-        <Icon.MaterialCommunity
-          name="plus"
-          className="text-[--primary] group-active:text-[--background]"
-          size={42}
-        />
-      </View>
-    </Pressable>
   )
 }

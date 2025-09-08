@@ -1,5 +1,6 @@
 import Button from "@/components/Button"
 import Icon from "@/components/Icon"
+import ScrollableScreenContainer from "@/components/ScrollableScreenContainer"
 import useNavigation from "@/hooks/useNavigation"
 import { MyAppAccount, Plant } from "@/schema"
 import type { NativeStackNavigationOptions } from "@react-navigation/native-stack"
@@ -7,7 +8,7 @@ import * as Clipboard from "expo-clipboard"
 import * as Linking from "expo-linking"
 import { createInviteLink, useAccount, useCoState } from "jazz-tools/expo"
 import { useState } from "react"
-import { Pressable, SafeAreaView, ScrollView, Text, View } from "react-native"
+import { Platform, Pressable, Text, View } from "react-native"
 import QRCode from "react-qr-code"
 
 export const routeOptions: NativeStackNavigationOptions = {
@@ -16,7 +17,7 @@ export const routeOptions: NativeStackNavigationOptions = {
 
 export default function SharePlantScreen() {
   const { route } = useNavigation<"SharePlant">()
-  const plantId = route.params.plantId
+  const { plantId } = route.params
 
   const [inviteLink, setInviteLink] = useState<string>()
   const plant = useCoState(Plant, plantId)
@@ -28,27 +29,28 @@ export default function SharePlantScreen() {
     const baseLink = createInviteLink(plant, "reader")
     const baseLinkParts = baseLink.split("/")
     const inviteSecret = baseLinkParts.pop()
-    const objectID = baseLinkParts.pop()
-    const sharedById = me.$jazz.id
-    const sharedByName = me.profile.name
+    const valueID = baseLinkParts.pop()
+    const sharerID = me.$jazz.id
+    const sharerName = me.profile.name
 
     const fullLink = Linking.createURL(
-      `IncomingPlantShare?value_id=${objectID}&invite_secret=${inviteSecret}&shared_by_id=${sharedById}&shared_by_name=${sharedByName}`,
+      `AcceptSharedPlant?valueID=${valueID}&inviteSecret=${inviteSecret}&sharerID=${sharerID}&sharerName=${sharerName}`,
     )
 
     setInviteLink(fullLink)
   }
 
   return (
-    <SafeAreaView className="flex-1 bg-[--background]">
-      <ScrollView className="py-8 px-5">
-        {inviteLink ? (
-          <QRCodeView inviteLink={inviteLink} />
-        ) : (
-          <InfoView generateInvite={generateInvite} />
-        )}
-      </ScrollView>
-    </SafeAreaView>
+    <ScrollableScreenContainer
+      className="px-4 py-6"
+      noPadding={Platform.OS === "android"}
+    >
+      {inviteLink ? (
+        <QRCodeView inviteLink={inviteLink} />
+      ) : (
+        <InfoView generateInvite={generateInvite} />
+      )}
+    </ScrollableScreenContainer>
   )
 }
 
@@ -99,7 +101,7 @@ function QRCodeView({ inviteLink }: { inviteLink: string }) {
           You can also copy and share this link:
         </Text>
 
-        <View className="px-5 py-0.5 rounded-lg bg-[--input]">
+        <View className="px-5 py-0.5 rounded-lg bg-[--card]">
           <Pressable
             className="group flex-row items-center py-3"
             onPress={copyLink}

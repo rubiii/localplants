@@ -1,12 +1,11 @@
 import DismissKeyboard from "@/components/DismissKeyboard"
-import AddPrimaryImageField from "@/components/PlantForm/AddPrimaryImageField"
-import EmoteField from "@/components/PlantForm/EmoteField"
-import NameField from "@/components/PlantForm/NameField"
-import NoteField from "@/components/PlantForm/NoteField"
-import { PlantFormValues } from "@/components/PlantForm/types"
-import Theme from "@/components/Theme"
+import EmoteSelect from "@/components/EmoteSelect"
+import HeaderTextButton from "@/components/HeaderTextButton"
+import Icon from "@/components/Icon"
+import PlantImageSelect from "@/components/PlantImageSelect"
+import TextField from "@/components/TextField"
 import useNavigation from "@/hooks/useNavigation"
-import randomPlantName from "@/lib/randomPlantName"
+import { newRandomPlantName, randomPlantName } from "@/lib/randomPlantName"
 import {
   Plant,
   PlantCollection,
@@ -14,18 +13,17 @@ import {
   type PlantImageType,
 } from "@/schema"
 import type { NativeStackNavigationOptions } from "@react-navigation/native-stack"
-import { clsx } from "clsx"
 import { Group } from "jazz-tools"
 import { useCoState } from "jazz-tools/expo"
 import { createImage } from "jazz-tools/media"
 import { useState } from "react"
-import { useForm } from "react-hook-form"
-import { Platform, Pressable, SafeAreaView, Text, View } from "react-native"
+import { Platform, Pressable, SafeAreaView, View } from "react-native"
 import { Asset } from "react-native-image-picker"
 import { KeyboardAwareScrollView } from "react-native-keyboard-controller"
 
 export const routeOptions: NativeStackNavigationOptions = {
-  title: "Add a plant",
+  title: "Add plant",
+  headerTransparent: false,
   // On Android, the header title is not centered, but left aligned
   // and it's also placing a back arrow button if we pass undefined.
   headerLeft: () => (Platform.OS === "ios" ? <HeaderLeft /> : undefined),
@@ -34,68 +32,26 @@ export const routeOptions: NativeStackNavigationOptions = {
 
 function HeaderLeft() {
   const { navigation } = useNavigation()
-  const cancel = () => navigation.goBack()
-
-  return (
-    <Theme style={{ flex: 0 }}>
-      <Pressable className="group p-2" onPress={cancel}>
-        <Text className="text-[--foreground]">Cancel</Text>
-      </Pressable>
-    </Theme>
-  )
+  return <HeaderTextButton text="Cancel" onPress={() => navigation.goBack()} />
 }
 
 function HeaderRight({ onSave }: { onSave?: () => void }) {
-  return (
-    <Theme style={{ flex: 0 }}>
-      <Pressable onPress={onSave}>
-        <Text
-          className={clsx({
-            "text-[--foreground]": onSave,
-            "text-[--foregroundMuted]": !onSave,
-          })}
-        >
-          Save
-        </Text>
-      </Pressable>
-    </Theme>
-  )
+  return <HeaderTextButton text="Save" onPress={onSave} disabled={!onSave} />
 }
 
 export default function AddPlantScreen() {
   const [plantImage, setPlantImage] = useState<PlantImageType>()
-  const { navigation, route } = useNavigation<"AddPlant">()
+  const [name, setName] = useState<string | undefined>(randomPlantName())
+  const [emote, setEmote] = useState<string>()
+  const [note, setNote] = useState<string>()
+  const valid = !!(plantImage && name)
 
-  const collectionId = route.params.collectionId
+  const { navigation, route } = useNavigation<"AddPlant">()
+  const { collectionId } = route.params
+
   const collection = useCoState(PlantCollection, collectionId, {
     resolve: { plants: true },
   })
-
-  const {
-    control,
-    handleSubmit,
-    setValue,
-    getValues,
-    formState: { isValid, errors },
-  } = useForm<PlantFormValues>({
-    defaultValues: {
-      name: randomPlantName(),
-    },
-  })
-
-  const generatePlantName = () => {
-    const currentName = getValues().name
-    let newName = randomPlantName()
-
-    const maxTries = 5
-    let tries = 0
-    while (currentName === newName && tries <= maxTries) {
-      newName = randomPlantName()
-      tries += 1
-    }
-
-    setValue("name", newName)
-  }
 
   const createPlantImage = async (asset: Asset) => {
     if (!collection) return
@@ -125,11 +81,10 @@ export default function AddPlantScreen() {
     )
 
     setPlantImage(newPlantImage)
-    setValue("primaryImageId", newPlantImage.$jazz.id)
   }
 
-  const onSubmit = (data: PlantFormValues) => {
-    if (!isValid || !collection || !plantImage?.image) return
+  const createPlant = () => {
+    if (!collection || !plantImage?.image) return
 
     const plantOwner = Group.create()
     plantOwner.addMember(collection.$jazz.owner)
@@ -139,7 +94,7 @@ export default function AddPlantScreen() {
 
     const plant = Plant.create(
       {
-        name: data.name,
+        name: name as string,
         primaryImage: plantImage,
         // TODO: does the list needs it's own explicit owner?
         images: [plantImage],
@@ -147,37 +102,58 @@ export default function AddPlantScreen() {
       plantOwner,
     )
 
-    plantImage.$jazz.set("emote", data.emote)
-    plantImage.$jazz.set("note", data.note)
+    plantImage.$jazz.set("emote", emote)
+    plantImage.$jazz.set("note", note)
     collection.plants.$jazz.unshift(plant)
 
     navigation.goBack()
   }
 
-  navigation.setOptions({
-    headerRight: () => (
-      <HeaderRight
-        onSave={isValid && plantImage ? handleSubmit(onSubmit) : undefined}
-      />
-    ),
-  })
+  setTimeout(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <HeaderRight onSave={valid ? createPlant : undefined} />
+      ),
+    })
+  }, 1)
 
   return (
     <SafeAreaView className="flex-1 bg-[--background]">
-      <KeyboardAwareScrollView bottomOffset={62} className="py-8 px-5">
+      <KeyboardAwareScrollView bottomOffset={62} className="px-4 py-6">
         <DismissKeyboard>
-          <View className="mb-12 gap-8">
-            <AddPrimaryImageField
+          <View className="gap-8">
+            <PlantImageSelect
               plantImage={plantImage}
               createPlantImage={createPlantImage}
             />
-            <NameField
-              control={control}
-              errors={errors}
-              generatePlantName={generatePlantName}
+
+            <TextField
+              placeholder="What’s their name?"
+              value={name}
+              setValue={setName}
+              icon={
+                <Pressable
+                  onPress={() => setName(newRandomPlantName(name))}
+                  className="group items-center justify-center"
+                >
+                  <Icon.Material
+                    name="auto-awesome"
+                    size={19}
+                    className="text-[--foregroundSecondary] group-active:text-[--primary]"
+                  />
+                </Pressable>
+              }
             />
-            <EmoteField control={control} errors={errors} />
-            <NoteField control={control} errors={errors} />
+
+            <EmoteSelect value={emote} setValue={setEmote} />
+
+            <TextField
+              value={note}
+              setValue={setNote}
+              placeholder="Add a note if you like …"
+              multiline={true}
+              numberOfLines={5}
+            />
           </View>
         </DismissKeyboard>
       </KeyboardAwareScrollView>

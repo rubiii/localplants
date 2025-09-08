@@ -1,24 +1,21 @@
 import Button from "@/components/Button"
+import ScrollableScreenContainer from "@/components/ScrollableScreenContainer"
 import useNavigation from "@/hooks/useNavigation"
 import { MyAppAccount, Plant, PlantCollection, PlantType } from "@/schema"
 import type { NativeStackNavigationOptions } from "@react-navigation/native-stack"
 import { Group } from "jazz-tools"
 import { useAccount } from "jazz-tools/expo"
-import { SafeAreaView, Text, View } from "react-native"
+import { Text, View } from "react-native"
 
 export const routeOptions: NativeStackNavigationOptions = {
   title: "Shared Plant Invite",
-  headerLargeTitle: true,
 }
 
 export default function AcceptSharedPlantScreeen() {
   const { navigation, route } = useNavigation<"AcceptSharedPlant">()
 
-  const valueID = route.params.value_id
-  const inviteSecret = route.params.invite_secret
-  const sharedByID = route.params.shared_by_id
-  const sharedByName = route.params.shared_by_name
-  const valid = valueID && inviteSecret && sharedByID && sharedByName
+  const { valueID, inviteSecret, sharerID, sharerName } = route.params
+  const valid = valueID && inviteSecret && sharerID && sharerName
 
   const { me } = useAccount(MyAppAccount, {
     resolve: { root: { collections: { $each: { plants: true } } } },
@@ -43,7 +40,7 @@ export default function AcceptSharedPlantScreeen() {
     }
 
     const sharerCollection = me.root.collections.find(
-      (collection) => collection.sharedBy?.accountID === sharedByID,
+      (collection) => collection.sharedBy?.accountID === sharerID,
     )
 
     if (sharerCollection) {
@@ -51,11 +48,11 @@ export default function AcceptSharedPlantScreeen() {
     } else {
       const collection = PlantCollection.create(
         {
-          name: `Shared by ${sharedByName || sharedByID}`,
+          name: `Shared by ${sharerName || sharerID}`,
           plants: [plant],
           sharedBy: {
-            name: sharedByName,
-            accountID: sharedByID,
+            name: sharerName,
+            accountID: sharerID,
             sharedAt: new Date().toISOString(),
           },
         },
@@ -68,23 +65,21 @@ export default function AcceptSharedPlantScreeen() {
   }
 
   return (
-    <SafeAreaView className="flex-1 bg-[--background]">
-      <View className="flex-1 pt-8 pb-12 px-5">
-        {valid ? (
-          <>
-            <View className="flex-1 gap-6">
-              <Text className="text-[--foreground]">
-                {sharedByName || sharedByID} wants to share
-                {"\n"}
-                one of their plants with you.
-              </Text>
-            </View>
-            <Button onPress={acceptInvite} title="Accept" size="large" />
-          </>
-        ) : (
-          <Text className="text-[--foreground]">Invalid Invite</Text>
-        )}
-      </View>
-    </SafeAreaView>
+    <ScrollableScreenContainer className="p-4">
+      {valid ? (
+        <>
+          <View className="flex-1 gap-6">
+            <Text className="text-[--foreground]">
+              {sharerName || sharerID} wants to share
+              {"\n"}
+              one of their plants with you.
+            </Text>
+          </View>
+          <Button onPress={acceptInvite} title="Accept" size="large" />
+        </>
+      ) : (
+        <Text className="text-[--foreground]">Invalid Invite</Text>
+      )}
+    </ScrollableScreenContainer>
   )
 }

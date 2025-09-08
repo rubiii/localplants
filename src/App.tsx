@@ -1,6 +1,6 @@
-import Theme from "@/components/Theme"
 import "@/global.css"
 import useDeviceSettings from "@/hooks/useDeviceSettings"
+import { ThemeProvider } from "@/hooks/useTheme"
 import Navigation from "@/Navigation"
 import { MyAppAccount } from "@/schema"
 import "@bam.tech/react-native-image-resizer"
@@ -31,9 +31,9 @@ export default function App() {
         <GestureHandlerRootView>
           <KeyboardProvider>
             <SafeAreaProvider>
-              <Theme>
+              <ThemeProvider>
                 <Navigation skipWelcome={skipWelcome} />
-              </Theme>
+              </ThemeProvider>
             </SafeAreaProvider>
           </KeyboardProvider>
         </GestureHandlerRootView>

@@ -11,8 +11,7 @@ export const routeOptions: NativeStackNavigationOptions = {
 
 export default function RemovePlantScreen() {
   const { navigation, route } = useNavigation<"RemovePlant">()
-  const plantId = route.params.plantId
-  const collectionId = route.params.collectionId
+  const { plantId, collectionId } = route.params
 
   const { me } = useAccount(MyAppAccount, {
     resolve: { root: { collections: { $each: { plants: { $each: true } } } } },

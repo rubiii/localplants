@@ -9,6 +9,7 @@ const names = [
   "Twiggy Stardust",
   "Dr. Leafgood",
   "Baron von Bloom",
+  "Baroness von Bloom",
   "Sir Succulent",
   "Berry Potter",
   "Spikey Minaj",
@@ -25,8 +26,30 @@ const names = [
   "Sunflower Supreme",
   "Dandelion Dynamite",
   "Lil Sprout",
+  "Cactus Everdeen",
+  "Fernie Sanders",
+  "Seedy Gonzales",
+  "Keanu Leaves",
+  "Chili Eilish",
+  "Lil Plant X",
+  "Peppermint Patti",
+  "Stevia Buscemi",
+  "Green Latifah",
 ]
 
-export default function randomPlantName(): string {
+export function randomPlantName(): string {
   return names[Math.floor(Math.random() * names.length)]
+}
+
+export function newRandomPlantName(currentName?: string): string {
+  const maxTries = 5
+  let tries = 0
+  let newName = randomPlantName()
+
+  while (currentName === newName && tries <= maxTries) {
+    newName = randomPlantName()
+    tries += 1
+  }
+
+  return newName
 }

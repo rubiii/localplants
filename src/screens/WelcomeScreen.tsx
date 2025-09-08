@@ -18,7 +18,6 @@ type PermissionResult = ResultMap[keyof ResultMap]
 
 export const routeOptions: NativeStackNavigationOptions = {
   title: "Welcome",
-  headerLargeTitle: true,
 }
 
 export default function WelcomeScreen() {
@@ -41,7 +40,7 @@ export default function WelcomeScreen() {
 
   return (
     <SafeAreaView className="flex-1 bg-[--background]">
-      <View className="flex-1 pt-4 pb-12 px-5">
+      <View className="flex-1 p-4">
         <View className="flex-1">
           <Text className="text-[--foregroundSecondary]">
             The following permissions are needed
@@ -123,7 +122,7 @@ function CameraPermissions({
       <View className="flex-1">
         <View className="flex-row items-end">
           <View className="flex-row flex-grow items-baseline">
-            <Icon.Feather
+            <Icon.Material
               name="camera"
               className="text-[--foreground]"
               size={24}
@@ -195,7 +194,7 @@ function LibraryPermissions({
       <View className="flex-1">
         <View className="flex-row items-end">
           <View className="flex-row flex-grow items-baseline">
-            <Icon.Feather
+            <Icon.Material
               name="image"
               className="text-[--foreground]"
               size={24}
@@ -249,7 +248,7 @@ const ConfigureButton = ({
 
   return (
     <Pressable onPress={configure}>
-      <Icon.Feather name={icon as any} className={className} size={26} />
+      <Icon.Material name={icon as any} className={className} size={26} />
     </Pressable>
   )
 }

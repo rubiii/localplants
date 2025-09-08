@@ -1,23 +1,15 @@
-import FeatherIcon from "@expo/vector-icons/Feather"
-import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons"
-import MaterialIcons from "@expo/vector-icons/MaterialIcons"
+import MaterialCommunity from "@expo/vector-icons/MaterialCommunityIcons"
+import Material from "@expo/vector-icons/MaterialIcons"
 import { cssInterop } from "nativewind"
 
-cssInterop(FeatherIcon, {
+cssInterop(Material, {
   className: {
     target: "style",
     nativeStyleToProp: { color: true },
   },
 })
 
-cssInterop(MaterialIcons, {
-  className: {
-    target: "style",
-    nativeStyleToProp: { color: true },
-  },
-})
-
-cssInterop(MaterialCommunityIcons, {
+cssInterop(MaterialCommunity, {
   className: {
     target: "style",
     nativeStyleToProp: { color: true },
@@ -25,9 +17,9 @@ cssInterop(MaterialCommunityIcons, {
 })
 
 const Icon = {
-  Feather: FeatherIcon,
-  Material: MaterialIcons,
-  MaterialCommunity: MaterialCommunityIcons,
+  Material: Material,
+  MaterialCommunity: MaterialCommunity,
 }
 
 export default Icon
+export { Material, MaterialCommunity }

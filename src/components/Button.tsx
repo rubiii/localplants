@@ -29,7 +29,7 @@ export default function Button({
         "py-4 px-6 gap-2 inline-flex": size === "medium",
         "py-6 px-8 gap-3": size === "large",
         "bg-[--primary] active:text-[--foreground]": !disabled,
-        "bg-[--backgroundSecondary]": disabled,
+        "bg-[--card]": disabled,
       })}
     >
       {busy || icon ? (

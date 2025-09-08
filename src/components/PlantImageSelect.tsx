@@ -10,7 +10,7 @@ import { Asset } from "react-native-image-picker"
 
 type Steps = "initial" | "upload" | "image"
 
-export default function AddPrimaryImageField({
+export default function PlantImageSelect({
   plantImage,
   createPlantImage,
 }: {
@@ -81,7 +81,7 @@ function InitialState({
         },
       ]}
     >
-      <View className="h-[180] items-center justify-center bg-[--input] rounded-lg">
+      <View className="h-[180] items-center justify-center bg-[--card] rounded-lg">
         <View className="rounded-full p-6 bg-[--primary]">
           <Icon.MaterialCommunity
             name="image-search"
@@ -96,7 +96,7 @@ function InitialState({
 
 function UploadState() {
   return (
-    <View className="h-[180] items-center justify-center bg-[--input] rounded-lg">
+    <View className="h-[180] items-center justify-center bg-[--card] rounded-lg">
       <View className="rounded-full p-6 bg-[--primary]">
         <ActivityIndicator size="small" className="text-[--background]" />
       </View>

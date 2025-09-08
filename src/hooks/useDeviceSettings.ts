@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage"
 
-const settings = ["skip-welcome", "jazz-sync-state"] as const
+const settings = ["skip-welcome", "theme"] as const
 
 type Setting = (typeof settings)[number]
 

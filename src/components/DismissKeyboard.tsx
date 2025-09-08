@@ -1,9 +1,15 @@
 import type { ReactNode } from "react"
 import { Keyboard, Pressable } from "react-native"
 
-export default function DismissKeyboard({ children }: { children: ReactNode }) {
+export default function DismissKeyboard({
+  className,
+  children,
+}: {
+  className?: string
+  children: ReactNode
+}) {
   return (
-    <Pressable className="flex-1" onPress={() => Keyboard.dismiss()}>
+    <Pressable className={className} onPress={() => Keyboard.dismiss()}>
       {children}
     </Pressable>
   )

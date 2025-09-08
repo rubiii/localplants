@@ -5,6 +5,9 @@ import AcceptSharedPlantScreen, {
 import AccountScreen, {
   routeOptions as accountRouteOptions,
 } from "@/screens/AccountScreen"
+import CollectionScreen, {
+  routeOptions as collectionRouteOptions,
+} from "@/screens/CollectionScreen"
 import AddPlantImageScreen, {
   routeOptions as addPlantImageRouteOptions,
 } from "@/screens/Plant/AddPlantImageScreen"
@@ -28,7 +31,10 @@ import type { NativeStackNavigationOptions } from "@react-navigation/native-stac
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import * as Linking from "expo-linking"
 import { InviteSecret } from "jazz-tools"
-import { Text } from "react-native"
+import { Platform, Text } from "react-native"
+import EditCollectionScreen, {
+  routeOptions as editCollectionRouteOptions,
+} from "./screens/Collection/EditCollectionScreen"
 import SharePlantScreen, {
   routeOptions as sharePlantRouteOptions,
 } from "./screens/Plant/SharePlantScreen"
@@ -36,12 +42,21 @@ import SharePlantScreen, {
 export type RootStackParamList = {
   Welcome: undefined
   AcceptSharedPlant: {
-    value_id: string
-    invite_secret: InviteSecret
-    shared_by_id: string
-    shared_by_name: string
+    valueID: string
+    inviteSecret: InviteSecret
+    sharerID: string
+    sharerName: string
   }
   Plants: undefined
+  Collection: {
+    title: string
+    collectionId: string
+    readOnly: boolean
+  }
+  EditCollection: {
+    collectionName: string
+    collectionId: string
+  }
   Plant: {
     title: string
     plantId: string
@@ -59,13 +74,16 @@ const Stack = createNativeStackNavigator<RootStackParamList>()
 const prefix = Linking.createURL("/")
 
 export default function Navigation({ skipWelcome }: { skipWelcome: boolean }) {
-  const { colors } = useTheme()
+  const { resolvedTheme, colors } = useTheme()
 
   const rootStackOptions: NativeStackNavigationOptions = {
     headerTintColor: colors.foreground,
-    headerStyle: { backgroundColor: colors.background },
-    // headerTransparent: true,
-    // headerBlurEffect: "regular",
+    headerTransparent: true,
+    headerBlurEffect: resolvedTheme === "light" ? "light" : "dark",
+  }
+  const modalScreenOptions: NativeStackNavigationOptions = {
+    presentation: "modal",
+    headerTransparent: Platform.OS === "ios",
   }
 
   return (
@@ -89,7 +107,11 @@ export default function Navigation({ skipWelcome }: { skipWelcome: boolean }) {
             component={PlantsScreen}
             options={plantsRouteOptions}
           />
-
+          <Stack.Screen
+            name="Collection"
+            component={CollectionScreen}
+            options={collectionRouteOptions}
+          />
           <Stack.Screen
             name="Plant"
             component={PlantScreen}
@@ -112,7 +134,7 @@ export default function Navigation({ skipWelcome }: { skipWelcome: boolean }) {
         </Stack.Group>
 
         {/* Plants modals */}
-        <Stack.Group screenOptions={{ presentation: "modal" }}>
+        <Stack.Group screenOptions={modalScreenOptions}>
           <Stack.Screen
             name="AddPlant"
             component={AddPlantScreen}
@@ -120,8 +142,17 @@ export default function Navigation({ skipWelcome }: { skipWelcome: boolean }) {
           />
         </Stack.Group>
 
+        {/* Collection modals */}
+        <Stack.Group screenOptions={modalScreenOptions}>
+          <Stack.Screen
+            name="EditCollection"
+            component={EditCollectionScreen}
+            options={editCollectionRouteOptions}
+          />
+        </Stack.Group>
+
         {/* Plant modals */}
-        <Stack.Group screenOptions={{ presentation: "modal" }}>
+        <Stack.Group screenOptions={modalScreenOptions}>
           <Stack.Screen
             name="SharePlant"
             component={SharePlantScreen}
