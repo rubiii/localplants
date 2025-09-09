@@ -5,24 +5,11 @@ import Icon from "@/components/Icon"
 import ScrollableScreenContainer from "@/components/ScrollableScreenContainer"
 import useNavigation, { RootStackParamList } from "@/hooks/useNavigation"
 import { Plant, type PlantImageType } from "@/schema"
-import { Zoomable } from "@likashefqet/react-native-image-zoom"
-import { useHeaderHeight } from "@react-navigation/elements"
 import { type RouteProp } from "@react-navigation/native"
 import type { NativeStackNavigationOptions } from "@react-navigation/native-stack"
-import { clsx } from "clsx"
-import { ImageDefinition } from "jazz-tools"
 import { Image, useCoState } from "jazz-tools/expo"
 import { useEffect, useRef, useState } from "react"
-import {
-  ActivityIndicator,
-  FlatList,
-  Platform,
-  Pressable,
-  Image as RNImage,
-  Text,
-  useWindowDimensions,
-  View,
-} from "react-native"
+import { FlatList, Pressable, Text, View } from "react-native"
 
 export const routeOptions = ({
   route,
@@ -101,44 +88,26 @@ export default function PlantScreeen() {
 
   return (
     <ScrollableScreenContainer>
-      {plant ? (
-        <View className="flex-1 -mt-[580]">
-          <View className="w-[30] h-[600] border-r border-[--border]"></View>
+      <View className="flex-1 -mt-[580]">
+        <View className="w-[30] h-[600] border-r border-[--border]"></View>
 
-          {plant.images.map((plantImage) => (
-            <PlantImageView
-              key={plantImage.$jazz.id.toString()}
-              plantImage={plantImage}
-              fullscreenPlantImage={fullscreenPlantImage}
-              setFullscreenPlantImage={setFullscreenPlantImage}
-            />
-          ))}
+        {(plant?.images || []).map((plantImage) => (
+          <PlantImageView
+            key={plantImage.$jazz.id.toString()}
+            plantImage={plantImage}
+          />
+        ))}
 
-          <View className="w-[30] h-full border-r border-[--border]"></View>
-        </View>
-      ) : null}
-
-      {fullscreenPlantImage ? (
-        <FullscreenPlantImage
-          plantImage={fullscreenPlantImage}
-          closeView={() => {
-            setFullscreenPlantImage(undefined)
-          }}
-        />
-      ) : null}
+        <View className="w-[30] h-full border-r border-[--border]"></View>
+      </View>
     </ScrollableScreenContainer>
   )
 }
 
-function PlantImageView({
-  plantImage,
-  fullscreenPlantImage,
-  setFullscreenPlantImage,
-}: {
-  plantImage: PlantImageType
-  fullscreenPlantImage?: PlantImageType
-  setFullscreenPlantImage: (plantImage: PlantImageType) => void
-}) {
+function PlantImageView({ plantImage }: { plantImage: PlantImageType }) {
+  const plantImageId = plantImage.$jazz.id
+  const { navigation } = useNavigation()
+
   const createdAt = new Date(plantImage.createdAt)
   const weekday = createdAt.toLocaleString(undefined, { weekday: "long" })
   const day = createdAt.toLocaleString(undefined, { day: "2-digit" })
@@ -178,13 +147,11 @@ function PlantImageView({
         </Text>
 
         {plantImage?.image ? (
-          <Pressable onPress={() => setFullscreenPlantImage(plantImage)}>
-            {fullscreenPlantImage === plantImage ? (
-              <ActivityIndicator
-                size="large"
-                className="absolute z-[1] top-1/2 left-1/2 -mt-[20] -ml-[20] text-[--foreground]"
-              />
-            ) : null}
+          <Pressable
+            onPress={() =>
+              navigation.navigate("PlantImageModal", { plantImageId })
+            }
+          >
             <Image
               imageId={plantImage.image.$jazz.id}
               resizeMode="cover"
@@ -204,66 +171,6 @@ function PlantImageView({
             {plantImage.note}
           </Text>
         ) : null}
-      </View>
-    </View>
-  )
-}
-
-function FullscreenPlantImage({
-  plantImage,
-  closeView,
-}: {
-  plantImage: PlantImageType
-  closeView: () => void
-}) {
-  const [loaded, setLoaded] = useState(false)
-  const imageDefinition = useCoState(
-    ImageDefinition,
-    plantImage.image!.$jazz.id,
-    { resolve: { original: true } },
-  )
-  const headerHeight = useHeaderHeight()
-  const window = useWindowDimensions()
-
-  const imageWidth = window.width
-  const imageHeight = window.height
-  const marginTop = Platform.OS === "ios" ? headerHeight / 2 : 0
-
-  return (
-    <View
-      className={clsx(
-        "absolute top-0 left-0 right-0 bottom-0",
-        loaded ? "z-[2]" : "z-[0]",
-      )}
-    >
-      <Pressable
-        className="group absolute z-[20] top-4 right-4"
-        style={{ marginTop: headerHeight }}
-        onPress={closeView}
-      >
-        <Icon.MaterialCommunity
-          name="close-circle-outline"
-          size={42}
-          className="text-[--foreground] group-active:text-[--foreground]"
-        />
-      </Pressable>
-
-      <View className="flex-1 relative items-center justify-center bg-[--background]">
-        <Zoomable minScale={0.5} isDoubleTapEnabled={true} maxPanPointers={1}>
-          <View style={{ marginTop }}>
-            {imageDefinition?.original ? (
-              <RNImage
-                source={{
-                  uri: imageDefinition.original.asBase64({ dataURL: true }),
-                }}
-                onLoadEnd={() => setLoaded(true)}
-                resizeMode="contain"
-                width={imageWidth}
-                height={imageHeight}
-              />
-            ) : null}
-          </View>
-        </Zoomable>
       </View>
     </View>
   )

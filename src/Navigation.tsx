@@ -38,6 +38,9 @@ import EditCollectionScreen, {
 import SharePlantScreen, {
   routeOptions as sharePlantRouteOptions,
 } from "./screens/Plant/SharePlantScreen"
+import PlantImageModal, {
+  routeOptions as plantImageModalRouteOptions,
+} from "./screens/PlantImageModal"
 
 export type RootStackParamList = {
   Welcome: undefined
@@ -64,6 +67,7 @@ export type RootStackParamList = {
     readOnly: boolean
   }
   Account: undefined
+  PlantImageModal: { plantImageId: string }
   AddPlant: { collectionId: string }
   SharePlant: { plantId: string }
   RemovePlant: { plantId: string; collectionId: string }
@@ -123,7 +127,6 @@ export default function Navigation({ skipWelcome }: { skipWelcome: boolean }) {
             component={AcceptSharedPlantScreen}
             options={acceptSharedPlantRouteOptions}
           />
-
           <Stack.Group>
             <Stack.Screen
               name="Account"
@@ -133,26 +136,34 @@ export default function Navigation({ skipWelcome }: { skipWelcome: boolean }) {
           </Stack.Group>
         </Stack.Group>
 
-        {/* Plants modals */}
+        {/* PageSheets */}
+        <Stack.Group
+          screenOptions={{
+            presentation: "pageSheet",
+            headerShown: false,
+          }}
+        >
+          <Stack.Screen
+            name="PlantImageModal"
+            component={PlantImageModal}
+            options={plantImageModalRouteOptions}
+          />
+        </Stack.Group>
+
+        {/* Modals */}
         <Stack.Group screenOptions={modalScreenOptions}>
           <Stack.Screen
             name="AddPlant"
             component={AddPlantScreen}
             options={addPlantRouteOptions}
           />
-        </Stack.Group>
 
-        {/* Collection modals */}
-        <Stack.Group screenOptions={modalScreenOptions}>
           <Stack.Screen
             name="EditCollection"
             component={EditCollectionScreen}
             options={editCollectionRouteOptions}
           />
-        </Stack.Group>
 
-        {/* Plant modals */}
-        <Stack.Group screenOptions={modalScreenOptions}>
           <Stack.Screen
             name="SharePlant"
             component={SharePlantScreen}
