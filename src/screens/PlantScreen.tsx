@@ -2,7 +2,7 @@ import HeaderContextMenu from "@/components/HeaderContextMenu"
 import HeaderIconButton from "@/components/HeaderIconButton"
 import HeaderView from "@/components/HeaderView"
 import Icon from "@/components/Icon"
-import ScreenContainer from "@/components/ScreenContainer"
+import ScrollableScreenContainer from "@/components/ScrollableScreenContainer"
 import useNavigation, { RootStackParamList } from "@/hooks/useNavigation"
 import { Plant, type PlantImageType } from "@/schema"
 import { Zoomable } from "@likashefqet/react-native-image-zoom"
@@ -100,20 +100,22 @@ export default function PlantScreeen() {
   }, [plant, navigation])
 
   return (
-    <ScreenContainer>
+    <ScrollableScreenContainer>
       {plant ? (
-        <FlatList
-          ref={listRef}
-          data={plant.images}
-          renderItem={({ item }) => (
+        <View className="flex-1 -mt-[580]">
+          <View className="w-[30] h-[600] border-r border-[--border]"></View>
+
+          {plant.images.map((plantImage) => (
             <PlantImageView
-              plantImage={item}
+              key={plantImage.$jazz.id.toString()}
+              plantImage={plantImage}
               fullscreenPlantImage={fullscreenPlantImage}
               setFullscreenPlantImage={setFullscreenPlantImage}
             />
-          )}
-          keyExtractor={(image) => (image ? image.$jazz.id.toString() : "none")}
-        />
+          ))}
+
+          <View className="w-[30] h-full border-r border-[--border]"></View>
+        </View>
       ) : null}
 
       {fullscreenPlantImage ? (
@@ -124,7 +126,7 @@ export default function PlantScreeen() {
           }}
         />
       ) : null}
-    </ScreenContainer>
+    </ScrollableScreenContainer>
   )
 }
 
@@ -149,7 +151,7 @@ function PlantImageView({
 
   return (
     <View className="flex-row items-start">
-      <View className="flex items-center w-[26] min-w-[26] ml-5 mr-6">
+      <View className="items-center w-[24] min-w-[24] ml-5 mr-6">
         {plantImage.emote ? (
           <>
             <View className="h-[10] w-px border-r border-[--border]" />
@@ -169,7 +171,7 @@ function PlantImageView({
         <View className="w-px flex-1 min-h-[42] border-r border-[--border]" />
       </View>
 
-      <View className="flex-1 py-4 pr-4">
+      <View className="flex-1 py-4 pr-6">
         <Text className="mb-3 text-sm text-[--foregroundSecondary]">
           {weekday}, {day}. {month} {year}{" "}
           <Text className="text-[--foregroundMuted]">({time})</Text>
@@ -198,7 +200,7 @@ function PlantImageView({
         ) : null}
 
         {plantImage.note?.length ? (
-          <Text className="text-lg mt-2 mb-6 text-[--foregroundSecondary]">
+          <Text className="text-lg mt-2 mb-2 text-[--foregroundSecondary]">
             {plantImage.note}
           </Text>
         ) : null}
