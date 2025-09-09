@@ -21,7 +21,7 @@ export const routeOptions: NativeStackNavigationOptions = {
 }
 
 function HeaderLeft() {
-  const { navigation } = useNavigation()
+  const { navigation } = useNavigation<"Account">()
   return <HeaderTextButton text="Close" onPress={() => navigation.goBack()} />
 }
 
@@ -64,6 +64,7 @@ export default function AccountScreen() {
     <ScrollableScreenContainer className="px-4 py-6 gap-8">
       <TextField
         placeholder="Account name"
+        size="large"
         value={name}
         setValue={setName}
         onBlur={updateProfileName}
@@ -98,7 +99,7 @@ function ThemeSelect({
   canAddCustomTheme: boolean
   removeCustomTheme: () => void
 }) {
-  const { navigation } = useNavigation()
+  const { navigation } = useNavigation<"Account">()
   const { theme, setTheme } = useTheme()
 
   return (

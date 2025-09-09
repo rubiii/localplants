@@ -7,7 +7,7 @@ import { CustomTheme, MyAppAccount } from "@/schema"
 import { Theme } from "@/themes"
 import { RouteProp } from "@react-navigation/native"
 import type { NativeStackNavigationOptions } from "@react-navigation/native-stack"
-import clsx from "clsx"
+import { clsx } from "clsx"
 import * as Crypto from "expo-crypto"
 import { useAccount } from "jazz-tools/expo"
 import { useState } from "react"
@@ -32,12 +32,19 @@ export const routeOptions = ({
 })
 
 function HeaderLeft() {
-  const { navigation } = useNavigation()
+  const { navigation } = useNavigation<"CustomTheme">()
   return <HeaderTextButton text="Cancel" onPress={() => navigation.goBack()} />
 }
 
 function HeaderRight({ onSave }: { onSave?: () => void }) {
-  return <HeaderTextButton text="Save" onPress={onSave} disabled={!onSave} />
+  return (
+    <HeaderTextButton
+      text="Save"
+      variant="primary"
+      onPress={onSave}
+      disabled={!onSave}
+    />
+  )
 }
 
 function generateCustomThemeName() {
@@ -45,8 +52,7 @@ function generateCustomThemeName() {
 }
 
 export default function CustomThemeScreen() {
-  const { navigation, route } = useNavigation<"CustomTheme">()
-  const customThemeName = route.params?.customThemeName
+  const { navigation } = useNavigation<"CustomTheme">()
 
   const { setTheme, colors } = useTheme()
   const { me } = useAccount(MyAppAccount, {

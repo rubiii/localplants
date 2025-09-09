@@ -8,7 +8,7 @@ import { useAccount } from "jazz-tools/expo"
 import { Text, View } from "react-native"
 
 export const routeOptions: NativeStackNavigationOptions = {
-  title: "Shared Plant Invite",
+  title: "Plant Invite",
 }
 
 export default function AcceptSharedPlantScreeen() {

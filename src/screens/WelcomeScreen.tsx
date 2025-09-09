@@ -21,7 +21,7 @@ export const routeOptions: NativeStackNavigationOptions = {
 }
 
 export default function WelcomeScreen() {
-  const { navigation } = useNavigation()
+  const { navigation } = useNavigation<"Welcome">()
   const settings = useDeviceSettings()
 
   const [cameraPermission, setCameraPermission] = useState<PermissionResult>()

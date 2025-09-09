@@ -10,16 +10,17 @@ import {
   PlantType,
 } from "@/schema"
 import type { NativeStackNavigationOptions } from "@react-navigation/native-stack"
+import * as Haptics from "expo-haptics"
 import { Image, useAccount, useCoState } from "jazz-tools/expo"
 import { Pressable, Text, View } from "react-native"
 
 export const routeOptions: NativeStackNavigationOptions = {
-  title: "Your plants",
+  title: "Your Plants",
   headerRight: () => <HeaderRight />,
 }
 
 function HeaderRight() {
-  const { navigation } = useNavigation()
+  const { navigation } = useNavigation<"Plants">()
 
   const openAccount = () => navigation.navigate("Account")
 
@@ -54,7 +55,7 @@ function PlantCollectionView({
 }) {
   const collectionId = shallowCollection.$jazz.id
 
-  const { navigation } = useNavigation()
+  const { navigation } = useNavigation<"Plants">()
   const collection = useCoState(PlantCollection, collectionId, {
     resolve: {
       sharedBy: true,
@@ -128,11 +129,23 @@ function PlantItem({
   plant: PlantType
   openPlant: (plant: PlantType) => void
 }) {
+  const { navigation } = useNavigation<"Plants">()
+
+  const openPlantImageModal = () => {
+    if (!plant.primaryImage) return
+
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
+    navigation.navigate("PlantImageModal", {
+      plantImageId: plant.primaryImage.$jazz.id,
+    })
+  }
+
   if (!plant.primaryImage?.image) return
 
   return (
     <Pressable
       onPress={() => openPlant(plant)}
+      onLongPress={openPlantImageModal}
       key={plant.primaryImage.image.$jazz.id}
       className="w-4/12 p-1.5 aspect-square"
     >

@@ -1,3 +1,4 @@
+import { clsx } from "clsx"
 import { ReactNode } from "react"
 import { Text, TextInput, View } from "react-native"
 
@@ -11,6 +12,7 @@ export default function TextField({
   numberOfLines,
   multiline = false,
   autoFocus = false,
+  size = "medium",
 }: {
   value?: string
   setValue: (value?: string) => void
@@ -18,9 +20,10 @@ export default function TextField({
   note?: string
   icon?: ReactNode
   onBlur?: (value?: string) => void
-  multiline?: boolean
   numberOfLines?: number
+  multiline?: boolean
   autoFocus?: boolean
+  size?: "small" | "medium" | "large"
 }) {
   return (
     <View className="gap-2">
@@ -34,7 +37,14 @@ export default function TextField({
             autoFocus={autoFocus}
             onChangeText={setValue}
             onBlur={() => onBlur && onBlur(value)}
-            className="flex-1 px-6 py-0 text-xl text-[--text] placeholder:text-[--mutedText]"
+            className={clsx(
+              "flex-1 px-6 py-0 text-[--text] placeholder:text-[--mutedText]",
+              {
+                "text-lg": size === "small",
+                "text-xl": size === "medium",
+                "text-2xl": size === "large",
+              },
+            )}
           />
 
           {icon ? <View className="px-6">{icon}</View> : null}

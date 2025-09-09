@@ -45,9 +45,9 @@ function HeaderRight() {
           }
         }}
         actions={[
-          { title: "Share plant", systemIcon: "square.and.arrow.up" },
+          { title: "Share Plant", systemIcon: "square.and.arrow.up" },
           {
-            title: "Delete plant",
+            title: "Remove Plant",
             systemIcon: "trash",
             destructive: true,
           },
@@ -64,7 +64,7 @@ export default function PlantScreeen() {
   const [fullscreenPlantImage, setFullscreenPlantImage] =
     useState<PlantImageType>()
 
-  const { navigation } = useNavigation()
+  const { navigation } = useNavigation<"Plant">()
   const listRef = useRef<FlatList>(null)
 
   const plant = useCoState(Plant, plantId, {
@@ -106,7 +106,7 @@ export default function PlantScreeen() {
 
 function PlantImageView({ plantImage }: { plantImage: PlantImageType }) {
   const plantImageId = plantImage.$jazz.id
-  const { navigation } = useNavigation()
+  const { navigation } = useNavigation<"Plant">()
 
   const createdAt = new Date(plantImage.createdAt)
   const weekday = createdAt.toLocaleString(undefined, { weekday: "long" })
@@ -148,9 +148,9 @@ function PlantImageView({ plantImage }: { plantImage: PlantImageType }) {
 
         {plantImage?.image ? (
           <Pressable
-            onPress={() =>
+            onPress={() => {
               navigation.navigate("PlantImageModal", { plantImageId })
-            }
+            }}
           >
             <Image
               imageId={plantImage.image.$jazz.id}

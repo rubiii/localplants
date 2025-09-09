@@ -18,12 +18,19 @@ export const routeOptions: NativeStackNavigationOptions = {
 }
 
 function HeaderLeft() {
-  const { navigation } = useNavigation()
+  const { navigation } = useNavigation<"EditCollection">()
   return <HeaderTextButton text="Cancel" onPress={() => navigation.goBack()} />
 }
 
 function HeaderRight({ onSave }: { onSave?: () => void }) {
-  return <HeaderTextButton text="Save" onPress={onSave} disabled={!onSave} />
+  return (
+    <HeaderTextButton
+      text="Save"
+      variant="primary"
+      onPress={onSave}
+      disabled={!onSave}
+    />
+  )
 }
 
 export default function EditCollectionScreen() {
@@ -61,6 +68,7 @@ export default function EditCollectionScreen() {
           <View className="gap-12">
             <TextField
               placeholder="Name of collection"
+              size="large"
               autoFocus={true}
               value={name}
               setValue={setName}

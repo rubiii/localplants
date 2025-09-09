@@ -45,6 +45,9 @@ import * as Linking from "expo-linking"
 import { InviteSecret } from "jazz-tools"
 import { Platform, Text } from "react-native"
 import { hexToRgb, luminance } from "./lib/colorUtils"
+import RemoveCollectionScreen, {
+  routeOptions as removeCollectionRouteOptions,
+} from "./screens/Collection/RemoveCollectionScreen"
 
 export type RootStackParamList = {
   Welcome: undefined
@@ -61,6 +64,10 @@ export type RootStackParamList = {
     readOnly: boolean
   }
   EditCollection: {
+    collectionName: string
+    collectionId: string
+  }
+  RemoveCollection: {
     collectionName: string
     collectionId: string
   }
@@ -170,6 +177,11 @@ export default function Navigation({ skipWelcome }: { skipWelcome: boolean }) {
             name="EditCollection"
             component={EditCollectionScreen}
             options={editCollectionRouteOptions}
+          />
+          <Stack.Screen
+            name="RemoveCollection"
+            component={RemoveCollectionScreen}
+            options={removeCollectionRouteOptions}
           />
 
           <Stack.Screen

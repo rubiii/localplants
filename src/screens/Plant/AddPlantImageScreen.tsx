@@ -15,7 +15,7 @@ import { Asset } from "react-native-image-picker"
 import { KeyboardAwareScrollView } from "react-native-keyboard-controller"
 
 export const routeOptions: NativeStackNavigationOptions = {
-  title: "Add photo",
+  title: "Add Photo",
   // On Android, the header title is not centered, but left aligned
   // and it's also placing a back arrow button if we pass undefined.
   headerLeft: () => (Platform.OS === "ios" ? <HeaderLeft /> : undefined),
@@ -23,12 +23,19 @@ export const routeOptions: NativeStackNavigationOptions = {
 }
 
 function HeaderLeft() {
-  const { navigation } = useNavigation()
+  const { navigation } = useNavigation<"AddPlantImage">()
   return <HeaderTextButton text="Cancel" onPress={() => navigation.goBack()} />
 }
 
 function HeaderRight({ onSave }: { onSave?: () => void }) {
-  return <HeaderTextButton text="Save" onPress={onSave} disabled={!onSave} />
+  return (
+    <HeaderTextButton
+      text="Save"
+      variant="primary"
+      onPress={onSave}
+      disabled={!onSave}
+    />
+  )
 }
 
 export default function AddPlantImageScreen() {

@@ -7,6 +7,7 @@ import timeDifference from "@/lib/timeDifference"
 import { PlantCollection, PlantCollectionType, PlantType } from "@/schema"
 import { RouteProp } from "@react-navigation/native"
 import type { NativeStackNavigationOptions } from "@react-navigation/native-stack"
+import * as Haptics from "expo-haptics"
 import { Image, useCoState } from "jazz-tools/expo"
 import { useEffect } from "react"
 import { Pressable, Text, View } from "react-native"
@@ -45,13 +46,16 @@ function HeaderRight() {
               collectionName,
             })
           } else if (index === 1) {
-            // viaLibrary()
+            navigation.navigate("RemoveCollection", {
+              collectionId,
+              collectionName,
+            })
           }
         }}
         actions={[
           { title: "Edit Collection", systemIcon: "square.and.pencil" },
           {
-            title: "Delete Collection",
+            title: "Remove Collection",
             systemIcon: "trash",
             destructive: true,
           },
@@ -99,7 +103,7 @@ function PlantView({
   plant: PlantType
   collection: PlantCollectionType
 }) {
-  const { navigation } = useNavigation()
+  const { navigation } = useNavigation<"Collection">()
 
   const openPlant = () => {
     navigation.navigate("Plant", {
@@ -107,6 +111,15 @@ function PlantView({
       plantId: plant.$jazz.id,
       collectionId: collection.$jazz.id,
       readOnly: !!collection.sharedBy,
+    })
+  }
+
+  const openPlantImageModal = () => {
+    if (!plant.primaryImage) return
+
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
+    navigation.navigate("PlantImageModal", {
+      plantImageId: plant.primaryImage.$jazz.id,
     })
   }
 
@@ -122,6 +135,7 @@ function PlantView({
     <Pressable
       key={plant.$jazz.id}
       onPress={openPlant}
+      onLongPress={openPlantImageModal}
       className="gap-2 w-6/12 p-2 aspect-square"
     >
       <Image

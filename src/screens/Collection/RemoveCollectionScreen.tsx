@@ -7,34 +7,29 @@ import { useAccount } from "jazz-tools/expo"
 import { Platform, Pressable, SafeAreaView, Text, View } from "react-native"
 
 export const routeOptions: NativeStackNavigationOptions = {
-  title: "Remove Plant",
+  title: "Remove Collection",
   // On Android, the header title is not centered, but left aligned
   // and it's also placing a back arrow button if we pass undefined.
   headerLeft: () => (Platform.OS === "ios" ? <HeaderLeft /> : undefined),
 }
 
 function HeaderLeft() {
-  const { navigation } = useNavigation<"RemovePlant">()
+  const { navigation } = useNavigation<"EditCollection">()
   return <HeaderTextButton text="Cancel" onPress={() => navigation.goBack()} />
 }
 
-export default function RemovePlantScreen() {
-  const { navigation, route } = useNavigation<"RemovePlant">()
-  const { plantId, collectionId } = route.params
+export default function RemoveCollectionScreen() {
+  const { navigation, route } = useNavigation<"RemoveCollection">()
+  const { collectionId } = route.params
 
   const { me } = useAccount(MyAppAccount, {
-    resolve: { root: { collections: { $each: { plants: { $each: true } } } } },
+    resolve: { root: { collections: { $each: true } } },
   })
 
-  const removePlant = () => {
+  const removeCollection = () => {
     if (!me) return
 
-    const collection = me.root.collections.find(
-      (c) => c.$jazz.id === collectionId,
-    )
-    if (!collection) return
-
-    collection.plants.$jazz.remove((p) => p.$jazz.id === plantId)
+    me.root.collections.$jazz.remove((c) => c.$jazz.id === collectionId)
     navigation.popToTop()
   }
 
@@ -42,7 +37,7 @@ export default function RemovePlantScreen() {
     <SafeAreaView className="flex-1 bg-[--background]">
       <View className="flex-1 w-full pt-12 px-8 pb-24 gap-6 justify-center items-center">
         <Pressable
-          onPress={removePlant}
+          onPress={removeCollection}
           className="flex-row gap-2 py-6 px-8 w-3/4 justify-center items-center rounded-lg bg-[--error]"
         >
           <Icon.MaterialCommunity
@@ -50,7 +45,7 @@ export default function RemovePlantScreen() {
             className="text-[--background]"
             size={24}
           />
-          <Text className="text-xl text-[--background]">Remove plant</Text>
+          <Text className="text-xl text-[--background]">Remove collection</Text>
         </Pressable>
       </View>
     </SafeAreaView>

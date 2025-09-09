@@ -1,4 +1,5 @@
 import Button from "@/components/Button"
+import HeaderTextButton from "@/components/HeaderTextButton"
 import Icon from "@/components/Icon"
 import ScrollableScreenContainer from "@/components/ScrollableScreenContainer"
 import useNavigation from "@/hooks/useNavigation"
@@ -12,7 +13,15 @@ import { Platform, Pressable, Text, View } from "react-native"
 import QRCode from "react-qr-code"
 
 export const routeOptions: NativeStackNavigationOptions = {
-  title: "Share plant",
+  title: "Share Plant",
+  // On Android, the header title is not centered, but left aligned
+  // and it's also placing a back arrow button if we pass undefined.
+  headerLeft: () => (Platform.OS === "ios" ? <HeaderLeft /> : undefined),
+}
+
+function HeaderLeft() {
+  const { navigation } = useNavigation<"SharePlant">()
+  return <HeaderTextButton text="Cancel" onPress={() => navigation.goBack()} />
 }
 
 export default function SharePlantScreen() {
