@@ -1,40 +1,40 @@
 import useTheme from "@/hooks/useTheme"
 import AcceptSharedPlantScreen, {
   routeOptions as acceptSharedPlantRouteOptions,
-} from "@/screens/AcceptSharedPlantScreeen"
+} from "@/screens/AcceptSharedPlantScreen"
 import AccountScreen, {
   routeOptions as accountRouteOptions,
-} from "@/screens/AccountScreen"
+} from "@/screens/Account/AccountScreen"
+import CustomThemeScreen, {
+  routeOptions as customThemeRouteOptions,
+} from "@/screens/Account/CustomThemeScreen"
+import CollectionScreen, {
+  routeOptions as collectionRouteOptions,
+} from "@/screens/Collection/CollectionScreen"
 import EditCollectionScreen, {
   routeOptions as editCollectionRouteOptions,
 } from "@/screens/Collection/EditCollectionScreen"
-import CollectionScreen, {
-  routeOptions as collectionRouteOptions,
-} from "@/screens/CollectionScreen"
-import CustomThemeScreen, {
-  routeOptions as customThemeRouteOptions,
-} from "@/screens/CustomThemeScreen"
 import AddPlantImageScreen, {
   routeOptions as addPlantImageRouteOptions,
 } from "@/screens/Plant/AddPlantImageScreen"
+import PlantImageModal, {
+  routeOptions as plantImageModalRouteOptions,
+} from "@/screens/Plant/PlantImageModal"
+import PlantScreen, {
+  routeOptions as plantRouteOptions,
+} from "@/screens/Plant/PlantScreen"
 import RemovePlantScreen, {
   routeOptions as removePlantRouteOptions,
 } from "@/screens/Plant/RemovePlantScreen"
 import SharePlantScreen, {
   routeOptions as sharePlantRouteOptions,
 } from "@/screens/Plant/SharePlantScreen"
-import PlantImageModal, {
-  routeOptions as plantImageModalRouteOptions,
-} from "@/screens/PlantImageModal"
 import AddPlantScreen, {
   routeOptions as addPlantRouteOptions,
 } from "@/screens/Plants/AddPlantScreen"
-import PlantScreen, {
-  routeOptions as plantRouteOptions,
-} from "@/screens/PlantScreen"
 import PlantsScreen, {
   routeOptions as plantsRouteOptions,
-} from "@/screens/PlantsScreen"
+} from "@/screens/Plants/PlantsScreen"
 import WelcomeScreen, {
   routeOptions as welcomeRouteOptions,
 } from "@/screens/WelcomeScreen"
@@ -43,7 +43,7 @@ import type { NativeStackNavigationOptions } from "@react-navigation/native-stac
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import * as Linking from "expo-linking"
 import { InviteSecret } from "jazz-tools"
-import { Platform, Text } from "react-native"
+import { Platform } from "react-native"
 import { hexToRgb, luminance } from "./lib/colorUtils"
 import RemoveCollectionScreen, {
   routeOptions as removeCollectionRouteOptions,
@@ -104,10 +104,7 @@ export default function Navigation({ skipWelcome }: { skipWelcome: boolean }) {
   }
 
   return (
-    <NavigationContainer
-      linking={{ prefixes: [prefix] }}
-      fallback={<Text>Loading...</Text>}
-    >
+    <NavigationContainer linking={{ prefixes: [prefix] }}>
       <Stack.Navigator screenOptions={rootStackOptions}>
         {!skipWelcome ? (
           <Stack.Screen
@@ -142,17 +139,8 @@ export default function Navigation({ skipWelcome }: { skipWelcome: boolean }) {
           />
         </Stack.Group>
 
-        {/* PageSheets */}
-        <Stack.Group
-          screenOptions={{
-            presentation: "pageSheet",
-          }}
-        >
-          <Stack.Screen
-            name="PlantImageModal"
-            component={PlantImageModal}
-            options={plantImageModalRouteOptions}
-          />
+        {/* Account modals */}
+        <Stack.Group screenOptions={modalScreenOptions}>
           <Stack.Screen
             name="Account"
             component={AccountScreen}
@@ -165,25 +153,27 @@ export default function Navigation({ skipWelcome }: { skipWelcome: boolean }) {
           />
         </Stack.Group>
 
-        {/* Modals */}
+        {/* Plants modals */}
         <Stack.Group screenOptions={modalScreenOptions}>
           <Stack.Screen
             name="AddPlant"
             component={AddPlantScreen}
             options={addPlantRouteOptions}
           />
+        </Stack.Group>
 
+        {/* Plant modals */}
+        <Stack.Group screenOptions={modalScreenOptions}>
           <Stack.Screen
-            name="EditCollection"
-            component={EditCollectionScreen}
-            options={editCollectionRouteOptions}
+            name="AddPlantImage"
+            component={AddPlantImageScreen}
+            options={addPlantImageRouteOptions}
           />
           <Stack.Screen
-            name="RemoveCollection"
-            component={RemoveCollectionScreen}
-            options={removeCollectionRouteOptions}
+            name="PlantImageModal"
+            component={PlantImageModal}
+            options={plantImageModalRouteOptions}
           />
-
           <Stack.Screen
             name="SharePlant"
             component={SharePlantScreen}
@@ -194,10 +184,19 @@ export default function Navigation({ skipWelcome }: { skipWelcome: boolean }) {
             component={RemovePlantScreen}
             options={removePlantRouteOptions}
           />
+        </Stack.Group>
+
+        {/* Collection modals */}
+        <Stack.Group screenOptions={modalScreenOptions}>
           <Stack.Screen
-            name="AddPlantImage"
-            component={AddPlantImageScreen}
-            options={addPlantImageRouteOptions}
+            name="EditCollection"
+            component={EditCollectionScreen}
+            options={editCollectionRouteOptions}
+          />
+          <Stack.Screen
+            name="RemoveCollection"
+            component={RemoveCollectionScreen}
+            options={removeCollectionRouteOptions}
           />
         </Stack.Group>
       </Stack.Navigator>

@@ -11,7 +11,7 @@ export const routeOptions: NativeStackNavigationOptions = {
   title: "Plant Invite",
 }
 
-export default function AcceptSharedPlantScreeen() {
+export default function AcceptSharedPlantScreen() {
   const { navigation, route } = useNavigation<"AcceptSharedPlant">()
 
   const { valueID, inviteSecret, sharerID, sharerName } = route.params
