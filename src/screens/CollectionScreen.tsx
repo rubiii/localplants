@@ -138,11 +138,9 @@ function PlantView({
       />
 
       <View>
-        <Text className="text-[--foreground]">{plant.name}</Text>
+        <Text className="text-[--text]">{plant.name}</Text>
         {addedAt ? (
-          <Text className="text-xs text-[--foregroundMuted]">
-            Added: {addedAt}
-          </Text>
+          <Text className="text-xs text-[--muted-text]">Added: {addedAt}</Text>
         ) : null}
       </View>
     </Pressable>

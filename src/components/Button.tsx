@@ -28,7 +28,7 @@ export default function Button({
         "py-2 px-4 gap-1.5 inline-flex": size === "small",
         "py-4 px-6 gap-2 inline-flex": size === "medium",
         "py-6 px-8 gap-3": size === "large",
-        "bg-[--primary] active:text-[--foreground]": !disabled,
+        "bg-[--primary] active:text-[--text]": !disabled,
         "bg-[--card]": disabled,
       })}
     >
@@ -42,7 +42,7 @@ export default function Button({
             <Icon.Material
               name={icon as any}
               size={16}
-              className="text-[--primaryForeground]"
+              className="text-[--background]"
             />
           ) : null}
         </View>
@@ -51,8 +51,8 @@ export default function Button({
       <Text
         className={clsx({
           "text-xl": size === "large",
-          "text-[--primaryForeground]": !disabled,
-          "text-[--foregroundMuted]": disabled,
+          "text-[--background]": !disabled,
+          "text-[--muted-text]": disabled,
         })}
       >
         {title}

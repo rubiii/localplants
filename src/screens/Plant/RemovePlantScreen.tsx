@@ -38,12 +38,10 @@ export default function RemovePlantScreen() {
         >
           <Icon.MaterialCommunity
             name="delete-outline"
-            className="text-[--primaryForeground]"
+            className="text-[--background]"
             size={24}
           />
-          <Text className="text-xl text-[--primaryForeground]">
-            Remove this plant
-          </Text>
+          <Text className="text-xl text-[--background]">Remove this plant</Text>
         </Pressable>
       </View>
     </SafeAreaView>

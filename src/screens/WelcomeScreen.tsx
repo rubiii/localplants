@@ -42,7 +42,7 @@ export default function WelcomeScreen() {
     <SafeAreaView className="flex-1 bg-[--background]">
       <View className="flex-1 p-4">
         <View className="flex-1">
-          <Text className="text-[--foregroundSecondary]">
+          <Text className="text-[--secondary-text]">
             The following permissions are needed
             {"\n"}
             for different features of the app.
@@ -122,18 +122,14 @@ function CameraPermissions({
       <View className="flex-1">
         <View className="flex-row items-end">
           <View className="flex-row flex-grow items-baseline">
-            <Icon.Material
-              name="camera"
-              className="text-[--foreground]"
-              size={24}
-            />
-            <Text className="ml-3 text-2xl text-[--foreground]">Camera</Text>
+            <Icon.Material name="camera" className="text-[--text]" size={24} />
+            <Text className="ml-3 text-2xl text-[--text]">Camera</Text>
           </View>
 
           <ConfigureButton configure={configure} status={status} />
         </View>
 
-        <Text className="mt-2 text-[--foregroundSecondary]">
+        <Text className="mt-2 text-[--secondary-text]">
           Access front and back camera
           {"\n"}
           for taking photos of your plants.
@@ -194,20 +190,14 @@ function LibraryPermissions({
       <View className="flex-1">
         <View className="flex-row items-end">
           <View className="flex-row flex-grow items-baseline">
-            <Icon.Material
-              name="image"
-              className="text-[--foreground]"
-              size={24}
-            />
-            <Text className="ml-3 text-2xl text-[--foreground]">
-              Photo library
-            </Text>
+            <Icon.Material name="image" className="text-[--text]" size={24} />
+            <Text className="ml-3 text-2xl text-[--text]">Photo library</Text>
           </View>
 
           <ConfigureButton configure={configure} status={status} />
         </View>
 
-        <Text className="mt-2 text-[--foregroundSecondary]">
+        <Text className="mt-2 text-[--secondary-text]">
           Access your photo library to select
           {"\n"}
           existing photos of your plants.
@@ -230,7 +220,7 @@ const ConfigureButton = ({
         onPress={configure}
         className="rounded-lg py-1 px-2.5 bg-[--primary]"
       >
-        <Text className="text-[--primaryForeground]">Configure</Text>
+        <Text className="text-[--background]">Configure</Text>
       </Pressable>
     )
   }

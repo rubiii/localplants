@@ -18,10 +18,10 @@ export default function HeaderIconButton({
   return (
     <Pressable
       className={clsx(
-        "group p-1.5 w-9 items-center justify-center aspect-square rounded-full",
+        "group p-1.5 w-9 items-center justify-center aspect-square rounded-full bg-[--card]",
         {
-          "bg-[--button] active:bg-[--buttonActive]": !disabled,
-          "bg-[--buttonDisabled]": disabled,
+          "text-[--background] active:bg-[--primary]": !disabled,
+          "text-[--muted-text]": disabled,
         },
       )}
       onPress={() => !disabled && onPress()}
@@ -29,9 +29,8 @@ export default function HeaderIconButton({
       <IconType
         name={icon as any}
         className={clsx({
-          "text-[--buttonForeground] group-active:text-[--buttonActiveForeground]":
-            !disabled,
-          "text-[--buttonDisabledForeground]": disabled,
+          "text-[--text] group-active:text-[--background]": !disabled,
+          "text-[--background]": disabled,
         })}
         size={20}
       />

@@ -28,18 +28,18 @@ export default function HeaderContextMenu({
       <Pressable
         onPress={() => setOpen(true)}
         className={clsx(
-          "group p-1.5 w-9 items-center justify-center aspect-square rounded-full active:bg-[--button]",
+          "group p-1.5 w-9 items-center justify-center aspect-square rounded-full active:bg-[--primary]",
           {
-            "bg-[--button]": !open,
-            "bg-[--buttonActive]": open,
+            "bg-[--card]": !open,
+            "bg-[--primary]": open,
           },
         )}
       >
         <Icon.MaterialCommunity
           name={icon as any}
-          className={clsx("group-active:text-[--buttonActiveForeground]", {
-            "text-[--buttonForeground]": !open,
-            "text-[--buttonActiveForeground]": open,
+          className={clsx("group-active:text-[--background]", {
+            "text-[--text]": !open,
+            "text-[--background]": open,
           })}
           size={20}
         />

@@ -57,27 +57,25 @@ export default function SharePlantScreen() {
 function InfoView({ generateInvite }: { generateInvite: () => void }) {
   return (
     <View className="gap-12">
-      <Text className="text-lg text-[--foreground]">
+      <Text className="text-lg text-[--text]">
         Click the button to generate a QR code for someone to scan.
       </Text>
 
       <Button onPress={generateInvite} title="Generate QR code" size="large" />
 
       <View>
-        <Text className="font-bold text-[--foregroundMuted]">
-          Privacy info:
-        </Text>
+        <Text className="font-bold text-[--muted-text]">Privacy info:</Text>
 
         <View className="flex-row">
-          <Text className="text-[--foregroundMuted]">{"\u2022 "}</Text>
-          <Text className="text-[--foregroundMuted]">
+          <Text className="text-[--muted-text]">{"\u2022 "}</Text>
+          <Text className="text-[--muted-text]">
             The other person will not be able to edit your data.
           </Text>
         </View>
 
         <View className="flex-row">
-          <Text className="text-[--foregroundMuted]">{"\u2022 "}</Text>
-          <Text className="text-[--foregroundMuted]">
+          <Text className="text-[--muted-text]">{"\u2022 "}</Text>
+          <Text className="text-[--muted-text]">
             They will see all current and future data associated with this plant
             like photos and notes.
           </Text>
@@ -97,7 +95,7 @@ function QRCodeView({ inviteLink }: { inviteLink: string }) {
       </View>
 
       <View className="gap-2">
-        <Text className="text-[--foregroundSecondary]">
+        <Text className="text-[--secondary-text]">
           You can also copy and share this link:
         </Text>
 
@@ -106,14 +104,14 @@ function QRCodeView({ inviteLink }: { inviteLink: string }) {
             className="group flex-row items-center py-3"
             onPress={copyLink}
           >
-            <Text className="flex-1 text-xs text-[--foregroundSecondary]">
+            <Text className="flex-1 text-xs text-[--secondary-text]">
               {inviteLink}
             </Text>
 
             <Icon.Material
               name="content-copy"
               size={20}
-              className="ml-3 text-[--foregroundSecondary] group-active:text-[--background]"
+              className="ml-3 text-[--secondary-text] group-active:text-[--background]"
             />
           </Pressable>
         </View>

@@ -17,7 +17,7 @@ export default function TitleTextField({
       value={value}
       onChangeText={setValue}
       onBlur={() => onBlur && onBlur(value)}
-      className="px-6 py-4 font-bold text-2xl text-center text-[--foreground] border-b border-[--border]"
+      className="px-6 py-4 font-bold text-2xl text-center text-[--text] border-b border-[--border]"
     />
   )
 }

@@ -69,7 +69,7 @@ export default function AcceptSharedPlantScreeen() {
       {valid ? (
         <>
           <View className="flex-1 gap-6">
-            <Text className="text-[--foreground]">
+            <Text className="text-[--text]">
               {sharerName || sharerID} wants to share
               {"\n"}
               one of their plants with you.
@@ -78,7 +78,7 @@ export default function AcceptSharedPlantScreeen() {
           <Button onPress={acceptInvite} title="Accept" size="large" />
         </>
       ) : (
-        <Text className="text-[--foreground]">Invalid Invite</Text>
+        <Text className="text-[--text]">Invalid Invite</Text>
       )}
     </ScrollableScreenContainer>
   )

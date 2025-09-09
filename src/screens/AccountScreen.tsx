@@ -67,7 +67,7 @@ function ThemeSelect() {
 
   return (
     <View className="py-4 gap-2.5">
-      <Text className="px-6 text-sm text-[--foreground]">Theme</Text>
+      <Text className="px-6 text-sm text-[--text]">Theme</Text>
 
       <View className="px-6 flex-row gap-3">
         <ThemeButton
@@ -118,8 +118,8 @@ function ThemeButton({
         name={icon as any}
         size={size}
         className={clsx({
-          "text-[--foreground]": active,
-          "text-[--foregroundMuted]": !active,
+          "text-[--text]": active,
+          "text-[--muted-text]": !active,
         })}
       />
     </Pressable>

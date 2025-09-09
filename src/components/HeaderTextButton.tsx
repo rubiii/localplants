@@ -17,8 +17,8 @@ export default function HeaderTextButton({
     >
       <Text
         className={clsx({
-          "text-[--foreground]": !disabled,
-          "text-[--foregroundMuted]": disabled,
+          "text-[--text]": !disabled,
+          "text-[--muted-text]": disabled,
         })}
       >
         {text}

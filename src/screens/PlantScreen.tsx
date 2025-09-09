@@ -141,9 +141,9 @@ function PlantImageView({ plantImage }: { plantImage: PlantImageType }) {
       </View>
 
       <View className="flex-1 py-4 pr-6">
-        <Text className="mb-3 text-sm text-[--foregroundSecondary]">
+        <Text className="mb-3 text-sm text-[--secondary-text]">
           {weekday}, {day}. {month} {year}{" "}
-          <Text className="text-[--foregroundMuted]">({time})</Text>
+          <Text className="text-[--muted-text]">({time})</Text>
         </Text>
 
         {plantImage?.image ? (
@@ -167,7 +167,7 @@ function PlantImageView({ plantImage }: { plantImage: PlantImageType }) {
         ) : null}
 
         {plantImage.note?.length ? (
-          <Text className="text-lg mt-2 mb-2 text-[--foregroundSecondary]">
+          <Text className="text-lg mt-2 mb-2 text-[--secondary-text]">
             {plantImage.note}
           </Text>
         ) : null}

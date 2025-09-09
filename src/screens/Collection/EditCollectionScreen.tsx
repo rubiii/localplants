@@ -68,7 +68,7 @@ export default function EditCollectionScreen() {
 
             {collection?.sharedBy ? (
               <View className="px-6">
-                <Text className="text-[--foregroundMuted]">
+                <Text className="text-[--muted-text]">
                   This collection was shared with you
                   {"\n"}
                   by {collection.sharedBy.name || collection.sharedBy.accountID}

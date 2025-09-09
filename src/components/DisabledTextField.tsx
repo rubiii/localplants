@@ -27,11 +27,11 @@ export default function DisabledTextField({
         onPress={onPress}
         className="group gap-1 py-4 border-b border-[--border]"
       >
-        <Text className="px-6 text-sm text-[--foreground]">{label}</Text>
+        <Text className="px-6 text-sm text-[--text]">{label}</Text>
 
         <View className="flex-row">
           <Text
-            className={clsx("flex-1 px-6 text-[--foregroundMuted]", {
+            className={clsx("flex-1 px-6 text-[--muted-text]", {
               "text-lg": size === "small",
               "text-xl": size === "medium",
               "text-2xl": size === "large",
@@ -44,15 +44,13 @@ export default function DisabledTextField({
             <Icon.Material
               name="content-copy"
               size={20}
-              className="pr-6 text-[--foregroundMuted] group-active:text-[--primary]"
+              className="pr-6 text-[--muted-text] group-active:text-[--primary]"
             />
           ) : null}
         </View>
       </Pressable>
 
-      {note ? (
-        <Text className="px-6 text-[--foregroundMuted]">{note}</Text>
-      ) : null}
+      {note ? <Text className="px-6 text-[--muted-text]">{note}</Text> : null}
     </View>
   )
 }

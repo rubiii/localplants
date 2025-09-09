@@ -34,14 +34,14 @@ export default function PlantImageModal() {
         className={clsx(
           "group absolute z-[10] top-10 right-4",
           "p-0.5 items-center justify-center aspect-square rounded-full",
-          "bg-[--button] active:bg-[--buttonActive]",
+          "bg-[--card] active:bg-[--primary]",
         )}
         onPress={closeModal}
       >
         <Icon.MaterialCommunity
           name="close-circle-outline"
           size={35}
-          className="text-[--buttonForeground] group-active:text-[--buttonActiveForeground]"
+          className="text-[--text] group-active:text-[--background]"
         />
       </Pressable>
 

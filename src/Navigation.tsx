@@ -81,7 +81,7 @@ export default function Navigation({ skipWelcome }: { skipWelcome: boolean }) {
   const { resolvedTheme, colors } = useTheme()
 
   const rootStackOptions: NativeStackNavigationOptions = {
-    headerTintColor: colors.foreground,
+    headerTintColor: colors.text,
     headerTransparent: true,
     headerBlurEffect: resolvedTheme === "light" ? "light" : "dark",
   }

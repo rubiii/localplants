@@ -139,7 +139,7 @@ export default function AddPlantScreen() {
                   <Icon.Material
                     name="auto-awesome"
                     size={19}
-                    className="text-[--foregroundSecondary] group-active:text-[--primary]"
+                    className="text-[--secondary-text] group-active:text-[--primary]"
                   />
                 </Pressable>
               }
