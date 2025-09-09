@@ -5,15 +5,27 @@ import AcceptSharedPlantScreen, {
 import AccountScreen, {
   routeOptions as accountRouteOptions,
 } from "@/screens/AccountScreen"
+import EditCollectionScreen, {
+  routeOptions as editCollectionRouteOptions,
+} from "@/screens/Collection/EditCollectionScreen"
 import CollectionScreen, {
   routeOptions as collectionRouteOptions,
 } from "@/screens/CollectionScreen"
+import CustomThemeScreen, {
+  routeOptions as customThemeRouteOptions,
+} from "@/screens/CustomThemeScreen"
 import AddPlantImageScreen, {
   routeOptions as addPlantImageRouteOptions,
 } from "@/screens/Plant/AddPlantImageScreen"
 import RemovePlantScreen, {
   routeOptions as removePlantRouteOptions,
 } from "@/screens/Plant/RemovePlantScreen"
+import SharePlantScreen, {
+  routeOptions as sharePlantRouteOptions,
+} from "@/screens/Plant/SharePlantScreen"
+import PlantImageModal, {
+  routeOptions as plantImageModalRouteOptions,
+} from "@/screens/PlantImageModal"
 import AddPlantScreen, {
   routeOptions as addPlantRouteOptions,
 } from "@/screens/Plants/AddPlantScreen"
@@ -32,15 +44,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import * as Linking from "expo-linking"
 import { InviteSecret } from "jazz-tools"
 import { Platform, Text } from "react-native"
-import EditCollectionScreen, {
-  routeOptions as editCollectionRouteOptions,
-} from "./screens/Collection/EditCollectionScreen"
-import SharePlantScreen, {
-  routeOptions as sharePlantRouteOptions,
-} from "./screens/Plant/SharePlantScreen"
-import PlantImageModal, {
-  routeOptions as plantImageModalRouteOptions,
-} from "./screens/PlantImageModal"
+import { hexToRgb, luminance } from "./lib/colorUtils"
 
 export type RootStackParamList = {
   Welcome: undefined
@@ -67,6 +71,7 @@ export type RootStackParamList = {
     readOnly: boolean
   }
   Account: undefined
+  CustomTheme: { customThemeName: string } | undefined
   PlantImageModal: { plantImageId: string }
   AddPlant: { collectionId: string }
   SharePlant: { plantId: string }
@@ -78,12 +83,13 @@ const Stack = createNativeStackNavigator<RootStackParamList>()
 const prefix = Linking.createURL("/")
 
 export default function Navigation({ skipWelcome }: { skipWelcome: boolean }) {
-  const { resolvedTheme, colors } = useTheme()
+  const { colors } = useTheme()
 
   const rootStackOptions: NativeStackNavigationOptions = {
     headerTintColor: colors.text,
     headerTransparent: true,
-    headerBlurEffect: resolvedTheme === "light" ? "light" : "dark",
+    headerBlurEffect:
+      luminance(hexToRgb(colors.background)) > 0.5 ? "light" : "dark",
   }
   const modalScreenOptions: NativeStackNavigationOptions = {
     presentation: "modal",
@@ -127,26 +133,28 @@ export default function Navigation({ skipWelcome }: { skipWelcome: boolean }) {
             component={AcceptSharedPlantScreen}
             options={acceptSharedPlantRouteOptions}
           />
-          <Stack.Group>
-            <Stack.Screen
-              name="Account"
-              component={AccountScreen}
-              options={accountRouteOptions}
-            />
-          </Stack.Group>
         </Stack.Group>
 
         {/* PageSheets */}
         <Stack.Group
           screenOptions={{
             presentation: "pageSheet",
-            headerShown: false,
           }}
         >
           <Stack.Screen
             name="PlantImageModal"
             component={PlantImageModal}
             options={plantImageModalRouteOptions}
+          />
+          <Stack.Screen
+            name="Account"
+            component={AccountScreen}
+            options={accountRouteOptions}
+          />
+          <Stack.Screen
+            name="CustomTheme"
+            component={CustomThemeScreen}
+            options={customThemeRouteOptions}
           />
         </Stack.Group>
 

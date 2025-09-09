@@ -23,7 +23,6 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-controller"
 
 export const routeOptions: NativeStackNavigationOptions = {
   title: "Add plant",
-  headerTransparent: false,
   // On Android, the header title is not centered, but left aligned
   // and it's also placing a back arrow button if we pass undefined.
   headerLeft: () => (Platform.OS === "ios" ? <HeaderLeft /> : undefined),
@@ -139,7 +138,7 @@ export default function AddPlantScreen() {
                   <Icon.Material
                     name="auto-awesome"
                     size={19}
-                    className="text-[--secondary-text] group-active:text-[--primary]"
+                    className="text-[--secondaryText] group-active:text-[--primary]"
                   />
                 </Pressable>
               }

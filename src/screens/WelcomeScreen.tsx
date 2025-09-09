@@ -42,7 +42,7 @@ export default function WelcomeScreen() {
     <SafeAreaView className="flex-1 bg-[--background]">
       <View className="flex-1 p-4">
         <View className="flex-1">
-          <Text className="text-[--secondary-text]">
+          <Text className="text-[--secondaryText]">
             The following permissions are needed
             {"\n"}
             for different features of the app.
@@ -129,7 +129,7 @@ function CameraPermissions({
           <ConfigureButton configure={configure} status={status} />
         </View>
 
-        <Text className="mt-2 text-[--secondary-text]">
+        <Text className="mt-2 text-[--secondaryText]">
           Access front and back camera
           {"\n"}
           for taking photos of your plants.
@@ -197,7 +197,7 @@ function LibraryPermissions({
           <ConfigureButton configure={configure} status={status} />
         </View>
 
-        <Text className="mt-2 text-[--secondary-text]">
+        <Text className="mt-2 text-[--secondaryText]">
           Access your photo library to select
           {"\n"}
           existing photos of your plants.

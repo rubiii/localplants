@@ -31,7 +31,7 @@ export default function DisabledTextField({
 
         <View className="flex-row">
           <Text
-            className={clsx("flex-1 px-6 text-[--muted-text]", {
+            className={clsx("flex-1 px-6 text-[--mutedText]", {
               "text-lg": size === "small",
               "text-xl": size === "medium",
               "text-2xl": size === "large",
@@ -44,13 +44,13 @@ export default function DisabledTextField({
             <Icon.Material
               name="content-copy"
               size={20}
-              className="pr-6 text-[--muted-text] group-active:text-[--primary]"
+              className="pr-6 text-[--mutedText] group-active:text-[--primary]"
             />
           ) : null}
         </View>
       </Pressable>
 
-      {note ? <Text className="px-6 text-[--muted-text]">{note}</Text> : null}
+      {note ? <Text className="px-6 text-[--mutedText]">{note}</Text> : null}
     </View>
   )
 }

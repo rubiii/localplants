@@ -71,7 +71,6 @@ function InitialState({
           viaLibrary()
         }
       }}
-      onPreviewPress={undefined}
       dropdownMenuMode={true}
       actions={[
         { title: "Take Photo", systemIcon: "camera" },

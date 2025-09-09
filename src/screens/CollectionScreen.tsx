@@ -49,9 +49,9 @@ function HeaderRight() {
           }
         }}
         actions={[
-          { title: "Edit collection", systemIcon: "square.and.pencil" },
+          { title: "Edit Collection", systemIcon: "square.and.pencil" },
           {
-            title: "Delete collection",
+            title: "Delete Collection",
             systemIcon: "trash",
             destructive: true,
           },
@@ -140,7 +140,7 @@ function PlantView({
       <View>
         <Text className="text-[--text]">{plant.name}</Text>
         {addedAt ? (
-          <Text className="text-xs text-[--muted-text]">Added: {addedAt}</Text>
+          <Text className="text-xs text-[--mutedText]">Added: {addedAt}</Text>
         ) : null}
       </View>
     </Pressable>

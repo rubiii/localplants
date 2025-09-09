@@ -34,14 +34,14 @@ export default function TextField({
             autoFocus={autoFocus}
             onChangeText={setValue}
             onBlur={() => onBlur && onBlur(value)}
-            className="flex-1 px-6 py-0 text-xl text-[--text] placeholder:text-[--muted-text]"
+            className="flex-1 px-6 py-0 text-xl text-[--text] placeholder:text-[--mutedText]"
           />
 
           {icon ? <View className="px-6">{icon}</View> : null}
         </View>
       </View>
 
-      {note ? <Text className="px-6 text-[--muted-text]">{note}</Text> : null}
+      {note ? <Text className="px-6 text-[--mutedText]">{note}</Text> : null}
     </View>
   )
 }

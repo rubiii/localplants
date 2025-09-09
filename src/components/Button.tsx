@@ -52,7 +52,7 @@ export default function Button({
         className={clsx({
           "text-xl": size === "large",
           "text-[--background]": !disabled,
-          "text-[--muted-text]": disabled,
+          "text-[--mutedText]": disabled,
         })}
       >
         {title}

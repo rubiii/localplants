@@ -4,22 +4,11 @@ Plant care app build with [Expo](https://expo.dev) and [Jazz](https://jazz.tools
 
 ## TODO
 
-[x] - Get on TestFlight  
-[x] - Android simulator build  
-[x] - Allow rotating device  
-[x] - Allow plant collections for sharing  
-[x] - Enable sharing a plant via QR code / URL  
-[x] - Enable sharing a collection  
-[x] - Make images zoomable  
-[x] - Let users update their profile.name  
-[ ] - Improve zoomed image view (fix cut off large images, improve on android, swipe to dismiss)  
-[ ] - Allow custom theming  
-[ ] - Maybe use a component library?  
-[ ] - Make lists orderable by createdAt/addedAt/name?  
-[ ] - Expo [Updates](https://docs.expo.dev/versions/latest/sdk/updates/)  
+[ ] - Get on Expo [Updates](https://docs.expo.dev/versions/latest/sdk/updates/)?  
 [ ] - Show Jazz-Outage/Connection-Status?  
-[ ] - Enable auth via usePassphraseAuth({ wordlist })  
 [ ] - Maybe make sync status (never, always, signedUp) explicit  
+[ ] - Enable auth via usePassphraseAuth({ wordlist })  
+[ ] - Add reasonable limits? Max collections, max plants, etc.
 [ ] - Web build?  
 [ ] - Use universal links for invites?  
 
@@ -32,7 +21,8 @@ Plant care app build with [Expo](https://expo.dev) and [Jazz](https://jazz.tools
 - Photo library access
 - Keyboard avoiding views
 - Theming with Nativewind
-- Handling system/auto theming
+- Proper system/auto theming
+- Custom theme stored in Jazz
 - Sharing with Jazz
 
 ## Get started

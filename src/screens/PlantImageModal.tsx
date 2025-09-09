@@ -12,7 +12,9 @@ export const routeOptions = ({
   route,
 }: {
   route: RouteProp<RootStackParamList, "PlantImageModal">
-}): NativeStackNavigationOptions => ({})
+}): NativeStackNavigationOptions => ({
+  headerShown: false,
+})
 
 export default function PlantImageModal() {
   const { navigation, route } = useNavigation<"PlantImageModal">()

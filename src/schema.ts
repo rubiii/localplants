@@ -44,8 +44,26 @@ const AccountRoot = co.map({
 })
 export type AccountRootType = co.loaded<typeof AccountRoot>
 
+export const CustomTheme = co.map({
+  name: z.string(),
+  colors: co.map({
+    background: z.string(),
+    card: z.string(),
+    text: z.string(),
+    secondaryText: z.string(),
+    mutedText: z.string(),
+    primary: z.string(),
+    border: z.string(),
+    success: z.string(),
+    error: z.string(),
+  }),
+})
+export type CustomThemeType = co.loaded<typeof CustomTheme>
+
 const AccountProfile = co.map({
   name: z.string(),
+  activeTheme: z.optional(z.string()),
+  themes: co.list(CustomTheme),
 })
 export type AccountProfileType = co.loaded<typeof AccountProfile>
 
@@ -65,5 +83,9 @@ export const MyAppAccount = co
         owner,
       )
       account.$jazz.set("root", { collections: [firstCollection] })
+      account.$jazz.set("profile", {
+        name: "Unknown Plant",
+        themes: [],
+      })
     }
   })

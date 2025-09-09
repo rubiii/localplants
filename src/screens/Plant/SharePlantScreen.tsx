@@ -64,18 +64,18 @@ function InfoView({ generateInvite }: { generateInvite: () => void }) {
       <Button onPress={generateInvite} title="Generate QR code" size="large" />
 
       <View>
-        <Text className="font-bold text-[--muted-text]">Privacy info:</Text>
+        <Text className="font-bold text-[--mutedText]">Privacy info:</Text>
 
         <View className="flex-row">
-          <Text className="text-[--muted-text]">{"\u2022 "}</Text>
-          <Text className="text-[--muted-text]">
+          <Text className="text-[--mutedText]">{"\u2022 "}</Text>
+          <Text className="text-[--mutedText]">
             The other person will not be able to edit your data.
           </Text>
         </View>
 
         <View className="flex-row">
-          <Text className="text-[--muted-text]">{"\u2022 "}</Text>
-          <Text className="text-[--muted-text]">
+          <Text className="text-[--mutedText]">{"\u2022 "}</Text>
+          <Text className="text-[--mutedText]">
             They will see all current and future data associated with this plant
             like photos and notes.
           </Text>
@@ -95,7 +95,7 @@ function QRCodeView({ inviteLink }: { inviteLink: string }) {
       </View>
 
       <View className="gap-2">
-        <Text className="text-[--secondary-text]">
+        <Text className="text-[--secondaryText]">
           You can also copy and share this link:
         </Text>
 
@@ -104,14 +104,14 @@ function QRCodeView({ inviteLink }: { inviteLink: string }) {
             className="group flex-row items-center py-3"
             onPress={copyLink}
           >
-            <Text className="flex-1 text-xs text-[--secondary-text]">
+            <Text className="flex-1 text-xs text-[--secondaryText]">
               {inviteLink}
             </Text>
 
             <Icon.Material
               name="content-copy"
               size={20}
-              className="ml-3 text-[--secondary-text] group-active:text-[--background]"
+              className="ml-3 text-[--secondaryText] group-active:text-[--background]"
             />
           </Pressable>
         </View>

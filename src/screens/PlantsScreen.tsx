@@ -96,7 +96,7 @@ function PlantCollectionView({
         <Icon.MaterialCommunity
           name="chevron-right"
           size={28}
-          className="-ml-1 text-[--muted-text]"
+          className="-ml-1 text-[--mutedText]"
         />
       </Pressable>
 

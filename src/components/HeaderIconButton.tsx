@@ -21,7 +21,7 @@ export default function HeaderIconButton({
         "group p-1.5 w-9 items-center justify-center aspect-square rounded-full bg-[--card]",
         {
           "text-[--background] active:bg-[--primary]": !disabled,
-          "text-[--muted-text]": disabled,
+          "text-[--mutedText]": disabled,
         },
       )}
       onPress={() => !disabled && onPress()}

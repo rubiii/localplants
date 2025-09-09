@@ -33,7 +33,7 @@ function Emote({
       <Icon.MaterialCommunity
         name={`emoticon-${name}-outline` as any}
         className={
-          activeEmote === name ? "text-[--primary]" : "text-[--muted-text]"
+          activeEmote === name ? "text-[--primary]" : "text-[--mutedText]"
         }
         size={36}
       />

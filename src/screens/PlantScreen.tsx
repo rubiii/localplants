@@ -30,7 +30,7 @@ function HeaderRight() {
   return (
     <HeaderView>
       <HeaderIconButton
-        icon="camera-plus"
+        icon="camera"
         community={true}
         onPress={() => navigation.navigate("AddPlantImage", { plantId })}
       />
@@ -141,9 +141,9 @@ function PlantImageView({ plantImage }: { plantImage: PlantImageType }) {
       </View>
 
       <View className="flex-1 py-4 pr-6">
-        <Text className="mb-3 text-sm text-[--secondary-text]">
+        <Text className="mb-3 text-sm text-[--secondaryText]">
           {weekday}, {day}. {month} {year}{" "}
-          <Text className="text-[--muted-text]">({time})</Text>
+          <Text className="text-[--mutedText]">({time})</Text>
         </Text>
 
         {plantImage?.image ? (
@@ -167,7 +167,7 @@ function PlantImageView({ plantImage }: { plantImage: PlantImageType }) {
         ) : null}
 
         {plantImage.note?.length ? (
-          <Text className="text-lg mt-2 mb-2 text-[--secondary-text]">
+          <Text className="text-lg mt-2 mb-2 text-[--secondaryText]">
             {plantImage.note}
           </Text>
         ) : null}

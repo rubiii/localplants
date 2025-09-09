@@ -10,7 +10,7 @@ import { Platform, SafeAreaView, Text, View } from "react-native"
 import { KeyboardAwareScrollView } from "react-native-keyboard-controller"
 
 export const routeOptions: NativeStackNavigationOptions = {
-  title: "Edit collection",
+  title: "Edit Collection",
   // On Android, the header title is not centered, but left aligned
   // and it's also placing a back arrow button if we pass undefined.
   headerLeft: () => (Platform.OS === "ios" ? <HeaderLeft /> : undefined),
@@ -68,7 +68,7 @@ export default function EditCollectionScreen() {
 
             {collection?.sharedBy ? (
               <View className="px-6">
-                <Text className="text-[--muted-text]">
+                <Text className="text-[--mutedText]">
                   This collection was shared with you
                   {"\n"}
                   by {collection.sharedBy.name || collection.sharedBy.accountID}
