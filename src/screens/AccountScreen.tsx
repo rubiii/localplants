@@ -8,7 +8,7 @@ import type { NativeStackNavigationOptions } from "@react-navigation/native-stac
 import { clsx } from "clsx"
 import { useAccount, useIsAuthenticated } from "jazz-tools/expo"
 import { useState } from "react"
-import { Pressable, Text, View } from "react-native"
+import { Platform, Pressable, Text, View } from "react-native"
 
 export const routeOptions: NativeStackNavigationOptions = {
   title: "Account",
@@ -71,8 +71,8 @@ function ThemeSelect() {
 
       <View className="px-6 flex-row gap-3">
         <ThemeButton
-          icon="alpha-a"
-          size={40}
+          icon={Platform.OS === "ios" ? "apple" : "android"}
+          size={24}
           community={true}
           onPress={() => setTheme("system")}
           active={theme === "system"}
