@@ -1,6 +1,6 @@
 # 🌱 Local Plants
 
-Plant care app build with [Expo](https://expo.dev) and [Jazz](https://jazz.tools).
+Local-First Plant care app for iOS and Android build with [Expo](https://expo.dev) and [Jazz](https://jazz.tools).
 
 ## TODO
 
