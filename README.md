@@ -27,38 +27,75 @@ Local-First Plant care app for iOS and Android build with [Expo](https://expo.de
 
 ## Get started
 
-1. Install dependencies
+Install dependencies and start the app:
 
-   ```bash
-   npx expo install
-   ```
+```bash
+npx expo install
+npm start
+```
 
-2. Start the app
+Now this alone doesn't give you very much, because some kind of build
+still needs to run on some iOS/Android device or simulator.
+Theoretically you could use [Expo Go](https://expo.dev/blog/expo-go-vs-development-builds),
+but this app has grown out of that limited setup quite quickly.
 
-   ```bash
-   npm start
-   ```
+## Local builds
 
-In the output, you'll find options to open the app in a
+### iOS Simulator
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+Follow this guide to install Xcode and set up a simulator:  
+https://docs.expo.dev/workflow/ios-simulator/
 
-## Get an app on your phone
+To get the app onto the simular, run:
 
-Build the app locally:
+```bash
+npm build:ios:preview
+```
+
+and then drag the builds/preview/*.ipa file onto the simulator.
+
+### Android Emulator
+
+Follow this guide to install Java, Android Studio and Android Emulator:  
+https://docs.expo.dev/workflow/android-studio-emulator/
+
+To get the app onto the emulator, run:
+
+```bash
+npm build:android:preview
+```
+
+and then drag the builds/preview/*.apk file onto the emulator.
+
+### iOS Devices
+
+In Xcode, open Window > Devices & Simulators. Connect you phone or
+whatever via USB once if it's not already listed under Devices and
+then run:
 
 ```bash
 npm run build:ios:dev
 ```
 
-- Connect your phone to your mac.
-- Open the Apple Music app, select your phone, then drag the local .ipa file onto the default/general view.
-  Your cursor should have a plus sign added to it and this will install the app after you dropped it onto the window.
+Drag the builds/dev/*.ipa file onto the "Installed Apps" section
+for your device to install the app.
 
-Activate developer mode on your phone:
+If the app doesn't seem to install you may need to focus the Xcode
+device window because it may need to reconnect.
+
+### Android Device
+
+TODO
+
+```bash
+npm run build:android:dev
+```
+
+## Expo builds
+
+TODO
+
+##  Activate developer mode on your phone
 
 - Open Settings: Go to your device’s Settings.
 - Navigate to Privacy & Security: Scroll down and tap on Privacy & Security.
@@ -66,12 +103,12 @@ Activate developer mode on your phone:
 
 ## Docs
 
-- React Native
-  - [Core components](https://reactnative.dev/docs/components-and-apis)
-  - [Directory](https://reactnative.directory)
 - Expo
   - [Guides](https://docs.expo.dev/guides/overview/)
   - [Reference](https://docs.expo.dev/versions/latest/)
+- React Native
+  - [Core components](https://reactnative.dev/docs/components-and-apis)
+  - [Directory](https://reactnative.directory)
 - React Navigation
   - [Getting started](https://reactnavigation.org/docs/getting-started)
   - [Native Stack](https://reactnavigation.org/docs/native-stack-navigator)
