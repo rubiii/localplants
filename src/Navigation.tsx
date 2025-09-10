@@ -48,9 +48,13 @@ import { hexToRgb, luminance } from "./lib/colorUtils"
 import RemoveCollectionScreen, {
   routeOptions as removeCollectionRouteOptions,
 } from "./screens/Collection/RemoveCollectionScreen"
+import PermissionsScreen, {
+  routeOptions as permissionsRouteOptions,
+} from "./screens/PermissionsScreen"
 
 export type RootStackParamList = {
   Welcome: undefined
+  Permissions: undefined
   AcceptSharedPlant: {
     valueID: string
     inviteSecret: InviteSecret
@@ -107,11 +111,18 @@ export default function Navigation({ skipWelcome }: { skipWelcome: boolean }) {
     <NavigationContainer linking={{ prefixes: [prefix] }}>
       <Stack.Navigator screenOptions={rootStackOptions}>
         {!skipWelcome ? (
-          <Stack.Screen
-            name="Welcome"
-            component={WelcomeScreen}
-            options={welcomeRouteOptions}
-          />
+          <>
+            <Stack.Screen
+              name="Welcome"
+              component={WelcomeScreen}
+              options={welcomeRouteOptions}
+            />
+            <Stack.Screen
+              name="Permissions"
+              component={PermissionsScreen}
+              options={permissionsRouteOptions}
+            />
+          </>
         ) : null}
 
         {/* Home stack */}

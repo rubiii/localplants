@@ -1,6 +1,6 @@
 import useDeviceSettings from "@/hooks/useDeviceSettings"
 import { CustomThemeType, MyAppAccount } from "@/schema"
-import { defaultThemes, type Theme } from "@/themes"
+import { defaultThemes, type Theme } from "@/theme"
 import { useAccount } from "jazz-tools/expo"
 import { vars } from "nativewind"
 import {
@@ -35,7 +35,7 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
 
   const settings = useDeviceSettings()
   const { me } = useAccount(MyAppAccount, {
-    resolve: { profile: { themes: { $each: { colors: true } } } },
+    resolve: { profile: { activeTheme: { colors: true } } },
   })
 
   // Resolve stored theme on mount
@@ -47,7 +47,9 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
 
   // Listen to system changes if theme is "system"
   useEffect(() => {
+    console.log("change?!")
     if (!theme) return
+    console.log("chang!!!!!!!!!!!!")
 
     const colorScheme = Appearance.getColorScheme() ?? DEFAULT_THEME
     setResolvedTheme(theme === "system" ? colorScheme : theme)
@@ -58,6 +60,8 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
 
     return () => listener.remove()
   }, [theme])
+
+  useEffect(() => {}, [me?.profile.activeTheme?.colors])
 
   const setTheme = async (theme: string) => {
     await settings.setValue("theme", theme)
@@ -72,11 +76,8 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
   if (resolvedTheme === "light" || resolvedTheme === "dark") {
     colors = defaultThemes[resolvedTheme]
   } else {
-    activeCustomTheme = me.profile.themes.find(
-      (customTheme) => customTheme.name === me.profile.activeTheme,
-    )
-    if (activeCustomTheme?.colors) {
-      colors = activeCustomTheme.colors.toJSON()
+    if (me.profile.activeTheme) {
+      colors = me.profile.activeTheme.colors.toJSON()
     } else {
       colors = defaultThemes[DEFAULT_THEME]
     }

@@ -19,7 +19,8 @@ export default function HeaderTextButton({
     >
       <Text
         className={clsx({
-          "text-[--text]": !disabled && variant === "default",
+          "text-[--text] group-active:text-[--primary]":
+            !disabled && variant === "default",
           "text-[--primary]": !disabled && variant === "primary",
           "text-[--mutedText]": disabled,
         })}

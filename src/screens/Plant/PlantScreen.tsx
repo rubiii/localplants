@@ -8,7 +8,7 @@ import { Plant, type PlantImageType } from "@/schema"
 import { type RouteProp } from "@react-navigation/native"
 import type { NativeStackNavigationOptions } from "@react-navigation/native-stack"
 import { Image, useCoState } from "jazz-tools/expo"
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useRef } from "react"
 import { FlatList, Pressable, Text, View } from "react-native"
 
 export const routeOptions = ({
@@ -60,9 +60,6 @@ function HeaderRight() {
 export default function PlantScreeen() {
   const { route } = useNavigation<"Plant">()
   const { plantId } = route.params
-
-  const [fullscreenPlantImage, setFullscreenPlantImage] =
-    useState<PlantImageType>()
 
   const { navigation } = useNavigation<"Plant">()
   const listRef = useRef<FlatList>(null)

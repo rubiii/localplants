@@ -28,9 +28,9 @@ function HeaderLeft() {
 export default function AccountScreen() {
   const { usingCustomTheme, setTheme } = useTheme()
   const { me, agent } = useAccount(MyAppAccount, {
-    resolve: { profile: { themes: true } },
+    resolve: { profile: { activeTheme: true, themes: true } },
   })
-  const [name, setName] = useState(me?.profile?.name)
+  const [name, setName] = useState(me?.profile.name)
 
   const isAuthenticated = useIsAuthenticated()
   const isAnonymous = agent.$type$ === "Account" && !isAuthenticated
@@ -82,7 +82,7 @@ export default function AccountScreen() {
       />
 
       <ThemeSelect
-        customThemeName={me?.profile.activeTheme}
+        customThemeName={me?.profile.activeTheme?.name}
         canAddCustomTheme={!me?.profile.themes.length || false}
         removeCustomTheme={removeCustomTheme}
       />

@@ -136,7 +136,7 @@ function PlantView({
       key={plant.$jazz.id}
       onPress={openPlant}
       onLongPress={openPlantImageModal}
-      className="gap-2 w-6/12 p-2 aspect-square"
+      className="group gap-2 w-6/12 p-2 aspect-square"
     >
       <Image
         imageId={plant.primaryImage.image.$jazz.id}
@@ -152,9 +152,13 @@ function PlantView({
       />
 
       <View>
-        <Text className="text-[--text]">{plant.name}</Text>
+        <Text className="text-[--text] group-active:text-[--primary]">
+          {plant.name}
+        </Text>
         {addedAt ? (
-          <Text className="text-xs text-[--mutedText]">Added: {addedAt}</Text>
+          <Text className="text-xs text-[--secondaryText]">
+            Added: {addedAt}
+          </Text>
         ) : null}
       </View>
     </Pressable>

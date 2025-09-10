@@ -1,11 +1,12 @@
 import "@/global.css"
+import { AccountProvider } from "@/hooks/useAccount"
 import useDeviceSettings from "@/hooks/useDeviceSettings"
 import { ThemeProvider } from "@/hooks/useTheme"
 import Navigation from "@/Navigation"
 import { MyAppAccount } from "@/schema"
 import "@bam.tech/react-native-image-resizer"
 import { JazzExpoProvider } from "jazz-tools/expo"
-import { StrictMode, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import { GestureHandlerRootView } from "react-native-gesture-handler"
 import { KeyboardProvider } from "react-native-keyboard-controller"
 import { SafeAreaProvider } from "react-native-safe-area-context"
@@ -23,11 +24,12 @@ export default function App() {
   if (skipWelcome === undefined) return
 
   return (
-    <StrictMode>
-      <JazzExpoProvider
-        AccountSchema={MyAppAccount}
-        sync={{ peer, when: "always" }}
-      >
+    // <StrictMode>
+    <JazzExpoProvider
+      AccountSchema={MyAppAccount}
+      sync={{ peer, when: "always" }}
+    >
+      <AccountProvider>
         <GestureHandlerRootView>
           <KeyboardProvider>
             <SafeAreaProvider>
@@ -37,7 +39,8 @@ export default function App() {
             </SafeAreaProvider>
           </KeyboardProvider>
         </GestureHandlerRootView>
-      </JazzExpoProvider>
-    </StrictMode>
+      </AccountProvider>
+    </JazzExpoProvider>
+    // </StrictMode>
   )
 }

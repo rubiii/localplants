@@ -62,7 +62,7 @@ export type CustomThemeType = co.loaded<typeof CustomTheme>
 
 const AccountProfile = co.map({
   name: z.string(),
-  activeTheme: z.optional(z.string()),
+  activeTheme: co.optional(CustomTheme),
   themes: co.list(CustomTheme),
 })
 export type AccountProfileType = co.loaded<typeof AccountProfile>

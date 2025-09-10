@@ -3,8 +3,8 @@ import ScrollableScreenContainer from "@/components/ScrollableScreenContainer"
 import useNavigation, { RootStackParamList } from "@/hooks/useNavigation"
 import useTheme from "@/hooks/useTheme"
 import { contrast, hexToRgb } from "@/lib/colorUtils"
-import { CustomTheme, MyAppAccount } from "@/schema"
-import { Theme } from "@/themes"
+import { CustomTheme, CustomThemeType, MyAppAccount } from "@/schema"
+import { Theme } from "@/theme"
 import { RouteProp } from "@react-navigation/native"
 import type { NativeStackNavigationOptions } from "@react-navigation/native-stack"
 import { clsx } from "clsx"
@@ -52,37 +52,58 @@ function generateCustomThemeName() {
 }
 
 export default function CustomThemeScreen() {
-  const { navigation } = useNavigation<"CustomTheme">()
+  const { navigation, route } = useNavigation<"CustomTheme">()
+  const customThemeName = route.params?.customThemeName
 
-  const { setTheme, colors } = useTheme()
+  const { theme, colors } = useTheme()
   const { me } = useAccount(MyAppAccount, {
     resolve: { profile: { themes: { $each: true } } },
   })
 
   const [activeColorKey, setActiveColorKey] = useState<keyof Theme>()
-  const [customTheme, setCustomTheme] = useState<Theme>(colors)
+  const [themeColors, setThemeColors] = useState<Theme>(colors)
 
   if (!me?.profile) return
 
   const activeColorValue = activeColorKey
-    ? customTheme[activeColorKey]
+    ? themeColors[activeColorKey]
     : "#ffffff"
 
   const textBgContrast = contrast(
-    hexToRgb(customTheme.background),
-    hexToRgb(customTheme.text),
+    hexToRgb(themeColors.background),
+    hexToRgb(themeColors.text),
   )
   // TODO: communicate this contrast validation
   const valid = textBgContrast >= 1.5
 
-  const saveTheme = () => {
-    const theme = CustomTheme.create({
+  const createTheme = () => {
+    console.log("CREATE THEME")
+    const newCustomTheme = CustomTheme.create({
       name: generateCustomThemeName(),
-      colors: customTheme,
+      colors: themeColors,
     })
-    me.profile.themes.$jazz.push(theme)
-    me.profile.$jazz.set("activeTheme", theme.name)
-    setTheme(theme.name)
+    me.profile.themes.$jazz.push(newCustomTheme)
+    me.profile.$jazz.set("activeTheme", newCustomTheme)
+    // setTheme(newCustomTheme.name)
+  }
+  const updateTheme = (existingTheme: CustomThemeType) => {
+    console.log("UPDATE THEME")
+    existingTheme.$jazz.set("colors", themeColors)
+    // existingTheme.$jazz.set("name", generateCustomThemeName())
+    // setTheme(existingTheme.name)
+  }
+
+  const saveTheme = () => {
+    console.log("saving theme", themeColors)
+    if (customThemeName) {
+      if (me.profile.activeTheme) {
+        updateTheme(me.profile.activeTheme)
+      } else {
+        createTheme()
+      }
+    } else {
+      createTheme()
+    }
 
     navigation.goBack()
   }
@@ -95,27 +116,30 @@ export default function CustomThemeScreen() {
 
   return (
     <ScrollableScreenContainer className="px-4 py-6 gap-2">
+      <Text className="text-[--text]">{customThemeName}</Text>
+      <Text className="text-[--text]">{theme}</Text>
+
       <View className="gap-1.5">
         <Text className="text-[--text]">Background Colors:</Text>
         <View className="flex-row -m-1">
           <ThemeColor
             label="Main"
             colorKey="background"
-            value={customTheme.background}
+            value={themeColors.background}
             active={activeColorKey === "background"}
             onPress={setActiveColorKey}
           />
           <ThemeColor
             label="Card"
             colorKey="card"
-            value={customTheme.card}
+            value={themeColors.card}
             active={activeColorKey === "card"}
             onPress={setActiveColorKey}
           />
           <ThemeColor
             label="Border"
             colorKey="border"
-            value={customTheme.border}
+            value={themeColors.border}
             active={activeColorKey === "border"}
             onPress={setActiveColorKey}
           />
@@ -128,21 +152,21 @@ export default function CustomThemeScreen() {
           <ThemeColor
             label="Main"
             colorKey="text"
-            value={customTheme.text}
+            value={themeColors.text}
             active={activeColorKey === "text"}
             onPress={setActiveColorKey}
           />
           <ThemeColor
             label="Scndry"
             colorKey="secondaryText"
-            value={customTheme.secondaryText}
+            value={themeColors.secondaryText}
             active={activeColorKey === "secondaryText"}
             onPress={setActiveColorKey}
           />
           <ThemeColor
             label="Muted"
             colorKey="mutedText"
-            value={customTheme.mutedText}
+            value={themeColors.mutedText}
             active={activeColorKey === "mutedText"}
             onPress={setActiveColorKey}
           />
@@ -155,21 +179,21 @@ export default function CustomThemeScreen() {
           <ThemeColor
             label="Primary"
             colorKey="primary"
-            value={customTheme.primary}
+            value={themeColors.primary}
             active={activeColorKey === "primary"}
             onPress={setActiveColorKey}
           />
           <ThemeColor
             label="Success"
             colorKey="success"
-            value={customTheme.success}
+            value={themeColors.success}
             active={activeColorKey === "success"}
             onPress={setActiveColorKey}
           />
           <ThemeColor
             label="Error"
             colorKey="error"
-            value={customTheme.error}
+            value={themeColors.error}
             active={activeColorKey === "error"}
             onPress={setActiveColorKey}
           />
@@ -180,7 +204,7 @@ export default function CustomThemeScreen() {
         <ColorPickerView
           value={activeColorValue}
           setValue={(value) =>
-            setCustomTheme({ ...customTheme, [activeColorKey]: value })
+            setThemeColors({ ...themeColors, [activeColorKey]: value })
           }
         />
       ) : null}

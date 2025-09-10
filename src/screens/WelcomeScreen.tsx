@@ -1,244 +1,47 @@
 import Button from "@/components/Button"
-import Icon from "@/components/Icon"
-import useDeviceSettings from "@/hooks/useDeviceSettings"
+import ScrollableScreenContainer from "@/components/ScrollableScreenContainer"
 import useNavigation from "@/hooks/useNavigation"
 import type { NativeStackNavigationOptions } from "@react-navigation/native-stack"
-import { useCallback, useEffect, useState } from "react"
-import { Platform, Pressable, Text, View } from "react-native"
-import {
-  check,
-  openSettings,
-  PERMISSIONS,
-  request,
-} from "react-native-permissions"
-import { ResultMap } from "react-native-permissions/dist/typescript/results"
-import { SafeAreaView } from "react-native-safe-area-context"
-
-type PermissionResult = ResultMap[keyof ResultMap]
+import { Text, View } from "react-native"
 
 export const routeOptions: NativeStackNavigationOptions = {
-  title: "Welcome",
+  title: "Local Plants",
 }
 
 export default function WelcomeScreen() {
   const { navigation } = useNavigation<"Welcome">()
-  const settings = useDeviceSettings()
 
-  const [cameraPermission, setCameraPermission] = useState<PermissionResult>()
-  const [libraryPermission, setLibraryPermission] = useState<PermissionResult>()
-
-  const permissionsGranted =
-    cameraPermission === "granted" ||
-    cameraPermission === "limited" ||
-    libraryPermission === "granted" ||
-    libraryPermission === "limited"
-
-  const finishWelcome = async () => {
-    await settings.setValue("skip-welcome")
-    navigation.replace("Plants")
-  }
+  const openPermissions = async () => navigation.navigate("Permissions")
 
   return (
-    <SafeAreaView className="flex-1 bg-[--background]">
-      <View className="flex-1 p-4">
-        <View className="flex-1">
-          <Text className="text-[--secondaryText]">
-            The following permissions are needed
-            {"\n"}
-            for different features of the app.
-          </Text>
+    <ScrollableScreenContainer className="px-4 landscape:pl-20 pt-24 landscape:pt-8 pb-8">
+      <Text className="text-6xl font-bold text-[--primary]">Welcome</Text>
 
-          <View style={{ flex: 1, marginTop: 60, gap: 36 }}>
-            <CameraPermissions
-              status={cameraPermission}
-              setStatus={setCameraPermission}
-            />
-            <LibraryPermissions
-              status={libraryPermission}
-              setStatus={setLibraryPermission}
-            />
-          </View>
-        </View>
+      <Text className="mt-2 text-xl text-[--text] leading-snug w-10/12">
+        Local Plants is a new kind of software based on Local-first ideals
+      </Text>
 
-        <Button
-          title="Continue"
-          size="large"
-          onPress={finishWelcome}
-          disabled={!permissionsGranted}
-        />
+      <View className="my-12">
+        <ListItem text="Works completely offline" />
+        <ListItem text="Fully end-to-end encrypted" />
+        <ListItem text="Your data stays on this device by default" />
+        <ListItem text="Optional sync for backup and sharing" />
       </View>
-    </SafeAreaView>
+
+      <Button title="Continue" size="large" onPress={openPermissions} />
+    </ScrollableScreenContainer>
   )
 }
 
-function CameraPermissions({
-  status,
-  setStatus,
-}: {
-  status?: PermissionResult
-  setStatus: any
-}) {
-  const iosPermission = PERMISSIONS.IOS.CAMERA
-  const androidPermission = PERMISSIONS.ANDROID.CAMERA
-  const permission = Platform.OS === "ios" ? iosPermission : androidPermission
-
-  const setAndLogStatus = useCallback(
-    (status: PermissionResult) => {
-      setStatus(status)
-      console.debug("Library permission status", status)
-    },
-    [setStatus],
-  )
-
-  const configure = () => {
-    switch (status) {
-      case "denied":
-        // permission has not been requested or is denied but requestable
-        console.debug("Requesting camera permissions")
-        request(permission).then(setAndLogStatus)
-        break
-
-      case "blocked": // permission is denied and not requestable
-      case "granted": // permission already granted
-      case "limited": // permission granted with limitations
-        console.debug("Opening application settings")
-        openSettings("application").catch(() =>
-          console.error("Failed to open application settings"),
-        )
-        break
-
-      case "unavailable": // feature unavailable on this device or in this context
-      default:
-        break
-    }
-  }
-
-  useEffect(() => {
-    check(permission).then(setAndLogStatus)
-  }, [permission, setAndLogStatus])
-
+function ListItem({ text }: { text: string }) {
   return (
-    <SafeAreaView className="flex-row">
-      <View className="flex-1">
-        <View className="flex-row items-end">
-          <View className="flex-row flex-grow items-baseline">
-            <Icon.Material name="camera" className="text-[--text]" size={24} />
-            <Text className="ml-3 text-2xl text-[--text]">Camera</Text>
-          </View>
-
-          <ConfigureButton configure={configure} status={status} />
-        </View>
-
-        <Text className="mt-2 text-[--secondaryText]">
-          Access front and back camera
-          {"\n"}
-          for taking photos of your plants.
-        </Text>
+    <View className="flex-row items-center">
+      <View className="w-5">
+        <Text className="text-2xl text-[--text] leading-7">•</Text>
       </View>
-    </SafeAreaView>
-  )
-}
-
-function LibraryPermissions({
-  status,
-  setStatus,
-}: {
-  status?: PermissionResult
-  setStatus: any
-}) {
-  const iosPermission = PERMISSIONS.IOS.PHOTO_LIBRARY
-  const androidPermission = PERMISSIONS.ANDROID.READ_MEDIA_IMAGES
-  const permission = Platform.OS === "ios" ? iosPermission : androidPermission
-
-  const setAndLogStatus = useCallback(
-    (status: PermissionResult) => {
-      setStatus(status)
-      console.debug("Library permission status", status)
-    },
-    [setStatus],
-  )
-
-  const configure = () => {
-    switch (status) {
-      case "denied":
-        // permission has not been requested or is denied but requestable
-        console.debug("Requesting camera permissions")
-        request(permission).then(setAndLogStatus)
-        break
-
-      case "blocked": // permission is denied and not requestable
-      case "granted": // permission already granted
-      case "limited": // permission granted with limitations
-        console.debug("Opening application settings")
-        openSettings("application").catch(() =>
-          console.error("Failed to open application settings"),
-        )
-        break
-
-      case "unavailable": // feature unavailable on this device or in this context
-      default:
-        break
-    }
-  }
-
-  useEffect(() => {
-    check(permission).then(setAndLogStatus)
-  }, [permission, setAndLogStatus])
-
-  return (
-    <View className="flex-row">
       <View className="flex-1">
-        <View className="flex-row items-end">
-          <View className="flex-row flex-grow items-baseline">
-            <Icon.Material name="image" className="text-[--text]" size={24} />
-            <Text className="ml-3 text-2xl text-[--text]">Photo library</Text>
-          </View>
-
-          <ConfigureButton configure={configure} status={status} />
-        </View>
-
-        <Text className="mt-2 text-[--secondaryText]">
-          Access your photo library to select
-          {"\n"}
-          existing photos of your plants.
-        </Text>
+        <Text className="text-lg text-[--text] leading-snug">{text}</Text>
       </View>
     </View>
-  )
-}
-
-const ConfigureButton = ({
-  configure,
-  status,
-}: {
-  configure: any
-  status?: PermissionResult
-}) => {
-  if (status === "denied" || status === "blocked") {
-    return (
-      <Pressable
-        onPress={configure}
-        className="rounded-lg py-1 px-2.5 bg-[--primary]"
-      >
-        <Text className="text-[--background]">Configure</Text>
-      </Pressable>
-    )
-  }
-
-  const icon = status === "unavailable" ? "error-outline" : "check-circle"
-
-  let className
-  if (status === "unavailable") {
-    className = "text-[--error]"
-  } else if (status === "granted") {
-    className = "text-[--success]"
-  } else if (status === "limited") {
-    className = "text-[--warning]"
-  }
-
-  return (
-    <Pressable onPress={configure}>
-      <Icon.Material name={icon as any} className={className} size={26} />
-    </Pressable>
   )
 }

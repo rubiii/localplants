@@ -89,7 +89,10 @@ function PlantCollectionView({
 
   return (
     <View className="gap-1">
-      <Pressable onPress={openCollection} className="flex-row items-center">
+      <Pressable
+        onPress={openCollection}
+        className="group flex-row items-center"
+      >
         <Text className="font-bold text-xl text-[--text]">
           {collectionName}
         </Text>
@@ -97,7 +100,7 @@ function PlantCollectionView({
         <Icon.MaterialCommunity
           name="chevron-right"
           size={28}
-          className="-ml-1 text-[--mutedText]"
+          className="-ml-1 text-[--mutedText] group-active:text-[--primary]"
         />
       </Pressable>
 
