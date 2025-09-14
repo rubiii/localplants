@@ -1,13 +1,12 @@
-import DismissKeyboard from "@/components/DismissKeyboard"
 import HeaderTextButton from "@/components/HeaderTextButton"
+import ScrollableScreenContainer from "@/components/ScrollableScreenContainer"
 import TextField from "@/components/TextField"
 import useNavigation from "@/hooks/useNavigation"
 import { PlantCollection } from "@/schema"
 import type { NativeStackNavigationOptions } from "@react-navigation/native-stack"
 import { useCoState } from "jazz-tools/expo"
 import { useState } from "react"
-import { Platform, SafeAreaView, Text, View } from "react-native"
-import { KeyboardAwareScrollView } from "react-native-keyboard-controller"
+import { Platform, Text, View } from "react-native"
 
 export const routeOptions: NativeStackNavigationOptions = {
   title: "Edit Collection",
@@ -62,33 +61,26 @@ export default function EditCollectionScreen() {
   }, 1)
 
   return (
-    <SafeAreaView className="flex-1 bg-[--background]">
-      <KeyboardAwareScrollView bottomOffset={62} className="px-4 py-6">
-        <DismissKeyboard>
-          <View className="gap-12">
-            <TextField
-              placeholder="Name of collection"
-              size="large"
-              autoFocus={true}
-              value={name}
-              setValue={setName}
-            />
+    <ScrollableScreenContainer className="px-4 py-6 gap-12">
+      <TextField
+        placeholder="Name of collection"
+        size="large"
+        autoFocus={true}
+        value={name}
+        setValue={setName}
+      />
 
-            {collection?.sharedBy ? (
-              <View className="px-6">
-                <Text className="text-[--mutedText]">
-                  This collection was shared with you
-                  {"\n"}
-                  by {collection.sharedBy.name || collection.sharedBy.accountID}
-                  {"\n"}
-                  on{" "}
-                  {new Date(collection.sharedBy.sharedAt).toLocaleDateString()}
-                </Text>
-              </View>
-            ) : null}
-          </View>
-        </DismissKeyboard>
-      </KeyboardAwareScrollView>
-    </SafeAreaView>
+      {collection?.sharedBy ? (
+        <View className="px-6">
+          <Text className="text-[--mutedText]">
+            This collection was shared with you
+            {"\n"}
+            by {collection.sharedBy.name || collection.sharedBy.accountID}
+            {"\n"}
+            on {new Date(collection.sharedBy.sharedAt).toLocaleDateString()}
+          </Text>
+        </View>
+      ) : null}
+    </ScrollableScreenContainer>
   )
 }

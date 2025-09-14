@@ -23,9 +23,7 @@ import PlantImageModal, {
 import PlantScreen, {
   routeOptions as plantRouteOptions,
 } from "@/screens/Plant/PlantScreen"
-import RemovePlantScreen, {
-  routeOptions as removePlantRouteOptions,
-} from "@/screens/Plant/RemovePlantScreen"
+import RemovePlantScreen from "@/screens/Plant/RemovePlantScreen"
 import SharePlantScreen, {
   routeOptions as sharePlantRouteOptions,
 } from "@/screens/Plant/SharePlantScreen"
@@ -43,7 +41,6 @@ import type { NativeStackNavigationOptions } from "@react-navigation/native-stac
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import * as Linking from "expo-linking"
 import { InviteSecret } from "jazz-tools"
-import { Platform } from "react-native"
 import { hexToRgb, luminance } from "./lib/colorUtils"
 import RemoveCollectionScreen, {
   routeOptions as removeCollectionRouteOptions,
@@ -104,7 +101,12 @@ export default function Navigation({ skipWelcome }: { skipWelcome: boolean }) {
   }
   const modalScreenOptions: NativeStackNavigationOptions = {
     presentation: "modal",
-    headerTransparent: Platform.OS === "ios",
+    headerStyle: { backgroundColor: "transparent" },
+  }
+  const transparentModalScreenOptions: NativeStackNavigationOptions = {
+    presentation: "transparentModal",
+    headerShown: false,
+    animation: "none",
   }
 
   return (
@@ -190,10 +192,12 @@ export default function Navigation({ skipWelcome }: { skipWelcome: boolean }) {
             component={SharePlantScreen}
             options={sharePlantRouteOptions}
           />
+        </Stack.Group>
+        <Stack.Group screenOptions={transparentModalScreenOptions}>
           <Stack.Screen
             name="RemovePlant"
             component={RemovePlantScreen}
-            options={removePlantRouteOptions}
+            options={transparentModalScreenOptions}
           />
         </Stack.Group>
 
@@ -204,6 +208,8 @@ export default function Navigation({ skipWelcome }: { skipWelcome: boolean }) {
             component={EditCollectionScreen}
             options={editCollectionRouteOptions}
           />
+        </Stack.Group>
+        <Stack.Group screenOptions={transparentModalScreenOptions}>
           <Stack.Screen
             name="RemoveCollection"
             component={RemoveCollectionScreen}

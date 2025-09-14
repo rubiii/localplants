@@ -1,6 +1,8 @@
 import Icon from "@/components/Icon"
 import useCamera from "@/hooks/useCamera"
+import useCameraPermission from "@/hooks/useCameraPermission"
 import useGallery from "@/hooks/useGallery"
+import useGalleryPermission from "@/hooks/useGalleryPermission"
 import { PlantImageType } from "@/schema"
 import { Image } from "jazz-tools/expo"
 import { useState } from "react"
@@ -19,8 +21,23 @@ export default function PlantImageSelect({
 }) {
   const [step, setStep] = useState<Steps>("initial")
 
+  const cameraPermission = useCameraPermission()
+  const galleryPermission = useGalleryPermission()
+
   const { takePhoto } = useCamera()
   const addPhotoViaCamera = async () => {
+    // check camera permission
+    if (cameraPermission.missing) {
+      cameraPermission.configure()
+      return
+    }
+
+    // camera needs gallery permission as well
+    if (galleryPermission.missing) {
+      galleryPermission.configure()
+      return
+    }
+
     const asset = await takePhoto()
     if (!asset?.uri) return
 
@@ -30,7 +47,13 @@ export default function PlantImageSelect({
   }
 
   const { pickPhoto } = useGallery()
-  const addPhotoFromLibrary = async () => {
+  const addPhotoFromGallery = async () => {
+    // check gallery permission
+    if (galleryPermission.missing) {
+      galleryPermission.configure()
+      return
+    }
+
     const asset = await pickPhoto()
     if (!asset?.uri) return
 
@@ -43,7 +66,7 @@ export default function PlantImageSelect({
     return (
       <InitialState
         viaCamera={addPhotoViaCamera}
-        viaLibrary={addPhotoFromLibrary}
+        viaGallery={addPhotoFromGallery}
       />
     )
   }
@@ -57,10 +80,10 @@ export default function PlantImageSelect({
 
 function InitialState({
   viaCamera,
-  viaLibrary,
+  viaGallery,
 }: {
   viaCamera: () => void
-  viaLibrary: () => void
+  viaGallery: () => void
 }) {
   return (
     <ContextMenu
@@ -68,7 +91,7 @@ function InitialState({
         if (index === 0) {
           viaCamera()
         } else if (index === 1) {
-          viaLibrary()
+          viaGallery()
         }
       }}
       dropdownMenuMode={true}

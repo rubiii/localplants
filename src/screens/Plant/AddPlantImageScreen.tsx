@@ -1,7 +1,7 @@
-import DismissKeyboard from "@/components/DismissKeyboard"
 import EmoteSelect from "@/components/EmoteSelect"
 import HeaderTextButton from "@/components/HeaderTextButton"
 import PlantImageSelect from "@/components/PlantImageSelect"
+import ScrollableScreenContainer from "@/components/ScrollableScreenContainer"
 import TextField from "@/components/TextField"
 import useNavigation from "@/hooks/useNavigation"
 import { Plant, PlantImage, type PlantImageType } from "@/schema"
@@ -10,9 +10,8 @@ import { Group } from "jazz-tools"
 import { useCoState } from "jazz-tools/expo"
 import { createImage } from "jazz-tools/media"
 import { useState } from "react"
-import { Platform, SafeAreaView, View } from "react-native"
+import { Platform } from "react-native"
 import { Asset } from "react-native-image-picker"
-import { KeyboardAwareScrollView } from "react-native-keyboard-controller"
 
 export const routeOptions: NativeStackNavigationOptions = {
   title: "Add Photo",
@@ -104,27 +103,21 @@ export default function AddPlantImageScreen() {
   }, 1)
 
   return (
-    <SafeAreaView className="flex-1 bg-[--background]">
-      <KeyboardAwareScrollView bottomOffset={62} className="px-4 py-6">
-        <DismissKeyboard>
-          <View className="gap-8">
-            <PlantImageSelect
-              plantImage={plantImage}
-              createPlantImage={createPlantImage}
-            />
+    <ScrollableScreenContainer className="px-4 py-6 gap-8">
+      <PlantImageSelect
+        plantImage={plantImage}
+        createPlantImage={createPlantImage}
+      />
 
-            <EmoteSelect value={emote} setValue={setEmote} />
+      <EmoteSelect value={emote} setValue={setEmote} />
 
-            <TextField
-              placeholder="Add a note if you like …"
-              multiline={true}
-              numberOfLines={5}
-              value={note}
-              setValue={setNote}
-            />
-          </View>
-        </DismissKeyboard>
-      </KeyboardAwareScrollView>
-    </SafeAreaView>
+      <TextField
+        placeholder="Add a note if you like …"
+        multiline={true}
+        numberOfLines={5}
+        value={note}
+        setValue={setNote}
+      />
+    </ScrollableScreenContainer>
   )
 }

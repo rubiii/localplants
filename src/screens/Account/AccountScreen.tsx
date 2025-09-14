@@ -26,10 +26,7 @@ function HeaderLeft() {
 }
 
 export default function AccountScreen() {
-  const { usingCustomTheme, setTheme } = useTheme()
-  const { me, agent } = useAccount(MyAppAccount, {
-    resolve: { profile: { activeTheme: true, themes: true } },
-  })
+  const { me, agent } = useAccount(MyAppAccount, { resolve: { profile: true } })
   const [name, setName] = useState(me?.profile.name)
 
   const isAuthenticated = useIsAuthenticated()
@@ -49,15 +46,6 @@ export default function AccountScreen() {
   const updateProfileName = (name?: string) => {
     if (!me?.profile) return
     me.profile.$jazz.set("name", name || "")
-  }
-
-  const removeCustomTheme = () => {
-    if (!me?.profile) return
-
-    me.profile.$jazz.set("themes", [])
-    me.profile.$jazz.set("activeTheme", undefined)
-
-    if (usingCustomTheme) setTheme("system")
   }
 
   return (
@@ -81,26 +69,20 @@ export default function AccountScreen() {
         note="Click to copy into clipboard."
       />
 
-      <ThemeSelect
-        customThemeName={me?.profile.activeTheme?.name}
-        canAddCustomTheme={!me?.profile.themes.length || false}
-        removeCustomTheme={removeCustomTheme}
-      />
+      <ThemeSelect />
     </ScrollableScreenContainer>
   )
 }
 
-function ThemeSelect({
-  customThemeName,
-  canAddCustomTheme,
-  removeCustomTheme,
-}: {
-  customThemeName?: string
-  canAddCustomTheme: boolean
-  removeCustomTheme: () => void
-}) {
+function ThemeSelect() {
   const { navigation } = useNavigation<"Account">()
-  const { theme, setTheme } = useTheme()
+  const {
+    theme,
+    setTheme,
+    hasCustomTheme,
+    removeCustomTheme,
+    usesSystemTheme,
+  } = useTheme()
 
   return (
     <View className="py-4 gap-2.5">
@@ -112,26 +94,26 @@ function ThemeSelect({
           size={24}
           community={true}
           onPress={() => setTheme("system")}
-          active={theme === "system"}
+          active={usesSystemTheme}
         />
         <ThemeButton
           icon="light-mode"
           size={24}
           onPress={() => setTheme("light")}
-          active={theme === "light"}
+          active={!usesSystemTheme && theme === "light"}
         />
         <ThemeButton
           icon="dark-mode"
           size={24}
           onPress={() => setTheme("dark")}
-          active={theme === "dark"}
+          active={!usesSystemTheme && theme === "dark"}
         />
 
-        {customThemeName ? (
+        {hasCustomTheme ? (
           <ContextMenu
             onPress={({ nativeEvent: { index } }) => {
               if (index === 0) {
-                navigation.navigate("CustomTheme", { customThemeName })
+                navigation.navigate("CustomTheme")
               } else if (index === 1) {
                 removeCustomTheme()
               }
@@ -150,13 +132,13 @@ function ThemeSelect({
               icon="account"
               community={true}
               size={24}
-              onPress={() => setTheme(customThemeName)}
-              active={theme === customThemeName}
+              onPress={() => setTheme("custom")}
+              active={theme === "custom"}
             />
           </ContextMenu>
         ) : null}
 
-        {canAddCustomTheme ? (
+        {!hasCustomTheme ? (
           <Pressable
             onPress={() => navigation.navigate("CustomTheme")}
             className="w-14 aspect-square items-center justify-center rounded-lg border border-[--border]"

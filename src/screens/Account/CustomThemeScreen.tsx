@@ -3,13 +3,11 @@ import ScrollableScreenContainer from "@/components/ScrollableScreenContainer"
 import useNavigation, { RootStackParamList } from "@/hooks/useNavigation"
 import useTheme from "@/hooks/useTheme"
 import { contrast, hexToRgb } from "@/lib/colorUtils"
-import { CustomTheme, CustomThemeType, MyAppAccount } from "@/schema"
-import { Theme } from "@/theme"
+import { ThemeColors } from "@/theme"
 import { RouteProp } from "@react-navigation/native"
 import type { NativeStackNavigationOptions } from "@react-navigation/native-stack"
 import { clsx } from "clsx"
-import * as Crypto from "expo-crypto"
-import { useAccount } from "jazz-tools/expo"
+import { vars } from "nativewind"
 import { useState } from "react"
 import { Platform, Pressable, Text, View } from "react-native"
 import ColorPicker, {
@@ -47,23 +45,14 @@ function HeaderRight({ onSave }: { onSave?: () => void }) {
   )
 }
 
-function generateCustomThemeName() {
-  return Crypto.randomUUID()
-}
-
 export default function CustomThemeScreen() {
   const { navigation, route } = useNavigation<"CustomTheme">()
   const customThemeName = route.params?.customThemeName
 
-  const { theme, colors } = useTheme()
-  const { me } = useAccount(MyAppAccount, {
-    resolve: { profile: { themes: { $each: true } } },
-  })
+  const { theme, setTheme, colors } = useTheme()
 
-  const [activeColorKey, setActiveColorKey] = useState<keyof Theme>()
-  const [themeColors, setThemeColors] = useState<Theme>(colors)
-
-  if (!me?.profile) return
+  const [activeColorKey, setActiveColorKey] = useState<keyof ThemeColors>()
+  const [themeColors, setThemeColors] = useState<ThemeColors>(colors)
 
   const activeColorValue = activeColorKey
     ? themeColors[activeColorKey]
@@ -76,34 +65,8 @@ export default function CustomThemeScreen() {
   // TODO: communicate this contrast validation
   const valid = textBgContrast >= 1.5
 
-  const createTheme = () => {
-    console.log("CREATE THEME")
-    const newCustomTheme = CustomTheme.create({
-      name: generateCustomThemeName(),
-      colors: themeColors,
-    })
-    me.profile.themes.$jazz.push(newCustomTheme)
-    me.profile.$jazz.set("activeTheme", newCustomTheme)
-    // setTheme(newCustomTheme.name)
-  }
-  const updateTheme = (existingTheme: CustomThemeType) => {
-    console.log("UPDATE THEME")
-    existingTheme.$jazz.set("colors", themeColors)
-    // existingTheme.$jazz.set("name", generateCustomThemeName())
-    // setTheme(existingTheme.name)
-  }
-
   const saveTheme = () => {
-    console.log("saving theme", themeColors)
-    if (customThemeName) {
-      if (me.profile.activeTheme) {
-        updateTheme(me.profile.activeTheme)
-      } else {
-        createTheme()
-      }
-    } else {
-      createTheme()
-    }
+    setTheme("custom", themeColors)
 
     navigation.goBack()
   }
@@ -115,7 +78,9 @@ export default function CustomThemeScreen() {
   }, 1)
 
   return (
-    <ScrollableScreenContainer className="px-4 py-6 gap-2">
+    <ScrollableScreenContainer
+      className={clsx("px-4 py-6 gap-2", vars(themeColors))}
+    >
       <Text className="text-[--text]">{customThemeName}</Text>
       <Text className="text-[--text]">{theme}</Text>
 
@@ -220,9 +185,9 @@ function ThemeColor({
   active = false,
 }: {
   label: string
-  colorKey: keyof Theme
+  colorKey: keyof ThemeColors
   value: string
-  onPress: (color: keyof Theme) => void
+  onPress: (color: keyof ThemeColors) => void
   active?: boolean
 }) {
   return (

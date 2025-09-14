@@ -1,4 +1,4 @@
-export type Theme = {
+export type ThemeColors = {
   background: string
   card: string
   text: string
@@ -10,7 +10,7 @@ export type Theme = {
   error: string
 }
 
-export const defaultThemes: Record<string, Theme> = {
+export const defaultThemes: Record<string, ThemeColors> = {
   light: {
     background: "#eeeeee",
     text: "#14532D",

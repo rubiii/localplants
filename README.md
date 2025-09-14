@@ -17,12 +17,10 @@ Local-First Plant care app for iOS and Android build with [Expo](https://expo.de
 - Stack navigation
 - Deep linking
 - Device permissions
-- Camera access
-- Photo library access
+- Camera and photo library access
 - Keyboard avoiding views
-- Theming with Nativewind
-- Proper system/auto theming
-- Custom theme stored in Jazz
+- (Custom) theming with Nativewind
+- Reactive system/auto theming
 - Sharing with Jazz
 
 ## Get started

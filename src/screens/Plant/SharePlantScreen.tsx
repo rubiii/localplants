@@ -50,10 +50,7 @@ export default function SharePlantScreen() {
   }
 
   return (
-    <ScrollableScreenContainer
-      className="px-4 py-6"
-      noPadding={Platform.OS === "android"}
-    >
+    <ScrollableScreenContainer className="px-4 py-6">
       {inviteLink ? (
         <QRCodeView inviteLink={inviteLink} />
       ) : (

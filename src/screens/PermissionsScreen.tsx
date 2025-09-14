@@ -1,12 +1,12 @@
 import Button from "@/components/Button"
 import Icon from "@/components/Icon"
 import ScrollableScreenContainer from "@/components/ScrollableScreenContainer"
-import useDeviceSettings from "@/hooks/useDeviceSettings"
+import useCameraPermission from "@/hooks/useCameraPermission"
+import useGalleryPermission from "@/hooks/useGalleryPermission"
 import useNavigation from "@/hooks/useNavigation"
+import AsyncStorage from "@react-native-async-storage/async-storage"
 import type { NativeStackNavigationOptions } from "@react-navigation/native-stack"
-import { useEffect, useState } from "react"
-import { Platform, Pressable, Text, View } from "react-native"
-import { openSettings, PERMISSIONS, request } from "react-native-permissions"
+import { Pressable, Text, View } from "react-native"
 import { ResultMap } from "react-native-permissions/dist/typescript/results"
 import { SafeAreaView } from "react-native-safe-area-context"
 
@@ -19,19 +19,14 @@ export const routeOptions: NativeStackNavigationOptions = {
 
 export default function PermissionsScreen() {
   const { navigation } = useNavigation<"Permissions">()
-  const settings = useDeviceSettings()
 
-  const [cameraPermission, setCameraPermission] = useState<PermissionResult>()
-  const [libraryPermission, setLibraryPermission] = useState<PermissionResult>()
-
+  const cameraPermission = useCameraPermission()
+  const galleryPermission = useGalleryPermission()
   const permissionsGranted =
-    cameraPermission === "granted" ||
-    cameraPermission === "limited" ||
-    libraryPermission === "granted" ||
-    libraryPermission === "limited"
+    !cameraPermission.missing && !galleryPermission.missing
 
   const finishWelcome = async () => {
-    await settings.setValue("skip-welcome")
+    await AsyncStorage.setItem("skip-welcome", "true")
     navigation.replace("Plants")
   }
 
@@ -41,12 +36,12 @@ export default function PermissionsScreen() {
 
       <View className="gap-4 mb-12">
         <CameraPermissions
-          status={cameraPermission}
-          setStatus={setCameraPermission}
+          status={cameraPermission.status}
+          configure={cameraPermission.configure}
         />
-        <LibraryPermissions
-          status={libraryPermission}
-          setStatus={setLibraryPermission}
+        <GalleryPermissions
+          status={galleryPermission.status}
+          configure={galleryPermission.configure}
         />
       </View>
 
@@ -62,41 +57,11 @@ export default function PermissionsScreen() {
 
 function CameraPermissions({
   status,
-  setStatus,
+  configure,
 }: {
   status?: PermissionResult
-  setStatus: any
+  configure: () => void
 }) {
-  const permission =
-    Platform.OS === "ios" ? PERMISSIONS.IOS.CAMERA : PERMISSIONS.ANDROID.CAMERA
-
-  const configure = () => {
-    switch (status) {
-      case "denied":
-        // permission has not been requested or is denied but requestable
-        console.debug("Requesting camera permissions")
-        request(permission).then(setStatus)
-        break
-
-      case "blocked": // permission is denied and not requestable
-      case "granted": // permission already granted
-      case "limited": // permission granted with limitations
-        console.debug("Opening application settings")
-        openSettings("application").catch(() =>
-          console.error("Failed to open application settings"),
-        )
-        break
-
-      case "unavailable": // feature unavailable on this device or in this context
-      default:
-        break
-    }
-  }
-
-  useEffect(() => {
-    // check(permission).then(setStatus)
-  }, [permission, setStatus])
-
   return (
     <SafeAreaView className="flex-row">
       <View className="flex-1">
@@ -123,45 +88,13 @@ function CameraPermissions({
   )
 }
 
-function LibraryPermissions({
+function GalleryPermissions({
   status,
-  setStatus,
+  configure,
 }: {
   status?: PermissionResult
-  setStatus: any
+  configure: () => void
 }) {
-  const permission =
-    Platform.OS === "ios"
-      ? PERMISSIONS.IOS.PHOTO_LIBRARY
-      : PERMISSIONS.ANDROID.READ_MEDIA_IMAGES
-
-  const configure = () => {
-    switch (status) {
-      case "denied":
-        // permission has not been requested or is denied but requestable
-        console.debug("Requesting camera permissions")
-        request(permission).then(setStatus)
-        break
-
-      case "blocked": // permission is denied and not requestable
-      case "granted": // permission already granted
-      case "limited": // permission granted with limitations
-        console.debug("Opening application settings")
-        openSettings("application").catch(() =>
-          console.error("Failed to open application settings"),
-        )
-        break
-
-      case "unavailable": // feature unavailable on this device or in this context
-      default:
-        break
-    }
-  }
-
-  useEffect(() => {
-    // check(permission).then(setStatus)
-  }, [permission, setStatus])
-
   return (
     <View className="flex-row">
       <View className="flex-1">
@@ -192,7 +125,7 @@ const ConfigureButton = ({
   configure,
   status,
 }: {
-  configure: any
+  configure: () => void
   status?: PermissionResult
 }) => {
   if (status === "denied" || status === "blocked") {
