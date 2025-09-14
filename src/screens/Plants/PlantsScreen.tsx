@@ -26,6 +26,11 @@ function HeaderRight() {
 
   return (
     <HeaderView>
+      <HeaderIconButton
+        icon="plus"
+        community={true}
+        onPress={() => navigation.navigate("AddCollection")}
+      />
       <HeaderIconButton icon="account" community={true} onPress={openAccount} />
     </HeaderView>
   )

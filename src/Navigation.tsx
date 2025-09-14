@@ -8,6 +8,9 @@ import AccountScreen, {
 import CustomThemeScreen, {
   routeOptions as customThemeRouteOptions,
 } from "@/screens/Account/CustomThemeScreen"
+import AddCollectionScreen, {
+  routeOptions as addCollectionRouteOptions,
+} from "@/screens/Collection/AddCollectionScreen"
 import CollectionScreen, {
   routeOptions as collectionRouteOptions,
 } from "@/screens/Collection/CollectionScreen"
@@ -64,6 +67,7 @@ export type RootStackParamList = {
     collectionId: string
     readOnly: boolean
   }
+  AddCollection: undefined
   EditCollection: {
     collectionName: string
     collectionId: string
@@ -203,6 +207,11 @@ export default function Navigation({ skipWelcome }: { skipWelcome: boolean }) {
 
         {/* Collection modals */}
         <Stack.Group screenOptions={modalScreenOptions}>
+          <Stack.Screen
+            name="AddCollection"
+            component={AddCollectionScreen}
+            options={addCollectionRouteOptions}
+          />
           <Stack.Screen
             name="EditCollection"
             component={EditCollectionScreen}
