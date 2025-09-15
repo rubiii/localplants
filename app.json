@@ -21,10 +21,6 @@
     "android": {
       "userInterfaceStyle": "automatic",
       "edgeToEdgeEnabled": true,
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      },
       "permissions": [
         "android.permission.CAMERA",
         "android.permission.READ_MEDIA_IMAGES",
@@ -54,7 +50,19 @@
         }
       ],
       "expo-sqlite",
-      "expo-font"
+      "expo-font",
+      [
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#4fb370",
+          "image": "./assets/splash-icon.png",
+          "dark": {
+            "image": "./assets/splash-icon.png",
+            "backgroundColor": "#4fb370"
+          },
+          "imageWidth": 200
+        }
+      ]
     ],
     "extra": {
       "router": {},
