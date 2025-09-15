@@ -81,9 +81,6 @@ export default function CustomThemeScreen() {
     <ScrollableScreenContainer
       className={clsx("px-4 py-6 gap-2", vars(themeColors))}
     >
-      <Text className="text-[--text]">{customThemeName}</Text>
-      <Text className="text-[--text]">{theme}</Text>
-
       <View className="gap-1.5">
         <Text className="text-[--text]">Background Colors:</Text>
         <View className="flex-row -m-1">
