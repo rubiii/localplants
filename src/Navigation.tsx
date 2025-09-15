@@ -33,9 +33,9 @@ import SharePlantScreen, {
 import AddPlantScreen, {
   routeOptions as addPlantRouteOptions,
 } from "@/screens/Plants/AddPlantScreen"
-import PlantsScreen, {
-  routeOptions as plantsRouteOptions,
-} from "@/screens/Plants/PlantsScreen"
+import HomeScreen, {
+  routeOptions as homeRouteOptions,
+} from "@/screens/Plants/HomeScreen"
 import WelcomeScreen, {
   routeOptions as welcomeRouteOptions,
 } from "@/screens/WelcomeScreen"
@@ -135,8 +135,8 @@ export default function Navigation({ skipWelcome }: { skipWelcome: boolean }) {
         <Stack.Group>
           <Stack.Screen
             name="Plants"
-            component={PlantsScreen}
-            options={plantsRouteOptions}
+            component={HomeScreen}
+            options={homeRouteOptions}
           />
           <Stack.Screen
             name="Collection"

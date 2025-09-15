@@ -36,7 +36,7 @@ function HeaderRight() {
   )
 }
 
-export default function PlantsScreen() {
+export default function HomeScreen() {
   const { me } = useAccount(MyAppAccount, {
     resolve: { root: { collections: { $each: { plants: true } } } },
   })
