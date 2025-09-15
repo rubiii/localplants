@@ -18,6 +18,7 @@ jobs:
       profile: production
       distribution: store
       channel: production
+      fingerprint_hash: ${{ needs.fingerprint.outputs.fingerprint_hash }}
   build_ios:
     name: Build iOS
     type: build
