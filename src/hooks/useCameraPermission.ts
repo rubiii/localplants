@@ -15,7 +15,7 @@ const PERMISSION =
 
 export default function useCameraPermission() {
   const [status, setStatus] = useState<PermissionResult>()
-  const missing = status === "denied" || status === "blocked"
+  const missing = status !== "granted" && status !== "limited"
 
   useEffect(() => {
     check(PERMISSION).then(setStatus)

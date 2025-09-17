@@ -17,7 +17,7 @@ const PERMISSION =
 
 export default function useGalleryPermission() {
   const [status, setStatus] = useState<PermissionResult>()
-  const missing = status === "denied" || status === "blocked"
+  const missing = status !== "granted" && status !== "limited"
 
   useEffect(() => {
     check(PERMISSION).then(setStatus)
