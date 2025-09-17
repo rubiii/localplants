@@ -17,7 +17,7 @@ import { Pressable, Text, View } from "react-native"
 export const routeOptions: NativeStackNavigationOptions = {
   title: "Your Plants",
   // Disable navigating back to welcome flow
-  headerLeft: () => null,
+  headerLeft: () => <></>,
   headerRight: () => <HeaderRight />,
 }
 
