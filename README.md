@@ -12,20 +12,10 @@ Local-First Plant care app for iOS and Android build with [Expo](https://expo.de
 [ ] - Web build?  
 [ ] - Use universal links for invites?  
 
-## Features on display
-
-- Stack navigation
-- Deep linking
-- Device permissions
-- Camera and photo library access
-- Keyboard avoiding views
-- (Custom) theming with Nativewind
-- Reactive system/auto theming
-- Sharing with Jazz
-
 ## Get started
 
-Install dependencies and start the app:
+Copy the `.env` file to `.env.local` and adjust the default values.
+Then you can install dependencies and start the app:
 
 ```bash
 npx expo install

@@ -12,9 +12,9 @@ import { KeyboardProvider } from "react-native-keyboard-controller"
 import { SafeAreaProvider } from "react-native-safe-area-context"
 
 SplashScreen.preventAutoHideAsync()
-SplashScreen.setOptions({ duration: 1000, fade: true })
+SplashScreen.setOptions({ duration: 300, fade: true })
 
-const peer = `wss://cloud.jazz.tools/?key=me@rubiii.com`
+const peer = process.env.EXPO_PUBLIC_JAZZ_PEER
 
 export default function App() {
   const [skipWelcome, setSkipWelcome] = useState<boolean>()
