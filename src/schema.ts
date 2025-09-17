@@ -65,6 +65,6 @@ export const MyAppAccount = co
         owner,
       )
       account.$jazz.set("root", { collections: [firstCollection] })
-      account.$jazz.set("profile", { name: "Unknown Plant" })
+      account.$jazz.set("profile", { name: "Anonymous Plant Owner" })
     }
   })
