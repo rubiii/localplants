@@ -12,10 +12,7 @@ import { KeyboardProvider } from "react-native-keyboard-controller"
 import { SafeAreaProvider } from "react-native-safe-area-context"
 
 SplashScreen.preventAutoHideAsync()
-SplashScreen.setOptions({
-  duration: 3000,
-  fade: true,
-})
+SplashScreen.setOptions({ duration: 1000, fade: true })
 
 const peer = `wss://cloud.jazz.tools/?key=me@rubiii.com`
 
@@ -29,8 +26,6 @@ export default function App() {
     })
   }, [])
 
-  if (skipWelcome === undefined) return
-
   return (
     <StrictMode>
       <JazzExpoProvider
@@ -41,7 +36,9 @@ export default function App() {
           <KeyboardProvider>
             <SafeAreaProvider>
               <ThemeProvider>
-                <Navigation skipWelcome={skipWelcome} />
+                {skipWelcome === undefined ? null : (
+                  <Navigation skipWelcome={skipWelcome} />
+                )}
               </ThemeProvider>
             </SafeAreaProvider>
           </KeyboardProvider>
