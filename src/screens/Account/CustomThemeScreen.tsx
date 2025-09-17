@@ -46,10 +46,8 @@ function HeaderRight({ onSave }: { onSave?: () => void }) {
 }
 
 export default function CustomThemeScreen() {
-  const { navigation, route } = useNavigation<"CustomTheme">()
-  const customThemeName = route.params?.customThemeName
-
-  const { theme, setTheme, colors } = useTheme()
+  const { navigation } = useNavigation<"CustomTheme">()
+  const { setTheme, colors } = useTheme()
 
   const [activeColorKey, setActiveColorKey] = useState<keyof ThemeColors>()
   const [themeColors, setThemeColors] = useState<ThemeColors>(colors)
