@@ -1,0 +1,32 @@
+{
+  "name": "localplants-plantid-worker",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "main": "src/server.ts",
+  "scripts": {
+    "build": "npm run update-schema && tsc",
+    "update-schema": "cp ../expo-app/src/schema.ts ./src",
+    "start": "dotenvx run --env-file=.env.local --env-file=.env -- node dist/worker.js",
+    "dev": "nodemon --watch 'src/**/*.ts' --exec npm run build && npm start",
+    "lint": "eslint 'src/**/*.ts'"
+  },
+  "dependencies": {
+    "axios": "^1.12.2",
+    "jazz-tools": "^0.18.18",
+    "winston": "^3.17.0"
+  },
+  "devDependencies": {
+    "@dotenvx/dotenvx": "^1.51.0",
+    "@types/express": "^5.0.3",
+    "@types/node": "^24.5.2",
+    "eslint": "^9.36.0",
+    "express": "^5.1.0",
+    "install": "^0.13.0",
+    "nodemon": "^3.1.10",
+    "npm": "^11.6.1",
+    "prettier": "^3.6.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.2"
+  }
+}

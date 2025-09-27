@@ -33,6 +33,9 @@ yarn-error.*
 # Builds
 builds/
 
+# Logs
+*.log
+
 # local env files
 .env*.local
 
