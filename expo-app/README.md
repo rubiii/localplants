@@ -4,13 +4,12 @@ Local-First Plant care app for iOS and Android build with [Expo](https://expo.de
 
 ## TODO
 
-[ ] - Get on Expo [Updates](https://docs.expo.dev/versions/latest/sdk/updates/)?  
-[ ] - Show Jazz-Outage/Connection-Status?  
-[ ] - Maybe make sync status (never, always, signedUp) explicit  
-[ ] - Enable auth via usePassphraseAuth({ wordlist })  
-[ ] - Add reasonable limits? Max collections, max plants, etc.
-[ ] - Web build?  
-[ ] - Use universal links for invites?  
+[ ] - Plant identification.  
+[ ] - Watering cycles?  
+[ ] - Use `useSyncConnectionStatus`.  
+[ ] - Disable sync by default and add authentication.  
+[ ] - Add reasonable limits.  
+[ ] - Get on Expo Updates.  
 
 ## Get started
 
