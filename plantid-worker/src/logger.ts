@@ -2,10 +2,10 @@ import { createLogger, format, transports } from 'winston'
 const { combine, colorize, timestamp, printf, metadata } = format
 
 const customFormat = printf((info) => {
-  const { iterationId, ...metadata } = info.metadata as Record<string, string>
+  const { requestId, ...metadata } = info.metadata as Record<string, string>
   const result: any[] = [info.timestamp]
 
-  if (iterationId) result.push(`[${iterationId}]`)
+  if (requestId) result.push(`[${requestId}]`)
 
   result.push(info.level, info.message)
 

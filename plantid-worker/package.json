@@ -5,7 +5,7 @@
   "type": "module",
   "main": "src/server.ts",
   "scripts": {
-    "build": "npm run update-schema && tsc",
+    "build": "tsc",
     "update-schema": "cp ../expo-app/src/schema.ts ./src",
     "start": "dotenvx run --env-file=.env.local --env-file=.env -- node dist/worker.js",
     "dev": "nodemon --watch 'src/**/*.ts' --exec npm run build && npm start",

@@ -1,7 +1,12 @@
 import { co, z } from "jazz-tools"
 // import config from "./config"
 
-export const PlantIdResultImage = co.map({
+export const IdentityResultError = co.map({
+  status: z.number(),
+  statusText: z.string(),
+})
+
+export const IdentityResultImage = co.map({
   author: z.string(),
   license: z.string(),
   citation: z.string(),
@@ -11,9 +16,9 @@ export const PlantIdResultImage = co.map({
   mediumImageUrl: z.string(),
   smallImageUrl: z.string(),
 })
-export const PlantIdResultImages = co.list(PlantIdResultImage)
+export const IdentityResultImages = co.list(IdentityResultImage)
 
-export const PlantIdResult = co.map({
+export const IdentityResult = co.map({
   score: z.number(),
   scientificSpeciesNameWithoutAuthor: z.string(),
   scientificSpeciesNameAuthorship: z.string(),
@@ -27,16 +32,26 @@ export const PlantIdResult = co.map({
   commonNames: z.array(z.string()),
   gbifID: z.string(),
   powoID: z.string(),
-  images: PlantIdResultImages,
+  images: IdentityResultImages,
 })
-export const PlantIdResults = co.list(PlantIdResult)
+export type IdentityResultType = co.loaded<typeof IdentityResult>
+export const IdentityResults = co.list(IdentityResult)
 
-export const PlantIdRequest = co.map({
+export const IdentityRequest = co.map({
   plantId: z.string(),
   completedAt: z.optional(z.iso.datetime()),
-  results: co.list(PlantIdResult),
+  results: co.list(IdentityResult),
+  error: co.optional(IdentityResultError),
 })
-export const PlantIdRequests = co.list(PlantIdRequest)
+export type IdentityRequestType = co.loaded<typeof IdentityRequest>
+export const IdentityRequests = co.list(IdentityRequest)
+
+export const PlantIdentity = co.map({
+  state: z.enum(["none", "scheduled", "processed", "identified", "failure"]),
+  request: co.optional(IdentityRequest),
+  result: co.optional(IdentityResult),
+})
+export type PlantIdentityType = co.loaded<typeof PlantIdentity>
 
 export const PlantImage = co.map({
   image: co.image(),
@@ -56,8 +71,7 @@ export const Plant = co.map({
   diedAt: z.optional(z.date()),
   primaryImage: PlantImage,
   images: PlantImages,
-  idRequests: PlantIdRequests,
-  idResult: co.optional(PlantIdResult),
+  identity: PlantIdentity,
 })
 export type PlantType = co.loaded<typeof Plant>
 
@@ -121,7 +135,7 @@ export const MyAppAccount = co.account({
 
 export const PlantIdWorkerAccount = co.account({
   root: co.map({
-    plantIdRequests: PlantIdRequests,
+    identityRequests: IdentityRequests,
     plantNetApi: PlantNetApi,
   }),
   profile: co.profile(),
@@ -141,7 +155,7 @@ export const PlantIdWorkerAccount = co.account({
 //     // console.log("Created PlantNetApi:", { coValue: plantNetApi.$jazz.id })
 
 //     const plantNetApi = await PlantNetApi.load(config.plantNetApiCoValue)
-//     account.$jazz.set("root", { plantIdRequests: [], plantNetApi })
+//     account.$jazz.set("root", { IdentityRequests: [], plantNetApi })
 //     account.root?.$jazz.owner.makePublic()
 //   }
 // })

@@ -32,7 +32,7 @@ export const routeOptions = ({
 
 export default function PlantScreeen() {
   const { navigation, route } = useNavigation<"Plant">()
-  const { plantId, primaryImageId, title } = route.params
+  const { plantId, collectionId, primaryImageId, title } = route.params
 
   const plant = useCoState(Plant, plantId, {
     resolve: { primaryImage: { image: true } },
@@ -44,7 +44,6 @@ export default function PlantScreeen() {
     ? `${timeAgo(new Date(), new Date(plant.aquiredAt))} old`
     : ""
 
-  // TODO: do we need this effect?
   useEffect(() => {
     if (!plant) return
 
@@ -66,38 +65,21 @@ export default function PlantScreeen() {
         </Text>
       ) : null}
 
-      <MainButtonArea plantId={plantId} plantName={plantName} />
-      {/*<Identification plantId={plantId} />*/}
+      <MainButtonArea
+        plantId={plantId}
+        plantName={plantName}
+        collectionId={collectionId}
+      />
+      <Identity plantId={plantId} plantName={plantName} />
       <Gradient />
       <ImageTimeline plantId={plantId} />
     </ScrollableScreenContainer>
   )
 }
 
-function ImageTimeline({ plantId }: { plantId: string }) {
-  const plant = useCoState(Plant, plantId, {
-    resolve: { images: { $each: true } },
-  })
-
-  if (!plant) {
-    return <ActivityIndicator size="small" className="text-[--text] mx-auto" />
-  }
-
-  return (
-    <FlashList
-      data={plant.images}
-      keyExtractor={(item, index) => item?.$jazz.id || index.toString()}
-      renderItem={({ item }) =>
-        item ? <PlantImageView plantImage={item} /> : null
-      }
-      numColumns={1}
-    />
-  )
-}
-
 function PrimaryImageView({ primaryImageId }: { primaryImageId: string }) {
   const window = useWindowDimensions()
-  const imageHeight = window.height / 1.75
+  const imageHeight = window.height / 1.7
 
   return (
     <View className="z-[100]">
@@ -121,9 +103,11 @@ function PrimaryImageView({ primaryImageId }: { primaryImageId: string }) {
 function MainButtonArea({
   plantId,
   plantName,
+  collectionId,
 }: {
-  plantId?: string
-  plantName?: string
+  plantId: string
+  plantName: string
+  collectionId: string
 }) {
   const { navigation } = useNavigation<"Plant">()
 
@@ -136,8 +120,8 @@ function MainButtonArea({
     navigation.navigate("SharePlant", { plantId })
   }
   const editPlant = () => {
-    if (!plantId || !plantName) return
-    navigation.navigate("EditPlant", { plantId, plantName })
+    if (!plantId || !plantName || !collectionId) return
+    navigation.navigate("EditPlant", { plantId, plantName, collectionId })
   }
 
   return (
@@ -146,6 +130,81 @@ function MainButtonArea({
       <IconButton icon="camera" onPress={addPhoto} />
       <SmallButton text="Share" onPress={sharePlant} />
     </View>
+  )
+}
+
+function Identity({
+  plantId,
+  plantName,
+}: {
+  plantId: string
+  plantName: string
+}) {
+  const { navigation } = useNavigation<"Plant">()
+  const plant = useCoState(Plant, plantId, {
+    resolve: { identity: { result: true } },
+  })
+
+  const openIdentity = () => {
+    if (!plantId || !plantName) return
+
+    navigation.navigate("Identity", { plantId, plantName })
+  }
+
+  if (!plant?.identity.result) {
+    return (
+      <SmallButton
+        text="Identify this plant"
+        onPress={openIdentity}
+        className="mx-auto"
+      />
+    )
+  }
+
+  return (
+    <Pressable onPress={openIdentity} className="mt-8 gap-4 items-center">
+      <View className="items-center">
+        <Text className="text-xs text-[--secondaryText]">Scientific name</Text>
+        <Text className="text-xl leading-tight text-[--text]">
+          {plant.identity.result.scientificName}
+        </Text>
+      </View>
+
+      <View className="items-center">
+        <Text className="text-xs text-[--secondaryText]">Genus</Text>
+        <Text className="text-lg leading-tight text-[--text]">
+          {plant.identity.result.scientificGenusName}
+        </Text>
+      </View>
+
+      <View className="items-center">
+        <Text className="text-xs text-[--secondaryText]">Family</Text>
+        <Text className="text-lg leading-tight text-[--text]">
+          {plant.identity.result.scientificFamilyName}
+        </Text>
+      </View>
+    </Pressable>
+  )
+}
+
+function ImageTimeline({ plantId }: { plantId: string }) {
+  const plant = useCoState(Plant, plantId, {
+    resolve: { images: { $each: true } },
+  })
+
+  if (!plant) {
+    return <ActivityIndicator size="small" className="text-[--text] mx-auto" />
+  }
+
+  return (
+    <FlashList
+      data={plant.images}
+      keyExtractor={(item, index) => item?.$jazz.id || index.toString()}
+      renderItem={({ item }) =>
+        item ? <PlantImageView plantImage={item} /> : null
+      }
+      numColumns={1}
+    />
   )
 }
 

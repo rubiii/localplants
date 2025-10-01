@@ -1,4 +1,4 @@
-import crypto from 'crypto'
+import { AxiosError } from 'axios'
 import { co, Group, Inbox } from 'jazz-tools'
 import { startWorker as startJazzWorker } from 'jazz-tools/worker'
 import config from './config.js'
@@ -11,12 +11,15 @@ import {
 } from './plantNet/index.js'
 import type { PlantNetResponse } from './plantNet/types.js'
 import {
+  IdentityRequest,
+  IdentityResult,
+  IdentityResultError,
+  IdentityResultImage,
+  IdentityResultImages,
   Plant,
-  PlantIdRequest,
-  PlantIdResult,
-  PlantIdResultImage,
-  PlantIdResultImages,
   PlantIdWorkerAccount,
+  type IdentityRequestType,
+  type PlantType,
 } from './schema.js'
 
 setupProcessExitHandling()
@@ -34,7 +37,7 @@ async function main() {
     logger.debug('Resolving request and plant values.')
     await idRequest.$jazz.ensureLoaded({ resolve: { results: true } })
     const plant = await Plant.load(idRequest.plantId, {
-      resolve: { primaryImage: { image: true } },
+      resolve: { primaryImage: { image: true }, identity: true },
     })
 
     if (plant === null) {
@@ -42,9 +45,14 @@ async function main() {
       return
     }
 
-    const response = await plantNetIdentityRequest({
-      imageId: plant.primaryImage.image.$jazz.id,
-    })
+    let response
+    try {
+      response = await plantNetIdentityRequest({
+        imageId: plant.primaryImage.image.$jazz.id,
+      })
+    } catch(error) {
+      handleRequestError({ error: error as AxiosError, plant, idRequest })
+    }
     if (!response) return
 
     logger.debug('Received PlantNet response:', {
@@ -62,12 +70,13 @@ async function main() {
 
     await processResponse({ idRequest, data: response.data })
 
-    logger.debug('Removing worker from all CoValues.')
-    idRequest.$jazz.owner.removeMember(worker)
+    logger.debug('Removing worker from plant.')
     plant.$jazz.owner.removeMember(worker)
 
     logger.info('Finished identifying plant.')
     idRequest.$jazz.set('completedAt', new Date().toISOString())
+    plant.identity.$jazz.set("state", "processed")
+    worker.root.identityRequests.$jazz.unshift(idRequest)
 
     return idRequest
   })
@@ -85,13 +94,17 @@ async function startWorker() {
     accountSecret: config.plantIdWorkerSecret,
   })
 
-  return { worker, inbox }
+  const loadedWorker = await worker.$jazz.ensureLoaded(
+    { resolve: { root: { identityRequests: { $each: true }} } }
+  )
+
+  return { worker: loadedWorker, inbox }
 }
 
-function subscribe(inbox: InboxType, cb: ({ idRequest }: { idRequest: co.loaded<typeof PlantIdRequest> }) => void) {
+function subscribe(inbox: InboxType, cb: ({ idRequest }: { idRequest: co.loaded<typeof IdentityRequest> }) => void) {
   logger.info('Subscribing to inbox.')
-  inbox.subscribe(PlantIdRequest, async (idRequest, senderID) => {
-    logger.defaultMeta = { iterationId: iterationId() }
+  inbox.subscribe(IdentityRequest, async (idRequest, senderID) => {
+    logger.defaultMeta = { requestId: idRequest.$jazz.id }
 
     logger.info('Received a message:', {
       senderID: senderID,
@@ -106,7 +119,7 @@ async function processResponse({
   idRequest,
   data,
 }: {
-  idRequest: co.loaded<typeof PlantIdRequest>
+  idRequest: co.loaded<typeof IdentityRequest>
   data: PlantNetResponse
 }) {
   for (const { score, species, gbif, powo, images } of data.results) {
@@ -114,13 +127,13 @@ async function processResponse({
 
     const resultImagesOwner = Group.create()
     resultImagesOwner.addMember(idRequest.$jazz.owner)
-    const resultImages = PlantIdResultImages.create([], resultImagesOwner)
+    const resultImages = IdentityResultImages.create([], resultImagesOwner)
 
     for (const img of images) {
       const resultImageOwner = Group.create()
       resultImageOwner.addMember(idRequest.$jazz.owner)
 
-      const resultImage = PlantIdResultImage.create(
+      const resultImage = IdentityResultImage.create(
         {
           author: img.author,
           license: img.license,
@@ -139,7 +152,7 @@ async function processResponse({
     const resultOwner = Group.create()
     resultOwner.addMember(idRequest.$jazz.owner)
 
-    const result = PlantIdResult.create(
+    const result = IdentityResult.create(
       {
         score: score,
         scientificName: species.scientificName,
@@ -159,8 +172,42 @@ async function processResponse({
       resultOwner,
     )
 
-    if (!idRequest.results) throw new Error("Expected PlantIdRequest.results to be resolved")
+    if (!idRequest.results) throw new Error("Expected IdentityRequest.results to be resolved")
     idRequest.results.$jazz.push(result)
+  }
+}
+
+function handleRequestError({ error, plant, idRequest }: {
+  error: AxiosError
+  plant: PlantType
+  idRequest: IdentityRequestType
+}) {
+  if (!plant.identity) {
+    logger.error("Unable to handle request error due to missing identity!")
+    return
+  }
+
+  plant.identity.$jazz.set("state", "failure")
+  idRequest.$jazz.set("completedAt", new Date().toISOString())
+
+  const requestErrorGroup = Group.create()
+  requestErrorGroup.addMember(idRequest.$jazz.owner)
+
+  if (error.response) {
+    idRequest.$jazz.set("error", IdentityResultError.create({
+      status: error.response.status,
+      statusText: error.response.statusText,
+    }, requestErrorGroup))
+  } else if (error.request) {
+    idRequest.$jazz.set("error", IdentityResultError.create({
+      status: 998,
+      statusText: "No response",
+    }, requestErrorGroup))
+  } else {
+    idRequest.$jazz.set("error", IdentityResultError.create({
+      status: 999,
+      statusText: "Failed to request",
+    }, requestErrorGroup))
   }
 }
 
@@ -184,10 +231,6 @@ async function updatePlantNetApi({
     plantNetApi.$jazz.set('remainingRequests', rateLimit.remainingRequests)
     plantNetApi.$jazz.set('resetInSeconds', rateLimit.resetInSeconds)
   }
-}
-
-function iterationId() {
-  return crypto.randomBytes(8).toString('hex')
 }
 
 main()

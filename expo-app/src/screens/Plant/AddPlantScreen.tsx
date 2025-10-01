@@ -9,7 +9,7 @@ import { newRandomPlantName, randomPlantName } from "@/lib/randomPlantName"
 import {
   Plant,
   PlantCollection,
-  PlantIdRequests,
+  PlantIdentity,
   PlantImage,
   PlantImages,
   type PlantImageType,
@@ -97,20 +97,20 @@ export default function AddPlantScreen() {
     plantOwner.addMember(collection.$jazz.owner)
 
     const plantImages = PlantImages.create([plantImage], Group.create())
-    const idRequests = PlantIdRequests.create([], Group.create())
+    const identity = PlantIdentity.create({ state: "none" }, Group.create())
 
     // Add plant owner to subvalues
     plantImage.$jazz.owner.addMember(plantOwner)
     plantImage.image.$jazz.owner.addMember(plantOwner)
     plantImages.$jazz.owner.addMember(plantOwner)
-    idRequests.$jazz.owner.addMember(plantOwner)
+    identity.$jazz.owner.addMember(plantOwner)
 
     const plant = Plant.create(
       {
         name: name as string,
         primaryImage: plantImage,
         images: plantImages,
-        idRequests: idRequests,
+        identity: identity,
       },
       plantOwner,
     )

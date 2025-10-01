@@ -5,6 +5,8 @@ import { logError } from '../lib/axiosErrorHandling.js'
 import logger from '../logger.js'
 import type { PlantNetResponse } from './types.js'
 
+const RESULTS_TO_REQUEST = 3
+
 // PlantNet resizes images to "a maximum of 1280px on the large side".
 // Minimum size should be 800x800px.
 // https://my.plantnet.org/doc/getting-started/faq#input-data
@@ -23,6 +25,14 @@ const client = axios.create({
   // maxBodyLength: 2000,
 })
 
+client.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    logError(error)
+    return Promise.reject(error)
+  }
+)
+
 export async function plantNetIdentityRequest({
   imageId,
 }: {
@@ -34,7 +44,7 @@ export async function plantNetIdentityRequest({
     MAX_IMAGE_HEIGHT,
   )
 
-  if (!image) {
+  if(!image) {
     throw new Error(`Failed to resolve image for ID "${imageId}".`)
   }
 
@@ -43,29 +53,23 @@ export async function plantNetIdentityRequest({
   formData.append('images', image.image.toBlob())
 
   logger.debug('Executing PlantNet request.')
-  return await request(formData)
+  return request(formData)
 }
 
-async function request(formData: FormData) {
-  try {
-    return client.postForm<any, AxiosResponse<PlantNetResponse>>(
-      '/v2/identify/all',
-      formData,
-      {
-        params: {
-          'api-key': config.plantNetApiKey,
-          'include-related-images': true,
-          'no-reject': true,
-          'nb-results': 10,
-          type: 'kt',
-          detailed: true,
-        },
-      },
-    )
-  } catch (error) {
-    logError(error)
-    // TODO: store and communicate error states
-  }
+function request(formData: FormData) {
+  return client.postForm<any, AxiosResponse<PlantNetResponse>>(
+  '/v2/identify/all',
+  formData,
+  {
+    params: {
+      'api-key': config.plantNetApiKey,
+      'include-related-images': true,
+      'no-reject': true,
+      'nb-results': RESULTS_TO_REQUEST,
+      type: 'kt',
+      detailed: true,
+    },
+  })
 }
 
 export type PlantNetRateLimit = {

@@ -27,7 +27,7 @@ export default function setupProcessExitHandling() {
   // what about errors
   // try remove/comment this handler, 'exit' event still works
   process.on('uncaughtException', (err) => {
-    logger.info(`Uncaught Exception: ${err.message}`)
+    logger.info(`Uncaught Exception: ${err.message}\n${err.stack}`)
     process.exit(1)
   })
 }

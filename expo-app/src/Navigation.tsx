@@ -29,9 +29,9 @@ import AddPlantScreen, {
 import EditPlantScreen, {
   routeOptions as editPlantRouteOptions,
 } from "@/screens/Plant/EditPlantScreen"
-import PlantIdentificationScreen, {
-  routeOptions as plantIdentificationRouteOptions,
-} from "@/screens/Plant/PlantIdentificationScreen"
+import IdentityScreen, {
+  routeOptions as identityRouteOptions,
+} from "@/screens/Plant/Identity/IndentityScreen"
 import PlantImageModal, {
   routeOptions as plantImageModalRouteOptions,
 } from "@/screens/Plant/PlantImageModal"
@@ -93,8 +93,8 @@ export type RootStackParamList = {
   CustomTheme: { customThemeName: string } | undefined
   PlantImageModal: { plantImageId: string }
   AddPlant: { collectionId: string }
-  EditPlant: { plantId: string; plantName: string }
-  PlantIdentification: { plantId: string; plantName: string }
+  EditPlant: { plantId: string; plantName: string; collectionId: string }
+  Identity: { plantId: string; plantName: string }
   SharePlant: { plantId: string }
   RemovePlant: { plantId: string; collectionId: string }
   AddPlantImage: { plantId: string }
@@ -192,9 +192,9 @@ export default function Navigation({ skipWelcome }: { skipWelcome: boolean }) {
             options={editPlantRouteOptions}
           />
           <Stack.Screen
-            name="PlantIdentification"
-            component={PlantIdentificationScreen}
-            options={plantIdentificationRouteOptions}
+            name="Identity"
+            component={IdentityScreen}
+            options={identityRouteOptions}
           />
         </Stack.Group>
 

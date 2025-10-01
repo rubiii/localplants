@@ -19,7 +19,7 @@ export default function Button({
       onPress={onPress}
       disabled={disabled}
       className={clsx([
-        "group self-start rounded-lg",
+        "group rounded-lg",
         {
           "py-2 px-4 gap-1.5": size === "small",
           "py-4 px-6 gap-2": size === "medium",
