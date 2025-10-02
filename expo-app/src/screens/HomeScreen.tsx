@@ -49,20 +49,12 @@ export default function HomeScreen() {
       <FlashList
         data={me?.root.collections}
         keyExtractor={(item, index) => item?.$jazz.id || index.toString()}
+        numColumns={1}
         renderItem={({ item }) =>
           item ? <PlantCollectionView shallowCollection={item} /> : null
         }
-        numColumns={2}
       />
     </ScrollableScreenContainer>
-    // <ScrollableScreenContainer className="px-4 pt-6 pb-4 gap-8">
-    //   {me?.root.collections.map((collection) => (
-    //     <PlantCollectionView
-    //       key={collection.$jazz.id}
-    //       shallowCollection={collection}
-    //     />
-    //   ))}
-    // </ScrollableScreenContainer>
   )
 }
 
@@ -133,6 +125,9 @@ function PlantCollectionView({
       <FlashList
         data={collection?.plants}
         keyExtractor={(item, index) => item?.$jazz.id || index.toString()}
+        numColumns={2}
+        className="-m-1"
+        masonry // TODO: use masonry
         renderItem={({ item }) =>
           item ? (
             <PlantItem
@@ -142,10 +137,6 @@ function PlantCollectionView({
             />
           ) : null
         }
-        className="-m-1"
-        numColumns={2}
-        optimizeItemArrangement={false}
-        masonry
       />
     </View>
   )

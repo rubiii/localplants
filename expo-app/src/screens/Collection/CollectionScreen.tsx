@@ -88,6 +88,7 @@ export default function CollectionScreen() {
         <FlashList
           data={collection?.plants}
           keyExtractor={(item, index) => item?.$jazz.id || index.toString()}
+          numColumns={2}
           renderItem={({ item }) =>
             item ? (
               <PlantView
@@ -97,7 +98,6 @@ export default function CollectionScreen() {
               />
             ) : null
           }
-          numColumns={2}
         />
       </View>
     </ScrollableScreenContainer>
@@ -138,8 +138,8 @@ function PlantView({
 
   let addedAt: string | undefined
   const lastImage = plant.images[plant.images.length - 1]
-  if (lastImage?.addedAt) {
-    addedAt = timeAgo(new Date(), new Date(lastImage.addedAt))
+  if (lastImage?.$jazz.createdAt) {
+    addedAt = timeAgo(new Date(), new Date(lastImage.$jazz.createdAt))
   }
 
   return (
@@ -147,7 +147,7 @@ function PlantView({
       key={plant.$jazz.id}
       onPress={openPlant}
       onLongPress={openPlantImageModal}
-      className="group gap-2 w-6/12 p-2 aspect-square"
+      className="group gap-2 mb-16 aspect-square"
     >
       <Image
         imageId={plant.primaryImage.image.$jazz.id}
@@ -157,7 +157,6 @@ function PlantView({
           height: "100%",
           borderRadius: 8,
         }}
-        className="aspect-ratio"
         height={140}
         width={140}
       />
