@@ -17,6 +17,7 @@
     "lint": "expo lint"
   },
   "dependencies": {
+    "@azure/core-asynciterator-polyfill": "^1.0.2",
     "@bacons/text-decoder": "^0.0.0",
     "@bam.tech/react-native-image-resizer": "joeinnes/react-native-image-resizer#patch-1",
     "@expo-google-fonts/anton": "^0.4.2",
