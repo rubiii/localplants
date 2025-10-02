@@ -5,7 +5,8 @@ import SmallButton from "@/components/SmallButton"
 import useNavigation, { RootStackParamList } from "@/hooks/useNavigation"
 import useTheme from "@/hooks/useTheme"
 import timeAgo from "@/lib/timeAgo"
-import { Plant, type PlantImageType } from "@/schema"
+import { getWateringRecommendation } from "@/lib/watering"
+import { Plant, PlantCollection, type PlantImageType } from "@/schema"
 import { Zoomable } from "@likashefqet/react-native-image-zoom"
 import { type RouteProp } from "@react-navigation/native"
 import { type NativeStackNavigationOptions } from "@react-navigation/native-stack"
@@ -70,7 +71,11 @@ export default function PlantScreeen() {
         plantName={plantName}
         collectionId={collectionId}
       />
-      <Identity plantId={plantId} plantName={plantName} />
+      <Identity
+        plantId={plantId}
+        plantName={plantName}
+        collectionId={collectionId}
+      />
       <Gradient />
       <ImageTimeline plantId={plantId} />
     </ScrollableScreenContainer>
@@ -136,11 +141,14 @@ function MainButtonArea({
 function Identity({
   plantId,
   plantName,
+  collectionId,
 }: {
   plantId: string
   plantName: string
+  collectionId: string
 }) {
   const { navigation } = useNavigation<"Plant">()
+  const collection = useCoState(PlantCollection, collectionId)
   const plant = useCoState(Plant, plantId, {
     resolve: { identity: { result: true } },
   })
@@ -161,27 +169,56 @@ function Identity({
     )
   }
 
+  const result = plant.identity.result
+
+  const wateringRecommendation = collection?.hemisphere
+    ? getWateringRecommendation({
+        species: result.scientificName,
+        genus: result.scientificGenusName,
+        family: result.scientificFamilyName,
+        hemisphere: collection.hemisphere,
+        size: plant.size,
+      })
+    : null
+
   return (
     <Pressable onPress={openIdentity} className="mt-8 gap-4 items-center">
       <View className="items-center">
         <Text className="text-xs text-[--secondaryText]">Scientific name</Text>
-        <Text className="text-xl leading-tight text-[--text]">
-          {plant.identity.result.scientificName}
+        <Text className="text-xl text-center text-[--text] max-w-[80%]">
+          {result.scientificName}
         </Text>
       </View>
 
       <View className="items-center">
         <Text className="text-xs text-[--secondaryText]">Genus</Text>
-        <Text className="text-lg leading-tight text-[--text]">
-          {plant.identity.result.scientificGenusName}
+        <Text className="text-center text-[--text]">
+          {result.scientificGenusName}
         </Text>
       </View>
 
       <View className="items-center">
         <Text className="text-xs text-[--secondaryText]">Family</Text>
-        <Text className="text-lg leading-tight text-[--text]">
-          {plant.identity.result.scientificFamilyName}
+        <Text className="text-center text-[--text]">
+          {result.scientificFamilyName}
         </Text>
+      </View>
+
+      <View className="items-center">
+        <Text className="text-xs text-[--secondaryText]">
+          Suggested watering schedule
+        </Text>
+        {wateringRecommendation ? (
+          <>
+            <Text className="text-center text-[--text]">
+              every {wateringRecommendation.minDays}–
+              {wateringRecommendation.maxDays} days
+            </Text>
+            <Text className="text-sm text-center text-[--mutedText]">
+              ({wateringRecommendation.note})
+            </Text>
+          </>
+        ) : null}
       </View>
     </Pressable>
   )

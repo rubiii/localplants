@@ -49,6 +49,8 @@ export default function AcceptSharedPlantScreen() {
       const collection = PlantCollection.create(
         {
           name: `Shared by ${sharerName || sharerID}`,
+          // TODO: get hemisphere from sender
+          hemisphere: "north",
           plants: [plant],
           sharedBy: {
             name: sharerName,

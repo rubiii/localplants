@@ -45,7 +45,12 @@ export default function AddCollectionScreen() {
   const createCollection = () => {
     if (!valid || !me) return
 
-    const collection = PlantCollection.create({ name, plants: [] })
+    const collection = PlantCollection.create({
+      name,
+      // TODO: let user enter hemisphere
+      hemisphere: "north",
+      plants: [],
+    })
     me.root.collections.$jazz.unshift(collection)
 
     navigation.goBack()

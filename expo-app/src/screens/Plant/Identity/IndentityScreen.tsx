@@ -27,7 +27,7 @@ export default function PlantIdentityScreen() {
   const { plantId } = route.params
 
   const plant = useCoState(Plant, plantId, {
-    resolve: { identity: { request: { error: true } } },
+    resolve: { identity: true },
   })
   const worker = useCoState(PlantIdWorkerAccount, config.plantIdWorkerAccount)
   const sendInboxMessage = experimental_useInboxSender(
@@ -35,11 +35,10 @@ export default function PlantIdentityScreen() {
   )
 
   const identifyPlant = async () => {
-    if (!plant || !worker) return
-
-    // Allow worker to temp. access primary image and identity.
-    plant.$jazz.owner.addMember(worker, "reader")
-    plant.identity.$jazz.owner.addMember(worker, "writer")
+    if (!plant || !worker) {
+      console.debug("Skip identifyPlant due to missing dependencies")
+      return
+    }
 
     // Create identity request
     const resultsGroup = Group.create()
@@ -60,6 +59,10 @@ export default function PlantIdentityScreen() {
     plant.identity.$jazz.set("request", request)
     plant.identity.$jazz.set("state", "scheduled")
 
+    // Allow worker to temp. access primary image and identity.
+    plant.$jazz.owner.addMember(worker, "reader")
+    plant.identity.$jazz.owner.addMember(worker, "writer")
+
     // Notify worker of new request
     await sendInboxMessage(request)
   }
@@ -77,7 +80,7 @@ export default function PlantIdentityScreen() {
       headerLeft: () => <HeaderLeft text="Close" onPress={close} />,
       headerRight: undefined,
     })
-  }, [navigation])
+  }, [navigation, plant?.identity.state])
 
   if (!plant?.identity) return <ScrollableScreenContainer /> // loading
 
@@ -91,7 +94,7 @@ export default function PlantIdentityScreen() {
     <ScrollableScreenContainer className="px-4 py-6 gap-16 items-center">
       <Text className="text-lg text-[--text] text-center">
         Identifying your plant enables the app{"\n"}
-        to suggest better watering schedules. {plant.identity.state}
+        to suggest better watering schedules.
       </Text>
 
       <View className="gap-4">
@@ -106,7 +109,7 @@ export default function PlantIdentityScreen() {
       </View>
 
       {plant.identity.state === "none" ? (
-        <Button onPress={identifyPlant} title="Identify" size="large" />
+        <Button onPress={identifyPlant} title="Identify plant" size="large" />
       ) : null}
 
       {plant.identity.state === "scheduled" ? (

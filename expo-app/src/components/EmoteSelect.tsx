@@ -9,7 +9,7 @@ export default function EmoteSelect({
   setValue: (value?: string) => void
 }) {
   return (
-    <View className="px-6 flex-row gap-3">
+    <View className="px-4 flex-row gap-3">
       <Emote name="excited" onPress={setValue} activeEmote={value} />
       <Emote name="neutral" onPress={setValue} activeEmote={value} />
       <Emote name="frown" onPress={setValue} activeEmote={value} />

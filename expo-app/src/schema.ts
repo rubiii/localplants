@@ -67,6 +67,8 @@ export type PlantImagesType = co.loaded<typeof PlantImages>
 
 export const Plant = co.map({
   name: z.string(),
+  hemisphere: z.optional(z.enum(["north", "south"])),
+  size: z.enum(["xs", "sm", "md", "lg"]),
   aquiredAt: z.optional(z.date()),
   diedAt: z.optional(z.date()),
   primaryImage: PlantImage,
@@ -86,6 +88,7 @@ const SharedBy = co.map({
 
 export const PlantCollection = co.map({
   name: z.string(),
+  hemisphere: z.enum(["north", "south"]),
   plants: Plants,
   sharedBy: co.optional(SharedBy),
 })
@@ -120,6 +123,7 @@ export const MyAppAccount = co.account({
 //     const firstCollection = PlantCollection.create(
 //       {
 //         name: "Your collection",
+//         hemisphere: "north",
 //         plants: Plants.create([], owner),
 //       },
 //       owner,

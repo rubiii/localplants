@@ -115,13 +115,10 @@ function PlantCollectionView({
 
   return (
     <View className="gap-4">
-      <Pressable
-        onPress={openCollection}
-        className="group flex-row items-center"
-      >
+      <Pressable onPress={openCollection} className="group flex-row items-end">
         <Text
-          className="font-bold text-xl text-[--text]"
-          style={{ fontFamily: "Inter_900Black", fontSize: 32, lineHeight: 36 }}
+          className="text-[--text]"
+          style={{ fontFamily: "Inter_900Black", fontSize: 28, lineHeight: 28 }}
         >
           {collectionName}
         </Text>

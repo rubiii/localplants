@@ -1,11 +1,14 @@
 import EmoteSelect from "@/components/EmoteSelect"
 import HeaderTextButton from "@/components/HeaderTextButton"
+import HemisphereSelect from "@/components/HemisphereSelect"
 import Icon from "@/components/Icon"
 import PlantImageSelect from "@/components/PlantImageSelect"
+import PlantSizeSelect from "@/components/PlantSizeSelect"
 import ScrollableScreenContainer from "@/components/ScrollableScreenContainer"
 import TextField from "@/components/TextField"
 import useNavigation from "@/hooks/useNavigation"
 import { newRandomPlantName, randomPlantName } from "@/lib/randomPlantName"
+import { Hemisphere, PlantSize } from "@/lib/watering/types"
 import {
   Plant,
   PlantCollection,
@@ -49,9 +52,11 @@ function HeaderRight({ onSave }: { onSave?: () => void }) {
 export default function AddPlantScreen() {
   const [plantImage, setPlantImage] = useState<PlantImageType>()
   const [name, setName] = useState<string | undefined>(randomPlantName())
+  const [hemisphere, setHemisphere] = useState<Hemisphere | undefined>()
+  const [size, setSize] = useState<PlantSize>("md")
   const [emote, setEmote] = useState<string>()
   const [note, setNote] = useState<string>()
-  const valid = !!(plantImage && name)
+  const valid = !!(plantImage && name && size)
 
   const { navigation, route } = useNavigation<"AddPlant">()
   const { collectionId } = route.params
@@ -108,6 +113,8 @@ export default function AddPlantScreen() {
     const plant = Plant.create(
       {
         name: name as string,
+        hemisphere: hemisphere,
+        size: size,
         primaryImage: plantImage,
         images: plantImages,
         identity: identity,
@@ -115,6 +122,8 @@ export default function AddPlantScreen() {
       plantOwner,
     )
 
+    plant.$jazz.set("size", size)
+    plant.$jazz.set("hemisphere", hemisphere)
     plantImage.$jazz.set("emote", emote)
     plantImage.$jazz.set("note", note)
     collection.plants.$jazz.unshift(plant)
@@ -155,6 +164,12 @@ export default function AddPlantScreen() {
         }
       />
 
+      <PlantSizeSelect value={size} setValue={setSize} />
+      <HemisphereSelect
+        autoValue={collection?.hemisphere}
+        value={hemisphere}
+        setValue={setHemisphere}
+      />
       <EmoteSelect value={emote} setValue={setEmote} />
 
       <TextField

@@ -1,10 +1,13 @@
 import Button from "@/components/Button"
 import HeaderTextButton from "@/components/HeaderTextButton"
+import HemisphereSelect from "@/components/HemisphereSelect"
 import Icon from "@/components/Icon"
+import PlantSizeSelect from "@/components/PlantSizeSelect"
 import ScrollableScreenContainer from "@/components/ScrollableScreenContainer"
 import TextField from "@/components/TextField"
 import useNavigation from "@/hooks/useNavigation"
 import { newRandomPlantName } from "@/lib/randomPlantName"
+import { Hemisphere, PlantSize } from "@/lib/watering/types"
 import { Plant, PlantCollection } from "@/schema"
 import type { NativeStackNavigationOptions } from "@react-navigation/native-stack"
 import { useCoState } from "jazz-tools/expo"
@@ -39,13 +42,17 @@ export default function EditPlantScreen() {
   const { navigation, route } = useNavigation<"EditPlant">()
   const { plantId, plantName, collectionId } = route.params
 
-  const [name, setName] = useState(plantName)
-  const [note, setNote] = useState("")
-
   const plant = useCoState(Plant, plantId)
   const collection = useCoState(PlantCollection, collectionId, {
     resolve: { plants: { $each: true } },
   })
+
+  const [name, setName] = useState(plantName)
+  const [size, setSize] = useState<PlantSize | undefined>(plant?.size)
+  const [hemisphere, setHemisphere] = useState<Hemisphere | undefined>(
+    plant?.hemisphere,
+  )
+  const [note, setNote] = useState("")
 
   const deletePlant = () => {
     if (!plant || !collection) return
@@ -55,12 +62,14 @@ export default function EditPlantScreen() {
   }
 
   useEffect(() => {
-    const valid = !!name
+    const valid = !!(name && size)
 
     const updatePlant = () => {
       if (!plant || !valid) return
 
       plant.$jazz.set("name", name)
+      plant.$jazz.set("size", size)
+      plant.$jazz.set("hemisphere", hemisphere)
       navigation.goBack()
     }
 
@@ -69,39 +78,46 @@ export default function EditPlantScreen() {
         <HeaderRight onSave={valid ? updatePlant : undefined} />
       ),
     })
-  }, [navigation, plant, name])
+  }, [navigation, plant, name, size, hemisphere])
 
   return (
     <ScrollableScreenContainer className="px-4 py-6 gap-8">
-      <View className="flex-1">
-        <TextField
-          placeholder="What’s their name?"
-          value={name}
-          setValue={(value) => setName(value || "")}
-          icon={
-            <Pressable
-              onPress={() => setName(newRandomPlantName(name))}
-              className="group items-center justify-center"
-            >
-              <Icon.Material
-                name="auto-awesome"
-                size={19}
-                className="text-[--secondaryText] group-active:text-[--primary]"
-              />
-            </Pressable>
-          }
-        />
+      <TextField
+        placeholder="What’s their name?"
+        value={name}
+        setValue={(value) => setName(value || "")}
+        icon={
+          <Pressable
+            onPress={() => setName(newRandomPlantName(name))}
+            className="group items-center justify-center"
+          >
+            <Icon.Material
+              name="auto-awesome"
+              size={19}
+              className="text-[--secondaryText] group-active:text-[--primary]"
+            />
+          </Pressable>
+        }
+      />
 
-        <TextField
-          value={note}
-          setValue={(value) => setNote(value || "")}
-          placeholder="Add a note if you like …"
-          multiline={true}
-          numberOfLines={5}
-        />
+      <PlantSizeSelect value={size} setValue={setSize} />
+      <HemisphereSelect
+        autoValue={collection?.hemisphere}
+        value={hemisphere}
+        setValue={setHemisphere}
+      />
+
+      <TextField
+        value={note}
+        setValue={(value) => setNote(value || "")}
+        placeholder="Add a note if you like …"
+        multiline={true}
+        numberOfLines={5}
+      />
+
+      <View className="items-start">
+        <Button onPress={deletePlant} title="Delete plant" />
       </View>
-
-      <Button onPress={deletePlant} title="Delete plant" />
     </ScrollableScreenContainer>
   )
 }
