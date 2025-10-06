@@ -1,12 +1,13 @@
 import Icon from "@/components/Icon"
 import ScrollableScreenContainer from "@/components/ScrollableScreenContainer"
+import Text from "@/components/Text"
 import useNavigation from "@/hooks/useNavigation"
 import { IdentityResultType, PlantIdentity } from "@/schema"
 import { FlashList } from "@shopify/flash-list/src"
 import { clsx } from "clsx"
 import { useCoState } from "jazz-tools/expo"
 import { useEffect, useState } from "react"
-import { Image, Pressable, Text, View } from "react-native"
+import { Image, Pressable, View } from "react-native"
 import HeaderLeft from "./HeaderLeft"
 import HeaderRight from "./HeaderRight"
 import PlantNetLogo from "./PlantNetLogo"
@@ -49,7 +50,7 @@ export default function IdentificationState({
     <ScrollableScreenContainer className="px-4 py-6 gap-8">
       <View className="gap-2 items-center">
         <PlantNetLogo />
-        <Text className="text-[--text]">Top identification results</Text>
+        <Text>Top identification results</Text>
       </View>
 
       <FlashList
@@ -89,30 +90,33 @@ function ResultItem({
     >
       <View className="w-5/12 gap-2 items-center">
         <View className="ml-10 self-center">
-          <Text
-            className={clsx("px-3 py-1.5 rounded-full font-bold text-xs", {
-              "text-[--text] bg-[--card]": !isSelected,
-              "text-[--background] bg-[--primary]": isSelected,
+          <View
+            className={clsx("px-3 py-1.5 rounded-full", {
+              "bg-[--card]": !isSelected,
+              "bg-[--primary]": isSelected,
             })}
           >
-            {(result.score * 100).toFixed(2)}%
-          </Text>
+            <Text
+              size="xs"
+              weight={700}
+              color={isSelected ? "background" : "text"}
+            >
+              {(result.score * 100).toFixed(2)}%
+            </Text>
+          </View>
         </View>
 
         {firstImage ? (
           <View className="flex-row gap-3 items-center">
             {isSelected ? (
-              <Icon.MaterialCommunity
+              <Icon
+                community
                 name="checkbox-marked-circle"
                 size={24}
-                className="text-[--primary]"
+                color="primary"
               />
             ) : (
-              <Icon.MaterialCommunity
-                name="checkbox-blank-circle-outline"
-                size={24}
-                className="text-[--text]"
-              />
+              <Icon community name="checkbox-blank-circle-outline" size={24} />
             )}
 
             <Image
@@ -125,15 +129,15 @@ function ResultItem({
       </View>
 
       <View className="mt-9 gap-3 w-7/12">
-        <Text className="text-lg leading-tight text-[--text] break-words">
+        <Text size="lg" className="leading-tight break-words">
           {result.scientificName}
         </Text>
-        <Text className="text-sm text-[--text] break-words">
+        <Text size="sm" className="break-words">
           Genus: {result.scientificGenusName}
           {"\n"}
           Family: {result.scientificFamilyName}
         </Text>
-        <Text className="mr-10 text-xs text-[--secondaryText]">
+        <Text size="sm" color="secondary" className="mr-10">
           Photo: {firstImage?.citation}
         </Text>
       </View>

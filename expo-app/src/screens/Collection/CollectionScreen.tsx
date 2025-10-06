@@ -2,6 +2,7 @@ import HeaderContextMenu from "@/components/HeaderContextMenu"
 import HeaderIconButton from "@/components/HeaderIconButton"
 import HeaderView from "@/components/HeaderView"
 import ScrollableScreenContainer from "@/components/ScrollableScreenContainer"
+import Text from "@/components/Text"
 import useNavigation, { RootStackParamList } from "@/hooks/useNavigation"
 import timeAgo from "@/lib/timeAgo"
 import { PlantCollection, PlantCollectionType, PlantType } from "@/schema"
@@ -11,7 +12,7 @@ import { FlashList } from "@shopify/flash-list/src"
 import * as Haptics from "expo-haptics"
 import { Image, useCoState } from "jazz-tools/expo"
 import { useEffect } from "react"
-import { Pressable, Text, View } from "react-native"
+import { Pressable, View } from "react-native"
 
 export const routeOptions = ({
   route,
@@ -162,11 +163,9 @@ function PlantView({
       />
 
       <View>
-        <Text className="text-[--text] group-active:text-[--primary]">
-          {plant.name}
-        </Text>
+        <Text activeColor="primary">{plant.name}</Text>
         {addedAt ? (
-          <Text className="text-xs text-[--secondaryText]">
+          <Text color="secondary" size="xs">
             Added: {addedAt} ago
           </Text>
         ) : null}

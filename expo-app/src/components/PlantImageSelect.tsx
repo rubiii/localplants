@@ -105,11 +105,7 @@ function InitialState({
     >
       <View className="h-[180] items-center justify-center bg-[--card] rounded-lg">
         <View className="rounded-full p-6 bg-[--primary]">
-          <Icon.MaterialCommunity
-            name="image-search"
-            size={32}
-            className="text-[--background]"
-          />
+          <Icon name="image-search" size={32} color="background" />
         </View>
       </View>
     </ContextMenu>

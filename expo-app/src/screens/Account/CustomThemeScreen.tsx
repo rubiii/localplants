@@ -1,5 +1,6 @@
 import HeaderTextButton from "@/components/HeaderTextButton"
 import ScrollableScreenContainer from "@/components/ScrollableScreenContainer"
+import Text from "@/components/Text"
 import useNavigation, { RootStackParamList } from "@/hooks/useNavigation"
 import useTheme from "@/hooks/useTheme"
 import { contrast, hexToRgb } from "@/lib/colorUtils"
@@ -9,7 +10,7 @@ import type { NativeStackNavigationOptions } from "@react-navigation/native-stac
 import { clsx } from "clsx"
 import { vars } from "nativewind"
 import { useEffect, useState } from "react"
-import { Platform, Pressable, Text, View } from "react-native"
+import { Platform, Pressable, View } from "react-native"
 import ColorPicker, {
   ColorFormatsObject,
   HueSlider,
@@ -80,7 +81,7 @@ export default function CustomThemeScreen() {
       className={clsx("px-4 py-6 gap-2", vars(themeColors))}
     >
       <View className="gap-1.5">
-        <Text className="text-[--text]">Background Colors:</Text>
+        <Text>Background Colors:</Text>
         <View className="flex-row -m-1">
           <ThemeColor
             label="Main"
@@ -107,7 +108,7 @@ export default function CustomThemeScreen() {
       </View>
 
       <View className="gap-1.5">
-        <Text className="text-[--text]">Text Colors:</Text>
+        <Text>Text Colors:</Text>
         <View className="flex-row -m-1">
           <ThemeColor
             label="Main"
@@ -134,7 +135,7 @@ export default function CustomThemeScreen() {
       </View>
 
       <View className="gap-1.5">
-        <Text className="text-[--text]">Utility Colors:</Text>
+        <Text>Utility Colors:</Text>
         <View className="flex-row -m-1">
           <ThemeColor
             label="Primary"
@@ -202,7 +203,7 @@ function ThemeColor({
         </View>
       </Pressable>
 
-      <Text className="text-sm text-[--text]">{label}</Text>
+      <Text size="sm">{label}</Text>
     </View>
   )
 }

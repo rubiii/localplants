@@ -1,11 +1,12 @@
 import Button from "@/components/Button"
 import ScrollableScreenContainer from "@/components/ScrollableScreenContainer"
+import Text from "@/components/Text"
 import useNavigation from "@/hooks/useNavigation"
 import { MyAppAccount, Plant, PlantCollection, PlantType } from "@/schema"
 import type { NativeStackNavigationOptions } from "@react-navigation/native-stack"
 import { Group } from "jazz-tools"
 import { useAccount } from "jazz-tools/expo"
-import { Text, View } from "react-native"
+import { View } from "react-native"
 
 export const routeOptions: NativeStackNavigationOptions = {
   title: "Plant Invite",
@@ -71,7 +72,7 @@ export default function AcceptSharedPlantScreen() {
       {valid ? (
         <>
           <View className="flex-1 gap-6">
-            <Text className="text-[--text]">
+            <Text>
               {sharerName || sharerID} wants to share
               {"\n"}
               one of their plants with you.
@@ -80,7 +81,7 @@ export default function AcceptSharedPlantScreen() {
           <Button onPress={acceptInvite} title="Accept" size="large" />
         </>
       ) : (
-        <Text className="text-[--text]">Invalid Invite</Text>
+        <Text>Invalid Invite</Text>
       )}
     </ScrollableScreenContainer>
   )

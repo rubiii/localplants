@@ -2,6 +2,7 @@ import Icon from "@/components/Icon"
 import IconButton from "@/components/IconButton"
 import ScrollableScreenContainer from "@/components/ScrollableScreenContainer"
 import SmallButton from "@/components/SmallButton"
+import Text from "@/components/Text"
 import useNavigation, { RootStackParamList } from "@/hooks/useNavigation"
 import useTheme from "@/hooks/useTheme"
 import timeAgo from "@/lib/timeAgo"
@@ -17,7 +18,6 @@ import { useEffect } from "react"
 import {
   ActivityIndicator,
   Pressable,
-  Text,
   useWindowDimensions,
   View,
 } from "react-native"
@@ -56,12 +56,12 @@ export default function PlantScreeen() {
     <ScrollableScreenContainer className="p-4">
       <PrimaryImageView primaryImageId={primaryImageId} />
 
-      <Text className="pl-2.5 mt-4 text-[--text] font-semibold text-4xl text-center">
+      <Text size="4xl" weight={700} className="pl-2.5 mt-4 text-center">
         {plant?.name || title}
       </Text>
 
       {relativeAquiredAt ? (
-        <Text className="pl-2.5 text-[--secondaryText] text-center">
+        <Text color="secondary" className="pl-2.5 text-center">
           Established: {relativeAquiredAt}
         </Text>
       ) : null}
@@ -184,37 +184,39 @@ function Identity({
   return (
     <Pressable onPress={openIdentity} className="mt-8 gap-4 items-center">
       <View className="items-center">
-        <Text className="text-xs text-[--secondaryText]">Scientific name</Text>
-        <Text className="text-xl text-center text-[--text] max-w-[80%]">
+        <Text size="xs" color="secondary">
+          Scientific name
+        </Text>
+        <Text size="xl" className="text-center max-w-[80%]">
           {result.scientificName}
         </Text>
       </View>
 
       <View className="items-center">
-        <Text className="text-xs text-[--secondaryText]">Genus</Text>
-        <Text className="text-center text-[--text]">
-          {result.scientificGenusName}
+        <Text size="xs" color="secondary">
+          Genus
         </Text>
+        <Text className="text-center">{result.scientificGenusName}</Text>
       </View>
 
       <View className="items-center">
-        <Text className="text-xs text-[--secondaryText]">Family</Text>
-        <Text className="text-center text-[--text]">
-          {result.scientificFamilyName}
+        <Text size="xs" color="secondary">
+          Family
         </Text>
+        <Text className="text-center">{result.scientificFamilyName}</Text>
       </View>
 
       <View className="items-center">
-        <Text className="text-xs text-[--secondaryText]">
+        <Text size="xs" color="secondary">
           Suggested watering schedule
         </Text>
         {wateringRecommendation ? (
           <>
-            <Text className="text-center text-[--text]">
+            <Text className="text-center">
               every {wateringRecommendation.minDays}–
               {wateringRecommendation.maxDays} days
             </Text>
-            <Text className="text-sm text-center text-[--mutedText]">
+            <Text size="sm" color="muted" className="text-center">
               ({wateringRecommendation.note})
             </Text>
           </>
@@ -267,7 +269,8 @@ function PlantImageView({ plantImage }: { plantImage: PlantImageType }) {
   return (
     <View className="items-center gap-2">
       {plantImage.emote ? (
-        <Icon.MaterialCommunity
+        <Icon
+          community
           name={`emoticon-${plantImage.emote}-outline` as any}
           className="text-[--primary]"
           size={24}
@@ -275,10 +278,10 @@ function PlantImageView({ plantImage }: { plantImage: PlantImageType }) {
       ) : null}
 
       <View className="items-center gap-1">
-        <Text className="text-[--secondaryText]">
+        <Text color="secondary">
           {weekday}, {day}. {month} {year}
         </Text>
-        <Text className="text-[--mutedText]">{time}</Text>
+        <Text color="muted">{time}</Text>
       </View>
 
       {plantImage?.image ? (
@@ -300,7 +303,7 @@ function PlantImageView({ plantImage }: { plantImage: PlantImageType }) {
       ) : null}
 
       {plantImage.note?.length ? (
-        <Text className="text-lg mt-2 text-[--secondaryText]">
+        <Text size="lg" color="secondary" className="mt-2">
           {plantImage.note}
         </Text>
       ) : null}

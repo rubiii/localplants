@@ -1,10 +1,11 @@
 import Button from "@/components/Button"
 import ListItem from "@/components/ListItem"
 import ScrollableScreenContainer from "@/components/ScrollableScreenContainer"
+import Text from "@/components/Text"
 import useNavigation from "@/hooks/useNavigation"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import type { NativeStackNavigationOptions } from "@react-navigation/native-stack"
-import { Text, View } from "react-native"
+import { View } from "react-native"
 
 export const routeOptions: NativeStackNavigationOptions = {
   title: "Local Plants",
@@ -23,9 +24,11 @@ export default function WelcomeScreen() {
 
   return (
     <ScrollableScreenContainer className="px-4 landscape:pl-20 pt-24 landscape:pt-8 pb-8">
-      <Text className="text-6xl font-bold text-[--primary]">Welcome</Text>
+      <Text size="6xl" weight={700} color="primary">
+        Welcome
+      </Text>
 
-      <Text className="mt-2 text-xl text-[--text] leading-snug w-10/12">
+      <Text size="xl" className="mt-2 leading-snug w-10/12">
         Local Plants is a new kind of software based on Local-first ideals
       </Text>
 

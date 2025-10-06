@@ -1,6 +1,7 @@
 import Icon from "@/components/Icon"
+import Text from "@/components/Text"
 import { type Hemisphere as HemisphereType } from "@/lib/watering/types"
-import { Pressable, Text, View } from "react-native"
+import { Pressable, View } from "react-native"
 
 export default function HemisphereSelect({
   autoValue,
@@ -60,12 +61,8 @@ function Hemisphere({
       onPressIn={() => onPress(value)}
       className="mx-1 gap-1 items-center"
     >
-      <Icon.Material
-        name={icon as any}
-        className={active ? "text-[--primary]" : "text-[--mutedText]"}
-        size={24}
-      />
-      <Text className="break-words text-xs text-center text-[--mutedText]">
+      <Icon name={icon as any} size={24} color={active ? "primary" : "muted"} />
+      <Text color="muted" size="xs" className="break-words text-center">
         {title}
       </Text>
     </Pressable>

@@ -1,5 +1,5 @@
-import { clsx } from "clsx"
-import { Pressable, Text } from "react-native"
+import Text from "@/components/Text"
+import { Pressable } from "react-native"
 
 export default function HeaderTextButton({
   text,
@@ -18,12 +18,10 @@ export default function HeaderTextButton({
       onPress={() => !disabled && onPress && onPress()}
     >
       <Text
-        className={clsx({
-          "text-[--text] group-active:text-[--primary]":
-            !disabled && variant === "default",
-          "text-[--primary]": !disabled && variant === "primary",
-          "text-[--mutedText]": disabled,
-        })}
+        color={
+          disabled ? "muted" : variant === "primary" ? "primary" : undefined
+        }
+        activeColor={variant === "default" ? "primary" : undefined}
       >
         {text}
       </Text>

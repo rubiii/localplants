@@ -1,17 +1,17 @@
 import Button from "@/components/Button"
 import HeaderTextButton from "@/components/HeaderTextButton"
-import Icon, { Material, MaterialCommunity } from "@/components/Icon"
+import Icon from "@/components/Icon"
 import ListItem from "@/components/ListItem"
 import ScrollableScreenContainer from "@/components/ScrollableScreenContainer"
+import Text from "@/components/Text"
 import TextField from "@/components/TextField"
 import useNavigation from "@/hooks/useNavigation"
 import useTheme from "@/hooks/useTheme"
 import { MyAppAccount } from "@/schema"
 import type { NativeStackNavigationOptions } from "@react-navigation/native-stack"
-import { clsx } from "clsx"
 import { useAccount, useIsAuthenticated } from "jazz-tools/expo"
 import { useState } from "react"
-import { Platform, Pressable, Text, View } from "react-native"
+import { Platform, Pressable, View } from "react-native"
 import ContextMenu from "react-native-context-menu-view"
 
 export const routeOptions: NativeStackNavigationOptions = {
@@ -59,11 +59,11 @@ export default function AccountScreen() {
 
       {isAuthenticated ? (
         <View className="gap-2">
-          <Text className="ml-6 text-lg text-[--text]">You’re logged in.</Text>
+          <Text className="ml-6 text-lg">You’re logged in.</Text>
         </View>
       ) : (
         <View className="gap-2">
-          <Text className="ml-6 text-lg text-[--text]">Authentication</Text>
+          <Text className="ml-6 text-lg">Authentication</Text>
           <View className="px-5 py-3 rounded-lg bg-[--card]">
             <ListItem text="Keep your data if you lose this device" />
             <ListItem text="Share data with family and friends" />
@@ -78,17 +78,6 @@ export default function AccountScreen() {
         </View>
       )}
 
-      {/*<DisabledTextField label="Account State" value={accountState} />*/}
-
-      {/*<View>
-        <Text className="text-[--text]">PlantNetApi:</Text>
-        <Text className="text-[--text]">
-          remainingRequests: {me?.root.plantNetApi.remainingRequests}
-        </Text>
-        <Text className="text-[--text]">
-          resetInSeconds: {me?.root.plantNetApi.resetInSeconds}
-        </Text>
-      </View>*/}
       <ThemeSelect />
     </ScrollableScreenContainer>
   )
@@ -106,7 +95,7 @@ function ThemeSelect() {
 
   return (
     <View className="py-2 gap-2.5">
-      <Text className="px-6 text-sm text-[--text]">Theme</Text>
+      <Text className="px-6 text-sm">Theme</Text>
 
       <View className="px-6 flex-row gap-3">
         <ThemeButton
@@ -163,13 +152,11 @@ function ThemeSelect() {
             onPress={() => navigation.navigate("CustomTheme")}
             className="w-14 aspect-square items-center justify-center rounded-lg border border-[--border]"
           >
-            <Icon.MaterialCommunity
+            <Icon
+              community
               name="plus"
               size={24}
-              className={clsx({
-                "text-[--text]": theme === "custom",
-                "text-[--mutedText]": theme !== "custom",
-              })}
+              color={theme === "custom" ? undefined : "muted"}
             />
           </Pressable>
         ) : null}
@@ -191,20 +178,16 @@ function ThemeButton({
   community?: boolean
   active?: boolean
 }) {
-  const IconType = community ? MaterialCommunity : Material
-
   return (
     <Pressable
       onPress={onPress}
       className="w-14 aspect-square items-center justify-center rounded-lg border border-[--border]"
     >
-      <IconType
+      <Icon
+        community={community}
         name={icon as any}
         size={size}
-        className={clsx({
-          "text-[--text]": active,
-          "text-[--mutedText]": !active,
-        })}
+        color={active ? "text" : "muted"}
       />
     </Pressable>
   )

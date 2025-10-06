@@ -1,4 +1,5 @@
 import useTheme from "@/hooks/useTheme"
+import { hexToRgb, luminance } from "@/lib/colorUtils"
 import AcceptSharedPlantScreen, {
   routeOptions as acceptSharedPlantRouteOptions,
 } from "@/screens/AcceptSharedPlantScreen"
@@ -26,6 +27,9 @@ import EditCollectionScreen, {
 import HomeScreen, {
   routeOptions as homeRouteOptions,
 } from "@/screens/HomeScreen"
+import PermissionsScreen, {
+  routeOptions as permissionsRouteOptions,
+} from "@/screens/PermissionsScreen"
 import AddPlantImageScreen, {
   routeOptions as addPlantImageRouteOptions,
 } from "@/screens/Plant/AddPlantImageScreen"
@@ -44,7 +48,6 @@ import PlantImageModal, {
 import PlantScreen, {
   routeOptions as plantRouteOptions,
 } from "@/screens/Plant/PlantScreen"
-import RemovePlantScreen from "@/screens/Plant/RemovePlantScreen"
 import SharePlantScreen, {
   routeOptions as sharePlantRouteOptions,
 } from "@/screens/Plant/SharePlantScreen"
@@ -53,62 +56,9 @@ import WelcomeScreen, {
 } from "@/screens/WelcomeScreen"
 import { NavigationContainer } from "@react-navigation/native"
 import type { NativeStackNavigationOptions } from "@react-navigation/native-stack"
-import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import * as Linking from "expo-linking"
-import { InviteSecret } from "jazz-tools"
-import { hexToRgb, luminance } from "./lib/colorUtils"
-import RemoveCollectionScreen, {
-  routeOptions as removeCollectionRouteOptions,
-} from "./screens/Collection/RemoveCollectionScreen"
-import PermissionsScreen, {
-  routeOptions as permissionsRouteOptions,
-} from "./screens/PermissionsScreen"
+import Stack from "./Stack"
 
-export type RootStackParamList = {
-  Welcome: undefined
-  Permissions: undefined
-  AcceptSharedPlant: {
-    valueID: string
-    inviteSecret: InviteSecret
-    sharerID: string
-    sharerName: string
-  }
-  Plants: undefined
-  Collection: {
-    title: string
-    collectionId: string
-    readOnly: boolean
-  }
-  AddCollection: undefined
-  EditCollection: {
-    collectionName: string
-    collectionId: string
-  }
-  RemoveCollection: {
-    collectionName: string
-    collectionId: string
-  }
-  Plant: {
-    title: string
-    plantId: string
-    primaryImageId: string
-    collectionId: string
-    readOnly: boolean
-  }
-  Account: undefined
-  Auth: undefined
-  Login: { accountName: string; signUp?: boolean }
-  CustomTheme: { customThemeName: string } | undefined
-  PlantImageModal: { plantImageId: string }
-  AddPlant: { collectionId: string }
-  EditPlant: { plantId: string; plantName: string; collectionId: string }
-  Identity: { plantId: string; plantName: string }
-  SharePlant: { plantId: string }
-  RemovePlant: { plantId: string; collectionId: string }
-  AddPlantImage: { plantId: string }
-}
-
-const Stack = createNativeStackNavigator<RootStackParamList>()
 const prefix = Linking.createURL("/")
 
 export default function Navigation({ skipWelcome }: { skipWelcome: boolean }) {
@@ -123,11 +73,6 @@ export default function Navigation({ skipWelcome }: { skipWelcome: boolean }) {
   const modalScreenOptions: NativeStackNavigationOptions = {
     presentation: "modal",
     headerStyle: { backgroundColor: "transparent" },
-  }
-  const transparentModalScreenOptions: NativeStackNavigationOptions = {
-    presentation: "transparentModal",
-    headerShown: false,
-    animation: "none",
   }
 
   return (
@@ -234,13 +179,6 @@ export default function Navigation({ skipWelcome }: { skipWelcome: boolean }) {
             options={sharePlantRouteOptions}
           />
         </Stack.Group>
-        <Stack.Group screenOptions={transparentModalScreenOptions}>
-          <Stack.Screen
-            name="RemovePlant"
-            component={RemovePlantScreen}
-            options={transparentModalScreenOptions}
-          />
-        </Stack.Group>
 
         {/* Collection modals */}
         <Stack.Group screenOptions={modalScreenOptions}>
@@ -253,13 +191,6 @@ export default function Navigation({ skipWelcome }: { skipWelcome: boolean }) {
             name="EditCollection"
             component={EditCollectionScreen}
             options={editCollectionRouteOptions}
-          />
-        </Stack.Group>
-        <Stack.Group screenOptions={transparentModalScreenOptions}>
-          <Stack.Screen
-            name="RemoveCollection"
-            component={RemoveCollectionScreen}
-            options={removeCollectionRouteOptions}
           />
         </Stack.Group>
       </Stack.Navigator>

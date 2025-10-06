@@ -1,12 +1,14 @@
 import Button from "@/components/Button"
-import Icon from "@/components/Icon"
+import Icon, { MaterialCommunityIcon } from "@/components/Icon"
 import ScrollableScreenContainer from "@/components/ScrollableScreenContainer"
+import Text from "@/components/Text"
 import useCameraPermission from "@/hooks/useCameraPermission"
 import useGalleryPermission from "@/hooks/useGalleryPermission"
 import useNavigation from "@/hooks/useNavigation"
+import { ThemeColor } from "@/theme"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import type { NativeStackNavigationOptions } from "@react-navigation/native-stack"
-import { Pressable, Text, View } from "react-native"
+import { Pressable, View } from "react-native"
 import { ResultMap } from "react-native-permissions/dist/typescript/results"
 import { SafeAreaView } from "react-native-safe-area-context"
 
@@ -32,7 +34,9 @@ export default function PermissionsScreen() {
 
   return (
     <ScrollableScreenContainer className="px-4 landscape:pl-20 pt-24 landscape:pt-8 pb-8">
-      <Text className="text-6xl font-bold text-[--primary]">Permissions</Text>
+      <Text color="primary" weight={700} size="6xl">
+        Permissions
+      </Text>
 
       <View className="gap-4 mb-12">
         <CameraPermissions
@@ -67,18 +71,16 @@ function CameraPermissions({
       <View className="flex-1">
         <View className="flex-row items-end">
           <View className="flex-row flex-grow items-center">
-            <Icon.MaterialCommunity
-              name="camera-outline"
-              className="text-[--text]"
-              size={24}
-            />
-            <Text className="ml-3 text-2xl text-[--text]">Camera</Text>
+            <Icon community name="camera-outline" size={24} />
+            <Text size="2xl" className="ml-3">
+              Camera
+            </Text>
           </View>
 
           <ConfigureButton configure={configure} status={status} />
         </View>
 
-        <Text className="mt-2 text-[--secondaryText]">
+        <Text color="secondary" className="mt-2">
           Access front and back camera
           {"\n"}
           for taking photos of your plants.
@@ -100,18 +102,16 @@ function GalleryPermissions({
       <View className="flex-1">
         <View className="flex-row items-end">
           <View className="flex-row flex-grow items-center">
-            <Icon.MaterialCommunity
-              name="image-multiple-outline"
-              className="text-[--text]"
-              size={24}
-            />
-            <Text className="ml-3 text-2xl text-[--text]">Photo library</Text>
+            <Icon community name="image-multiple-outline" size={24} />
+            <Text size="2xl" className="ml-3">
+              Photo library
+            </Text>
           </View>
 
           <ConfigureButton configure={configure} status={status} />
         </View>
 
-        <Text className="mt-2 text-[--secondaryText]">
+        <Text color="secondary" className="mt-2">
           Access your photo library to select
           {"\n"}
           existing photos of your plants.
@@ -134,26 +134,26 @@ const ConfigureButton = ({
         onPress={configure}
         className="group rounded-full py-1 px-2.5 bg-[--primary] active:bg-[--card]"
       >
-        <Text className="text-[--background] group-active:text-[--primary]">
+        <Text color="background" activeColor="primary">
           Configure
         </Text>
       </Pressable>
     )
   }
 
-  let className = ""
-  let icon = ""
+  let color: ThemeColor | undefined
+  let icon: MaterialCommunityIcon = "circle-outline"
   if (status === "unavailable") {
-    icon = "error-outline"
-    className = "text-[--error]"
+    icon = "alert-circle-outline"
+    color = "error"
   } else if (status === "granted" || status === "limited") {
-    icon = "check-circle"
-    className = "text-[--success]"
+    icon = "check-circle-outline"
+    color = "success"
   }
 
   return (
     <Pressable onPress={configure}>
-      <Icon.Material name={icon as any} className={className} size={26} />
+      <Icon community name={icon} color={color} size={26} />
     </Pressable>
   )
 }

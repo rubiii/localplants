@@ -38,10 +38,11 @@ export default function PlantImageModal() {
         )}
         onPress={closeModal}
       >
-        <Icon.MaterialCommunity
+        <Icon
+          community
           name="close-circle-outline"
           size={35}
-          className="text-[--text] group-active:text-[--background]"
+          activeColor="background"
         />
       </Pressable>
 

@@ -1,6 +1,7 @@
+import Text from "@/components/Text"
 import { clsx } from "clsx"
 import { ReactNode } from "react"
-import { Text, TextInput, View } from "react-native"
+import { TextInput, View } from "react-native"
 
 export default function TextField({
   value,
@@ -51,7 +52,11 @@ export default function TextField({
         </View>
       </View>
 
-      {note ? <Text className="px-6 text-[--mutedText]">{note}</Text> : null}
+      {note ? (
+        <Text color="muted" className="px-6">
+          {note}
+        </Text>
+      ) : null}
     </View>
   )
 }

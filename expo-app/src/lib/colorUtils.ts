@@ -1,7 +1,6 @@
 const RED = 0.2126
 const GREEN = 0.7152
 const BLUE = 0.0722
-
 const GAMMA = 2.4
 
 type RgbValueType = { r: number; g: number; b: number }

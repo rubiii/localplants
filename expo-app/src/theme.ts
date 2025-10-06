@@ -9,6 +9,29 @@ export type ThemeColors = {
   success: string
   error: string
 }
+export type ThemeColor =
+  | "text"
+  | "secondary"
+  | "muted"
+  | "background"
+  | "primary"
+  | "success"
+  | "error"
+
+export type FontSize =
+  | "xs"
+  | "sm"
+  | "base"
+  | "lg"
+  | "xl"
+  | "2xl"
+  | "3xl"
+  | "4xl"
+  | "5xl"
+  | "6xl"
+  | "7xl"
+  | "8xl"
+  | "9xl"
 
 export const defaultThemes: Record<string, ThemeColors> = {
   light: {

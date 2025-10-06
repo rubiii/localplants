@@ -14,11 +14,7 @@ export default function IconButton({
   return (
     <Pressable onPress={onPress} className={clsx("group", className)}>
       <View className="p-1 items-center justify-center">
-        <Icon.Material
-          name={icon as any}
-          size={36}
-          className="text-[--text] group-active:text-[--primary]"
-        />
+        <Icon name={icon as any} size={36} activeColor="primary" />
       </View>
     </Pressable>
   )

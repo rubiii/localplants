@@ -1,5 +1,6 @@
+import Text from "@/components/Text"
 import { clsx } from "clsx"
-import { Pressable, Text, View } from "react-native"
+import { Pressable, View } from "react-native"
 
 export default function SmallButton({
   text,
@@ -18,7 +19,7 @@ export default function SmallButton({
           "group-active:bg-[--primary] group-active:border-[--primary]",
         )}
       >
-        <Text className="text-[--secondaryText] group-active:text-[--background]">
+        <Text color="secondary" activeColor="background">
           {text}
         </Text>
       </View>

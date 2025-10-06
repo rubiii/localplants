@@ -91,10 +91,11 @@ export default function EditPlantScreen() {
             onPress={() => setName(newRandomPlantName(name))}
             className="group items-center justify-center"
           >
-            <Icon.Material
+            <Icon
               name="auto-awesome"
               size={19}
-              className="text-[--secondaryText] group-active:text-[--primary]"
+              color="secondary"
+              activeColor="primary"
             />
           </Pressable>
         }

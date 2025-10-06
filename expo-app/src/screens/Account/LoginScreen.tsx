@@ -1,6 +1,7 @@
 import Button from "@/components/Button"
 import HeaderTextButton from "@/components/HeaderTextButton"
 import ScrollableScreenContainer from "@/components/ScrollableScreenContainer"
+import Text from "@/components/Text"
 import TextField from "@/components/TextField"
 import useNavigation, { RootStackParamList } from "@/hooks/useNavigation"
 import wordlist from "@/lib/wordlist"
@@ -8,7 +9,7 @@ import { RouteProp } from "@react-navigation/native"
 import type { NativeStackNavigationOptions } from "@react-navigation/native-stack"
 import { usePassphraseAuth } from "jazz-tools/expo"
 import { useState } from "react"
-import { Platform, Text, View } from "react-native"
+import { Platform, View } from "react-native"
 
 export const routeOptions = ({
   route,
@@ -69,7 +70,7 @@ export default function LoginScreen() {
       />
       {error ? (
         <View className="mt-1">
-          <Text className="text-[--error]">{error}</Text>
+          <Text color="error">{error}</Text>
         </View>
       ) : null}
 

@@ -35,13 +35,12 @@ export default function HeaderContextMenu({
           },
         )}
       >
-        <Icon.MaterialCommunity
+        <Icon
+          community
           name={icon as any}
-          className={clsx("group-active:text-[--background]", {
-            "text-[--text]": !open,
-            "text-[--background]": open,
-          })}
           size={20}
+          color={open ? "background" : undefined}
+          activeColor="background"
         />
       </Pressable>
     </ContextMenu>

@@ -30,12 +30,11 @@ function Emote({
 }) {
   return (
     <Pressable onPressIn={() => onPress(name)}>
-      <Icon.MaterialCommunity
+      <Icon
+        community
         name={`emoticon-${name}-outline` as any}
-        className={
-          activeEmote === name ? "text-[--primary]" : "text-[--mutedText]"
-        }
         size={36}
+        color={activeEmote === name ? "primary" : "muted"}
       />
     </Pressable>
   )

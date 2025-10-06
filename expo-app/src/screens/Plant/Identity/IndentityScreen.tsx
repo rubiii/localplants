@@ -1,5 +1,6 @@
 import Button from "@/components/Button"
 import ScrollableScreenContainer from "@/components/ScrollableScreenContainer"
+import Text from "@/components/Text"
 import config from "@/config"
 import useNavigation from "@/hooks/useNavigation"
 import {
@@ -12,7 +13,7 @@ import { type NativeStackNavigationOptions } from "@react-navigation/native-stac
 import { Group } from "jazz-tools"
 import { experimental_useInboxSender, useCoState } from "jazz-tools/expo"
 import { useEffect } from "react"
-import { Text, View } from "react-native"
+import { View } from "react-native"
 import HeaderLeft from "./HeaderLeft"
 import IdentificationState from "./IdentificationState"
 import IdentityState from "./IdentityState"
@@ -92,17 +93,17 @@ export default function PlantIdentityScreen() {
 
   return (
     <ScrollableScreenContainer className="px-4 py-6 gap-16 items-center">
-      <Text className="text-lg text-[--text] text-center">
+      <Text size="lg" className="text-center">
         Identifying your plant enables the app{"\n"}
         to suggest better watering schedules.
       </Text>
 
       <View className="gap-4">
-        <Text className="text-sm text-[--text] text-center">
+        <Text size="sm" className="text-center">
           Identification is
         </Text>
         <PlantNetLogo />
-        <Text className="text-sm text-[--secondaryText] text-center">
+        <Text size="sm" color="secondary" className="text-center">
           (requires your plant’s primary{"\n"}
           photo being send to Pl@ntNet)
         </Text>

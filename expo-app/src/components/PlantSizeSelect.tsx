@@ -1,7 +1,8 @@
 import Icon from "@/components/Icon"
+import Text from "@/components/Text"
 import plantSizes from "@/lib/watering/plantSizes"
 import { PlantSize } from "@/lib/watering/types"
-import { Pressable, Text, View } from "react-native"
+import { Pressable, View } from "react-native"
 
 export default function PlantSizeSelect({
   value,
@@ -12,7 +13,6 @@ export default function PlantSizeSelect({
 }) {
   return (
     <View className="gap-1">
-      {/*<Text className="ml-6 text-[--text]">Pot size:</Text>*/}
       <View className="px-4 flex-row gap-3">
         <SelectItem value="xs" onPress={setValue} active={value === "xs"} />
         <SelectItem value="sm" onPress={setValue} active={value === "sm"} />
@@ -43,12 +43,13 @@ function SelectItem({
 
   return (
     <Pressable onPressIn={() => onPress(value)} className="items-center">
-      <Icon.MaterialCommunity
+      <Icon
+        community
         name={iconMapping[value] as any}
-        className={active ? "text-[--primary]" : "text-[--mutedText]"}
+        color={active ? "primary" : "muted"}
         size={36}
       />
-      <Text className="text-xs leading-none text-center text-[--mutedText]">
+      <Text color="muted" className="text-xs leading-none text-center">
         {diameterRangeCm[0]}–{diameterRangeCm[1]}
         {"\n"}cm
       </Text>

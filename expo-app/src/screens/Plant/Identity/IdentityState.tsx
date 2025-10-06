@@ -1,9 +1,10 @@
 import ScrollableScreenContainer from "@/components/ScrollableScreenContainer"
+import Text from "@/components/Text"
 import useNavigation from "@/hooks/useNavigation"
 import { PlantIdentity } from "@/schema"
 import { useCoState } from "jazz-tools/expo"
 import { useEffect } from "react"
-import { Text, View } from "react-native"
+import { View } from "react-native"
 import HeaderLeft from "./HeaderLeft"
 
 export default function IdentityState({
@@ -36,22 +37,28 @@ export default function IdentityState({
   return (
     <ScrollableScreenContainer className="px-4 py-6 gap-6">
       <View>
-        <Text className="text-xs text-[--secondaryText]">Scientific name</Text>
-        <Text className="text-xl leading-tight text-[--text]">
+        <Text size="sm" color="secondary">
+          Scientific name
+        </Text>
+        <Text size="lg" className="leading-tight">
           {result?.scientificName}
         </Text>
       </View>
 
       <View>
-        <Text className="text-xs text-[--secondaryText]">Genus</Text>
-        <Text className="text-lg leading-tight text-[--text]">
+        <Text size="sm" color="secondary">
+          Genus
+        </Text>
+        <Text size="lg" className="leading-tight">
           {result?.scientificGenusName}
         </Text>
       </View>
 
       <View>
-        <Text className="text-xs text-[--secondaryText]">Family</Text>
-        <Text className="text-lg leading-tight text-[--text]">
+        <Text size="sm" color="secondary">
+          Family
+        </Text>
+        <Text size="lg" className="leading-tight">
           {result?.scientificFamilyName}
         </Text>
       </View>

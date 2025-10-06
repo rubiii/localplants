@@ -3,13 +3,14 @@ import HeaderTextButton from "@/components/HeaderTextButton"
 import Icon from "@/components/Icon"
 import ListItem from "@/components/ListItem"
 import ScrollableScreenContainer from "@/components/ScrollableScreenContainer"
+import Text from "@/components/Text"
 import useNavigation from "@/hooks/useNavigation"
 import wordlist from "@/lib/wordlist"
 import { MyAppAccount } from "@/schema"
 import type { NativeStackNavigationOptions } from "@react-navigation/native-stack"
 import * as Clipboard from "expo-clipboard"
 import { useAccount, usePassphraseAuth } from "jazz-tools/expo"
-import { Platform, Pressable, Text, View } from "react-native"
+import { Platform, Pressable, View } from "react-native"
 
 export const routeOptions: NativeStackNavigationOptions = {
   title: "Authentication",
@@ -65,7 +66,7 @@ export default function AuthScreen() {
       </View>
 
       <View className="mt-4 gap-3">
-        <Text className="text-[--text]">
+        <Text>
           Authenticate using the following passphrase.{"\n"}
           Just click to copy it and store it somewhere save.{"\n"}
           When you’re ready click Sign up.
@@ -76,13 +77,14 @@ export default function AuthScreen() {
           className="group flex-row px-5 py-3 rounded-lg bg-[--card]"
         >
           <View className="w-10/12">
-            <Text className="text-[--text]">{auth.passphrase}</Text>
+            <Text>{auth.passphrase}</Text>
           </View>
           <View className="w-2/12 items-end justify-center">
-            <Icon.Material
+            <Icon
               name="content-copy"
               size={20}
-              className="text-[--mutedText] group-active:text-[--primary]"
+              color="muted"
+              activeColor="primary"
             />
           </View>
         </Pressable>
@@ -93,7 +95,7 @@ export default function AuthScreen() {
       </View>
 
       <View className="gap-2">
-        <Text className="text-[--text]">Aready have an account?</Text>
+        <Text>Aready have an account?</Text>
         <View className="items-start">
           <Button title="Login" onPress={openLogin} />
         </View>

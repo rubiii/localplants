@@ -2,6 +2,7 @@ import HeaderIconButton from "@/components/HeaderIconButton"
 import HeaderView from "@/components/HeaderView"
 import Icon from "@/components/Icon"
 import ScrollableScreenContainer from "@/components/ScrollableScreenContainer"
+import Text from "@/components/Text"
 import useNavigation from "@/hooks/useNavigation"
 import {
   MyAppAccount,
@@ -13,7 +14,7 @@ import type { NativeStackNavigationOptions } from "@react-navigation/native-stac
 import { FlashList } from "@shopify/flash-list/src"
 import * as Haptics from "expo-haptics"
 import { Image, useAccount, useCoState } from "jazz-tools/expo"
-import { Pressable, Text, View } from "react-native"
+import { Pressable, View } from "react-native"
 
 export const routeOptions: NativeStackNavigationOptions = {
   title: "Your Plants",
@@ -108,17 +109,17 @@ function PlantCollectionView({
   return (
     <View className="gap-4">
       <Pressable onPress={openCollection} className="group flex-row items-end">
-        <Text
-          className="text-[--text]"
-          style={{ fontFamily: "Inter_900Black", fontSize: 28, lineHeight: 28 }}
-        >
+        <Text size="2xl" weight={800}>
           {collectionName}
         </Text>
 
-        <Icon.MaterialCommunity
+        <Icon
+          community
           name="chevron-right"
           size={28}
-          className="-ml-1 text-[--mutedText] group-active:text-[--primary]"
+          color="muted"
+          activeColor="primary"
+          className="-ml-1"
         />
       </Pressable>
 

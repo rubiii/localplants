@@ -1,12 +1,13 @@
 import HeaderTextButton from "@/components/HeaderTextButton"
 import ScrollableScreenContainer from "@/components/ScrollableScreenContainer"
+import Text from "@/components/Text"
 import TextField from "@/components/TextField"
 import useNavigation from "@/hooks/useNavigation"
 import { PlantCollection } from "@/schema"
 import type { NativeStackNavigationOptions } from "@react-navigation/native-stack"
 import { useCoState } from "jazz-tools/expo"
 import { useEffect, useState } from "react"
-import { Platform, Text, View } from "react-native"
+import { Platform, View } from "react-native"
 
 export const routeOptions: NativeStackNavigationOptions = {
   title: "Edit Collection",
@@ -72,7 +73,7 @@ export default function EditCollectionScreen() {
 
       {collection?.sharedBy ? (
         <View className="px-6">
-          <Text className="text-[--mutedText]">
+          <Text color="muted">
             This collection was shared with you
             {"\n"}
             by {collection.sharedBy.name || collection.sharedBy.accountID}

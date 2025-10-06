@@ -1,5 +1,5 @@
-import { clsx } from "clsx"
-import { Text, View } from "react-native"
+import Text from "@/components/Text"
+import { View } from "react-native"
 
 export default function ListItem({
   text,
@@ -11,21 +11,12 @@ export default function ListItem({
   return (
     <View className="flex-row items-baseline">
       <View className="w-4">
-        <Text
-          className={clsx("text-[--text] leading-tight", {
-            "text-xl": size === "md",
-            "text-2xl": size === "lg",
-          })}
-        >
+        <Text size={size === "md" ? "xl" : "2xl"} className="leading-tight">
           •
         </Text>
       </View>
       <View className="flex-1">
-        <Text
-          className={clsx("text-[--text] leading-tight", {
-            "text-lg": size === "lg",
-          })}
-        >
+        <Text size={size === "lg" ? "lg" : undefined} className="leading-tight">
           {text}
         </Text>
       </View>

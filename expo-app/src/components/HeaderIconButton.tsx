@@ -1,4 +1,4 @@
-import { Material, MaterialCommunity } from "@/components/Icon"
+import Icon from "@/components/Icon"
 import { clsx } from "clsx"
 import { Pressable } from "react-native"
 
@@ -13,25 +13,19 @@ export default function HeaderIconButton({
   community?: boolean
   disabled?: boolean
 }) {
-  const IconType = community ? MaterialCommunity : Material
-
   return (
     <Pressable
       className={clsx(
         "group p-1.5 w-9 items-center justify-center aspect-square rounded-full bg-[--card]",
-        {
-          "text-[--background] active:bg-[--primary]": !disabled,
-          "text-[--mutedText]": disabled,
-        },
+        { "active:bg-[--primary]": !disabled },
       )}
       onPress={() => !disabled && onPress()}
     >
-      <IconType
+      <Icon
         name={icon as any}
-        className={clsx({
-          "text-[--text] group-active:text-[--background]": !disabled,
-          "text-[--background]": disabled,
-        })}
+        community={community}
+        color={disabled ? "background" : undefined}
+        activeColor="background"
         size={20}
       />
     </Pressable>

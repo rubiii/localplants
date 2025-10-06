@@ -2,6 +2,7 @@ import Button from "@/components/Button"
 import HeaderTextButton from "@/components/HeaderTextButton"
 import Icon from "@/components/Icon"
 import ScrollableScreenContainer from "@/components/ScrollableScreenContainer"
+import Text from "@/components/Text"
 import useNavigation from "@/hooks/useNavigation"
 import { MyAppAccount, Plant } from "@/schema"
 import type { NativeStackNavigationOptions } from "@react-navigation/native-stack"
@@ -9,7 +10,7 @@ import * as Clipboard from "expo-clipboard"
 import * as Linking from "expo-linking"
 import { createInviteLink, useAccount, useCoState } from "jazz-tools/expo"
 import { useState } from "react"
-import { Platform, Pressable, Text, View } from "react-native"
+import { Platform, Pressable, View } from "react-native"
 import QRCode from "react-qr-code"
 
 export const routeOptions: NativeStackNavigationOptions = {
@@ -63,25 +64,27 @@ export default function SharePlantScreen() {
 function InfoView({ generateInvite }: { generateInvite: () => void }) {
   return (
     <View className="gap-12">
-      <Text className="text-lg text-[--text]">
+      <Text size="lg">
         Click the button to generate a QR code for someone to scan.
       </Text>
 
       <Button onPress={generateInvite} title="Generate QR code" size="large" />
 
       <View>
-        <Text className="font-bold text-[--mutedText]">Privacy info:</Text>
+        <Text weight={700} color="muted">
+          Privacy info:
+        </Text>
 
         <View className="flex-row">
-          <Text className="text-[--mutedText]">{"\u2022 "}</Text>
-          <Text className="text-[--mutedText]">
+          <Text color="muted">{"\u2022 "}</Text>
+          <Text color="muted">
             The other person will not be able to edit your data.
           </Text>
         </View>
 
         <View className="flex-row">
-          <Text className="text-[--mutedText]">{"\u2022 "}</Text>
-          <Text className="text-[--mutedText]">
+          <Text color="muted">{"\u2022 "}</Text>
+          <Text color="muted">
             They will see all current and future data associated with this plant
             like photos and notes.
           </Text>
@@ -101,23 +104,23 @@ function QRCodeView({ inviteLink }: { inviteLink: string }) {
       </View>
 
       <View className="gap-2">
-        <Text className="text-[--secondaryText]">
-          You can also copy and share this link:
-        </Text>
+        <Text color="secondary">You can also copy and share this link:</Text>
 
         <View className="px-5 py-0.5 rounded-lg bg-[--card]">
           <Pressable
             className="group flex-row items-center py-3"
             onPress={copyLink}
           >
-            <Text className="flex-1 text-xs text-[--secondaryText]">
+            <Text size="xs" color="secondary" className="flex-1">
               {inviteLink}
             </Text>
 
-            <Icon.Material
+            <Icon
               name="content-copy"
               size={20}
-              className="ml-3 text-[--secondaryText] group-active:text-[--background]"
+              color="secondary"
+              activeColor="background"
+              className="ml-3"
             />
           </Pressable>
         </View>

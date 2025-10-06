@@ -1,5 +1,6 @@
+import Text from "@/components/Text"
 import { clsx } from "clsx"
-import { Pressable, Text } from "react-native"
+import { Pressable } from "react-native"
 
 export default function Button({
   title,
@@ -31,11 +32,8 @@ export default function Button({
       ])}
     >
       <Text
-        className={clsx({
-          "text-xl": size === "large",
-          "text-[--background] group-active:text-[--primary]": !disabled,
-          "text-[--mutedText]": disabled,
-        })}
+        size={size === "large" ? "xl" : undefined}
+        color={disabled ? "muted" : "background"}
       >
         {title}
       </Text>
