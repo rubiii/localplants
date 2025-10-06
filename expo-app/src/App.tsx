@@ -71,7 +71,7 @@ export default function App() {
     <StrictMode>
       <JazzExpoProvider
         AccountSchema={MyAppAccount}
-        sync={{ peer: config.jazzSyncServer, when: "always" }}
+        sync={{ peer: config.jazzSyncServer, when: "signedUp" }}
       >
         <GestureHandlerRootView>
           <KeyboardProvider>

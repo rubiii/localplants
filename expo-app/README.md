@@ -5,7 +5,6 @@ Local-First Plant care app for iOS and Android build with [Expo](https://expo.de
 ## TODO
 
 [ ] - Use `useSyncConnectionStatus`.  
-[ ] - Disable sync by default and add authentication.  
 [ ] - Add reasonable limits.  
 [ ] - Get on Expo Updates.  
 

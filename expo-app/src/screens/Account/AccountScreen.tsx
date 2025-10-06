@@ -1,6 +1,7 @@
-import DisabledTextField from "@/components/DisabledTextField"
+import Button from "@/components/Button"
 import HeaderTextButton from "@/components/HeaderTextButton"
 import Icon, { Material, MaterialCommunity } from "@/components/Icon"
+import ListItem from "@/components/ListItem"
 import ScrollableScreenContainer from "@/components/ScrollableScreenContainer"
 import TextField from "@/components/TextField"
 import useNavigation from "@/hooks/useNavigation"
@@ -26,25 +27,14 @@ function HeaderLeft() {
 }
 
 export default function AccountScreen() {
-  const { me, agent } = useAccount(MyAppAccount, {
+  const { navigation } = useNavigation<"Account">()
+
+  const { me } = useAccount(MyAppAccount, {
     resolve: { root: { plantNetApi: true }, profile: true },
   })
   const [name, setName] = useState(me?.profile.name)
 
-  // const auth = usePasskeyAuth({ appName: "Local Plants" })
-
   const isAuthenticated = useIsAuthenticated()
-  const isAnonymous = agent.$type$ === "Account" && !isAuthenticated
-  const isGuest = agent.$type$ !== "Account"
-
-  let accountState
-  if (isGuest) {
-    accountState = "Guest mode"
-  } else if (isAnonymous) {
-    accountState = "Anonymous account"
-  } else if (isAuthenticated) {
-    accountState = "Authenticated"
-  }
   const accountID = me?.$jazz.id
 
   const updateProfileName = (name?: string) => {
@@ -52,20 +42,45 @@ export default function AccountScreen() {
     me.profile.$jazz.set("name", name || "")
   }
 
+  const openAuth = async () => {
+    navigation.navigate("Auth")
+  }
+
   return (
     <ScrollableScreenContainer className="px-4 py-6 gap-8">
       <TextField
-        placeholder="Account name"
+        placeholder="Your account name"
         size="large"
         value={name}
         setValue={setName}
         onBlur={updateProfileName}
-        note="When you share a plant or a collection, your account name at that time will be shared as well."
+        note={`ID: ${accountID}`}
       />
 
-      <DisabledTextField label="Account State" value={accountState} />
+      {isAuthenticated ? (
+        <View className="gap-2">
+          <Text className="ml-6 text-lg text-[--text]">You’re logged in.</Text>
+        </View>
+      ) : (
+        <View className="gap-2">
+          <Text className="ml-6 text-lg text-[--text]">Authentication</Text>
+          <View className="px-5 py-3 rounded-lg bg-[--card]">
+            <ListItem text="Keep your data if you lose this device" />
+            <ListItem text="Share data with family and friends" />
+            <ListItem text="Enable identification via Pl@ntNet" />
+          </View>
+          <View className="mt-1 ml-5 self-start">
+            <Button
+              onPress={openAuth}
+              title="Learn more about authentication"
+            />
+          </View>
+        </View>
+      )}
 
-      <View>
+      {/*<DisabledTextField label="Account State" value={accountState} />*/}
+
+      {/*<View>
         <Text className="text-[--text]">PlantNetApi:</Text>
         <Text className="text-[--text]">
           remainingRequests: {me?.root.plantNetApi.remainingRequests}
@@ -73,16 +88,7 @@ export default function AccountScreen() {
         <Text className="text-[--text]">
           resetInSeconds: {me?.root.plantNetApi.resetInSeconds}
         </Text>
-      </View>
-
-      <DisabledTextField
-        label="Account ID"
-        value={accountID}
-        size="small"
-        copyButton={true}
-        note="Click to copy into clipboard."
-      />
-
+      </View>*/}
       <ThemeSelect />
     </ScrollableScreenContainer>
   )
@@ -99,7 +105,7 @@ function ThemeSelect() {
   } = useTheme()
 
   return (
-    <View className="py-4 gap-2.5">
+    <View className="py-2 gap-2.5">
       <Text className="px-6 text-sm text-[--text]">Theme</Text>
 
       <View className="px-6 flex-row gap-3">

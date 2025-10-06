@@ -5,9 +5,15 @@ import AcceptSharedPlantScreen, {
 import AccountScreen, {
   routeOptions as accountRouteOptions,
 } from "@/screens/Account/AccountScreen"
+import AuthScreen, {
+  routeOptions as authRouteOptions,
+} from "@/screens/Account/AuthScreen"
 import CustomThemeScreen, {
   routeOptions as customThemeRouteOptions,
 } from "@/screens/Account/CustomThemeScreen"
+import LoginScreen, {
+  routeOptions as loginRouteOptions,
+} from "@/screens/Account/LoginScreen"
 import AddCollectionScreen, {
   routeOptions as addCollectionRouteOptions,
 } from "@/screens/Collection/AddCollectionScreen"
@@ -90,6 +96,8 @@ export type RootStackParamList = {
     readOnly: boolean
   }
   Account: undefined
+  Auth: undefined
+  Login: { accountName: string; signUp?: boolean }
   CustomTheme: { customThemeName: string } | undefined
   PlantImageModal: { plantImageId: string }
   AddPlant: { collectionId: string }
@@ -171,6 +179,16 @@ export default function Navigation({ skipWelcome }: { skipWelcome: boolean }) {
             name="Account"
             component={AccountScreen}
             options={accountRouteOptions}
+          />
+          <Stack.Screen
+            name="Auth"
+            component={AuthScreen}
+            options={authRouteOptions}
+          />
+          <Stack.Screen
+            name="Login"
+            component={LoginScreen}
+            options={loginRouteOptions}
           />
           <Stack.Screen
             name="CustomTheme"

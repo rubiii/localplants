@@ -27,7 +27,7 @@ export default function TextField({
 }) {
   return (
     <View className="gap-2">
-      <View className="group py-4 border-b border-[--border]">
+      <View className="group py-4 rounded-lg bg-[--card]">
         <View className="flex-row items-end">
           <TextInput
             placeholder={placeholder}
@@ -42,7 +42,7 @@ export default function TextField({
               {
                 "text-lg": size === "small",
                 "text-xl": size === "medium",
-                "text-2xl": size === "large",
+                "text-2xl  leading-tight": size === "large",
               },
             )}
           />

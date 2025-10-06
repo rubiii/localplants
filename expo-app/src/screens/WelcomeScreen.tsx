@@ -1,4 +1,5 @@
 import Button from "@/components/Button"
+import ListItem from "@/components/ListItem"
 import ScrollableScreenContainer from "@/components/ScrollableScreenContainer"
 import useNavigation from "@/hooks/useNavigation"
 import AsyncStorage from "@react-native-async-storage/async-storage"
@@ -29,26 +30,13 @@ export default function WelcomeScreen() {
       </Text>
 
       <View className="my-12">
-        <ListItem text="Works completely offline" />
-        <ListItem text="Fully end-to-end encrypted" />
-        <ListItem text="Your data stays on this device by default" />
-        <ListItem text="Optional sync for backup and sharing" />
+        <ListItem size="lg" text="Works completely offline" />
+        <ListItem size="lg" text="Fully end-to-end encrypted" />
+        <ListItem size="lg" text="Your data stays on this device by default" />
+        <ListItem size="lg" text="Optional sync for backup and sharing" />
       </View>
 
       <Button title="Continue" size="large" onPress={openPermissions} />
     </ScrollableScreenContainer>
-  )
-}
-
-function ListItem({ text }: { text: string }) {
-  return (
-    <View className="flex-row items-center">
-      <View className="w-5">
-        <Text className="text-2xl text-[--text] leading-7">•</Text>
-      </View>
-      <View className="flex-1">
-        <Text className="text-lg text-[--text] leading-snug">{text}</Text>
-      </View>
-    </View>
   )
 }
