@@ -1,4 +1,4 @@
-import { RootStackParamList } from "@/Navigation"
+import { RootStackParamList } from "@/navigation/Stack"
 import {
   RouteProp,
   useNavigation as useReactNativeNavigation,
