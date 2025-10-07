@@ -11,6 +11,7 @@ export default function TextField({
   icon,
   onBlur,
   numberOfLines,
+  maxLength,
   multiline = false,
   autoFocus = false,
   size = "medium",
@@ -22,6 +23,7 @@ export default function TextField({
   icon?: ReactNode
   onBlur?: (value?: string) => void
   numberOfLines?: number
+  maxLength?: number
   multiline?: boolean
   autoFocus?: boolean
   size?: "small" | "medium" | "large"
@@ -37,6 +39,7 @@ export default function TextField({
             value={value}
             autoFocus={autoFocus}
             onChangeText={setValue}
+            maxLength={maxLength}
             onBlur={() => onBlur && onBlur(value)}
             className={clsx(
               "flex-1 px-6 py-0 text-[--text] placeholder:text-[--mutedText]",

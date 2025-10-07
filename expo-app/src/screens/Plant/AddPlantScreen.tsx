@@ -150,6 +150,7 @@ export default function AddPlantScreen() {
         placeholder="What’s their name?"
         value={name}
         setValue={setName}
+        maxLength={50}
         icon={
           <Pressable
             onPress={() => setName(newRandomPlantName(name))}

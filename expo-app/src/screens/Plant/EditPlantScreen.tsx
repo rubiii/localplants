@@ -86,6 +86,7 @@ export default function EditPlantScreen() {
         placeholder="What’s their name?"
         value={name}
         setValue={(value) => setName(value || "")}
+        maxLength={50}
         icon={
           <Pressable
             onPress={() => setName(newRandomPlantName(name))}
