@@ -16,6 +16,7 @@ export default function ScrollableScreenContainer({
       contentInsetAdjustmentBehavior={contentInsetAdjustmentBehavior}
       className="bg-[--background]"
       bottomOffset={64}
+      keyboardShouldPersistTaps="handled"
       {...props}
     >
       <DismissKeyboard className={clsx("flex-1", className)}>
