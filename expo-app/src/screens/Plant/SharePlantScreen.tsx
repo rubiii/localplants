@@ -68,7 +68,7 @@ function InfoView({ generateInvite }: { generateInvite: () => void }) {
         Click the button to generate a QR code for someone to scan.
       </Text>
 
-      <Button onPress={generateInvite} title="Generate QR code" size="large" />
+      <Button onPress={generateInvite} title="Generate QR code" size="lg" />
 
       <View>
         <Text weight={700} color="muted">

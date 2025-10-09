@@ -1,4 +1,4 @@
-import Icon from "@/components/Icon"
+import Icon, { MaterialCommunityIcon } from "@/components/Icon"
 import { clsx } from "clsx"
 import { useState } from "react"
 import { Pressable } from "react-native"
@@ -9,7 +9,7 @@ export default function HeaderContextMenu({
   onPress,
   actions,
 }: {
-  icon: string
+  icon: MaterialCommunityIcon
   onPress: (index: number) => void
   actions: ContextMenuAction[]
 }) {

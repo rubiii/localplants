@@ -1,15 +1,20 @@
 import Text from "@/components/Text"
 import { clsx } from "clsx"
+import { ReactNode } from "react"
 import { Pressable, View } from "react-native"
 
 export default function SmallButton({
-  text,
   onPress,
+  icon,
+  active,
   className,
+  children,
 }: {
-  text: string
-  onPress: () => void
+  onPress?: () => void
+  icon?: ReactNode
+  active?: boolean
   className?: string
+  children: ReactNode
 }) {
   return (
     <Pressable onPress={onPress} className={clsx("group py-3 px-2", className)}>
@@ -20,7 +25,7 @@ export default function SmallButton({
         )}
       >
         <Text color="secondary" activeColor="background">
-          {text}
+          {children}
         </Text>
       </View>
     </Pressable>

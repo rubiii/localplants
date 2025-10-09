@@ -29,8 +29,8 @@ export default function TextField({
   size?: "small" | "medium" | "large"
 }) {
   return (
-    <View className="gap-2">
-      <View className="group py-4 rounded-lg bg-[--card]">
+    <View className="gap-1">
+      <View className="group py-4 rounded-2xl bg-[--card]">
         <View className="flex-row items-end">
           <TextInput
             placeholder={placeholder}
@@ -46,7 +46,7 @@ export default function TextField({
               {
                 "text-lg": size === "small",
                 "text-xl": size === "medium",
-                "text-2xl  leading-tight": size === "large",
+                "text-2xl leading-tight": size === "large",
               },
             )}
           />
@@ -56,7 +56,7 @@ export default function TextField({
       </View>
 
       {note ? (
-        <Text color="muted" className="px-6">
+        <Text color="secondary" className="px-6">
           {note}
         </Text>
       ) : null}

@@ -42,6 +42,8 @@ type BaseProps = {
   className?: string
 }
 
+type Props = (MaterialProps & BaseProps) | (MaterialCommunityProps & BaseProps)
+
 export default function Icon({
   name,
   community,
@@ -49,7 +51,7 @@ export default function Icon({
   activeColor,
   className,
   ...props
-}: (MaterialProps & BaseProps) | (MaterialCommunityProps & BaseProps)) {
+}: Props) {
   const computedClassName = clsx(
     className,
     colorClasses(color),

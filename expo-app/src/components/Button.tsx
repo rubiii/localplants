@@ -1,42 +1,62 @@
-import Text from "@/components/Text"
+import { textSizeClasses } from "@/lib/themeUtils"
+import { FontSize } from "@/theme"
 import { clsx } from "clsx"
-import { Pressable } from "react-native"
+import { Pressable, StyleProp, Text, TextStyle } from "react-native"
+
+type Variant = "primary" | "dangerous" | "disabled"
+
+const VARIANTS: Record<Variant, Record<"wrapper" | "text", string>> = {
+  primary: {
+    wrapper: "bg-[--primary]",
+    text: "text-[--background]",
+  },
+  dangerous: {
+    wrapper: "bg-[--error]",
+    text: "text-[--background]",
+  },
+  disabled: {
+    wrapper: "bg-[--card]",
+    text: "text-[--muted]",
+  },
+}
+
+export type Props = {
+  title: string
+  onPress?: () => void
+  variant?: Variant
+  size?: FontSize
+  style?: StyleProp<TextStyle>
+  className?: string
+  disabled?: boolean
+}
 
 export default function Button({
   title,
   onPress,
+  variant = "primary",
+  size,
+  style,
   className,
-  size = "medium",
   disabled = false,
-}: {
-  title?: string
-  onPress?: any
-  className?: string
-  size?: string
-  disabled?: boolean
-}) {
+}: Props) {
+  const activeVariant = disabled ? "disabled" : variant
+
+  const wrapperClasses = clsx(
+    "px-4 py-3 rounded-lg",
+    className,
+    VARIANTS[activeVariant].wrapper,
+  )
+
+  const textClasses = clsx(textSizeClasses(size), VARIANTS[activeVariant].text)
+
   return (
     <Pressable
       onPress={onPress}
       disabled={disabled}
-      className={clsx([
-        "group rounded-lg",
-        {
-          "py-2 px-4 gap-1.5": size === "small",
-          "py-4 px-6 gap-2": size === "medium",
-          "py-6 px-12 gap-3": size === "large",
-          "bg-[--primary] active:bg-[--card]": !disabled,
-          "bg-[--card]": disabled,
-        },
-        className,
-      ])}
+      className={wrapperClasses}
+      style={style}
     >
-      <Text
-        size={size === "large" ? "xl" : undefined}
-        color={disabled ? "muted" : "background"}
-      >
-        {title}
-      </Text>
+      <Text className={textClasses}>{title}</Text>
     </Pressable>
   )
 }

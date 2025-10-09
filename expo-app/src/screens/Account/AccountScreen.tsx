@@ -1,21 +1,25 @@
 import Button from "@/components/Button"
+import Card from "@/components/Card"
+import ConfirmButton from "@/components/ConfirmButton"
 import HeaderTextButton from "@/components/HeaderTextButton"
 import Icon from "@/components/Icon"
 import ListItem from "@/components/ListItem"
 import ScrollableScreenContainer from "@/components/ScrollableScreenContainer"
+import SmallButton from "@/components/SmallButton"
 import Text from "@/components/Text"
 import TextField from "@/components/TextField"
 import useNavigation from "@/hooks/useNavigation"
 import useTheme from "@/hooks/useTheme"
 import { MyAppAccount } from "@/schema"
 import type { NativeStackNavigationOptions } from "@react-navigation/native-stack"
+import { clsx } from "clsx"
 import { useAccount, useIsAuthenticated } from "jazz-tools/expo"
 import { useState } from "react"
 import { Platform, Pressable, View } from "react-native"
 import ContextMenu from "react-native-context-menu-view"
 
 export const routeOptions: NativeStackNavigationOptions = {
-  title: "Account",
+  title: "Your Account",
   // On Android, the header title is not centered, but left aligned
   // and it's also placing a back arrow button if we pass undefined.
   headerLeft: () => (Platform.OS === "ios" ? <HeaderLeft /> : undefined),
@@ -29,7 +33,7 @@ function HeaderLeft() {
 export default function AccountScreen() {
   const { navigation } = useNavigation<"Account">()
 
-  const { me } = useAccount(MyAppAccount, {
+  const { me, logOut } = useAccount(MyAppAccount, {
     resolve: { root: { plantNetApi: true }, profile: true },
   })
   const [name, setName] = useState(me?.profile.name)
@@ -42,8 +46,10 @@ export default function AccountScreen() {
     me.profile.$jazz.set("name", name || "")
   }
 
-  const openAuth = async () => {
-    navigation.navigate("Auth")
+  const openAuth = async () => navigation.navigate("Auth")
+  const handleLogOut = () => {
+    logOut()
+    navigation.popToTop()
   }
 
   return (
@@ -58,28 +64,62 @@ export default function AccountScreen() {
       />
 
       {isAuthenticated ? (
-        <View className="gap-2">
-          <Text className="ml-6 text-lg">You’re logged in.</Text>
-        </View>
+        <LoggedInCard logOut={handleLogOut} />
       ) : (
-        <View className="gap-2">
-          <Text className="ml-6 text-lg">Authentication</Text>
-          <View className="px-5 py-3 rounded-lg bg-[--card]">
-            <ListItem text="Keep your data if you lose this device" />
-            <ListItem text="Share data with family and friends" />
-            <ListItem text="Enable identification via Pl@ntNet" />
-          </View>
-          <View className="mt-1 ml-5 self-start">
-            <Button
-              onPress={openAuth}
-              title="Learn more about authentication"
-            />
-          </View>
-        </View>
+        <LoggedOutCard openAuth={openAuth} />
       )}
 
       <ThemeSelect />
     </ScrollableScreenContainer>
+  )
+}
+
+function LoggedOutCard({ openAuth }: { openAuth: () => void }) {
+  return (
+    <Card>
+      <Text size="2xl" weight={900} className="mb-4">
+        Authentication
+      </Text>
+
+      <View className="mb-4">
+        <ListItem>Keep your data if you lose this device</ListItem>
+        <ListItem>Share data with family and friends</ListItem>
+        <ListItem>Enable identification via Pl@ntNet</ListItem>
+      </View>
+
+      <View className="self-start">
+        <Button onPress={openAuth} title="Learn more" />
+      </View>
+    </Card>
+  )
+}
+
+function LoggedInCard({ logOut }: { logOut: () => void }) {
+  return (
+    <Card>
+      <Text size="2xl" weight={900} className="mb-4">
+        Authentication
+      </Text>
+
+      <View className="mb-1 flex-row gap-1.5 items-center">
+        <Icon name="check-circle-outline" community size={18} color="success" />
+        <Text size="xl">You’re logged in</Text>
+      </View>
+
+      <Text className="mb-4 text-sm">
+        You can log out but everything added while being logged out will not be
+        there when you log back in.
+      </Text>
+
+      <View className="self-start">
+        <ConfirmButton
+          onPress={logOut}
+          title="Log out"
+          confirm="Are you sure you want to log out?"
+          variant="dangerous"
+        />
+      </View>
+    </Card>
   )
 }
 
@@ -94,26 +134,46 @@ function ThemeSelect() {
   } = useTheme()
 
   return (
-    <View className="py-2 gap-2.5">
-      <Text className="px-6 text-sm">Theme</Text>
+    <Card className="py-2 gap-2.5">
+      <Text size="2xl" weight={900}>
+        Theme
+      </Text>
+      <Text size="base" className="-mt-2 mb-3">
+        Select a theme or create your own.
+      </Text>
 
-      <View className="px-6 flex-row gap-3">
+      <View className="flex-row gap-3">
+        <SmallButton
+          icon={
+            <Icon
+              name={Platform.OS === "ios" ? "apple" : "android"}
+              community
+              size={24}
+              color={usesSystemTheme ? "background" : "secondary"}
+            />
+          }
+          active={usesSystemTheme}
+        >
+          <View>
+            <Text color={usesSystemTheme ? "background" : "secondary"}>
+              System
+            </Text>
+          </View>
+        </SmallButton>
+
         <ThemeButton
           icon={Platform.OS === "ios" ? "apple" : "android"}
-          size={24}
           community={true}
           onPress={() => setTheme("system")}
           active={usesSystemTheme}
         />
         <ThemeButton
           icon="light-mode"
-          size={24}
           onPress={() => setTheme("light")}
           active={!usesSystemTheme && theme === "light"}
         />
         <ThemeButton
           icon="dark-mode"
-          size={24}
           onPress={() => setTheme("dark")}
           active={!usesSystemTheme && theme === "dark"}
         />
@@ -140,7 +200,6 @@ function ThemeSelect() {
             <ThemeButton
               icon="account"
               community={true}
-              size={24}
               onPress={() => setTheme("custom")}
               active={theme === "custom"}
             />
@@ -150,30 +209,28 @@ function ThemeSelect() {
         {!hasCustomTheme ? (
           <Pressable
             onPress={() => navigation.navigate("CustomTheme")}
-            className="w-14 aspect-square items-center justify-center rounded-lg border border-[--border]"
+            className="w-14 aspect-square items-center justify-center rounded-lg border border-[--secondaryText]"
           >
             <Icon
               community
               name="plus"
               size={24}
-              color={theme === "custom" ? undefined : "muted"}
+              color={theme === "custom" ? undefined : "secondary"}
             />
           </Pressable>
         ) : null}
       </View>
-    </View>
+    </Card>
   )
 }
 
 function ThemeButton({
   icon,
-  size,
   onPress,
   community = false,
   active = false,
 }: {
   icon: string
-  size: number
   onPress: () => void
   community?: boolean
   active?: boolean
@@ -181,13 +238,19 @@ function ThemeButton({
   return (
     <Pressable
       onPress={onPress}
-      className="w-14 aspect-square items-center justify-center rounded-lg border border-[--border]"
+      className={clsx(
+        "w-14 aspect-square items-center justify-center rounded-lg border",
+        {
+          "border-[--border]": !active,
+          "text-[--backgorund] bg-[--text] border-[--text]": active,
+        },
+      )}
     >
       <Icon
         community={community}
         name={icon as any}
-        size={size}
-        color={active ? "text" : "muted"}
+        size={24}
+        color={active ? "background" : "secondary"}
       />
     </Pressable>
   )

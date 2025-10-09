@@ -29,17 +29,17 @@ export default function WelcomeScreen() {
       </Text>
 
       <Text size="xl" className="mt-2 leading-snug w-10/12">
-        Local Plants is a new kind of software based on Local-first ideals
+        Local Plants is a new kind of software based on Local-first principles
       </Text>
 
       <View className="my-12">
-        <ListItem size="lg" text="Works completely offline" />
-        <ListItem size="lg" text="Fully end-to-end encrypted" />
-        <ListItem size="lg" text="Your data stays on this device by default" />
-        <ListItem size="lg" text="Optional sync for backup and sharing" />
+        <ListItem size="lg">Works completely offline</ListItem>
+        <ListItem size="lg">Fully end-to-end encrypted</ListItem>
+        <ListItem size="lg">Your data stays on this device by default</ListItem>
+        <ListItem size="lg">Optional sync for backup and sharing</ListItem>
       </View>
 
-      <Button title="Continue" size="large" onPress={openPermissions} />
+      <Button title="Continue" size="lg" onPress={openPermissions} />
     </ScrollableScreenContainer>
   )
 }

@@ -1,11 +1,14 @@
+import ConfirmButton from "@/components/ConfirmButton"
 import HeaderTextButton from "@/components/HeaderTextButton"
+import HemisphereSelect from "@/components/HemisphereSelect"
 import ScrollableScreenContainer from "@/components/ScrollableScreenContainer"
 import Text from "@/components/Text"
 import TextField from "@/components/TextField"
 import useNavigation from "@/hooks/useNavigation"
-import { PlantCollection } from "@/schema"
+import { Hemisphere } from "@/lib/watering/types"
+import { MyAppAccount, PlantCollection } from "@/schema"
 import type { NativeStackNavigationOptions } from "@react-navigation/native-stack"
-import { useCoState } from "jazz-tools/expo"
+import { useAccount, useCoState } from "jazz-tools/expo"
 import { useEffect, useState } from "react"
 import { Platform, View } from "react-native"
 
@@ -37,20 +40,35 @@ export default function EditCollectionScreen() {
   const { navigation, route } = useNavigation<"EditCollection">()
   const { collectionId, collectionName } = route.params
 
-  const collection = useCoState(PlantCollection, collectionId, {
-    resolve: { sharedBy: true },
+  const { me } = useAccount(MyAppAccount, {
+    resolve: { root: { collections: { $each: true } } },
   })
 
+  const collection = useCoState(PlantCollection, collectionId, {
+    resolve: { sharedBy: true, plants: true },
+  })
+
+  const [hemisphere, setHemisphere] = useState<Hemisphere | undefined>(
+    collection?.hemisphere,
+  )
   const [name, setName] = useState<string | undefined>(
     collection?.name || collectionName,
   )
-  const valid = !!name
+  const valid = !!(name && hemisphere)
 
   const updateCollection = () => {
     if (!collection || !valid) return
 
-    collection.$jazz.set("name", name)
+    collection.$jazz.set("name", name.trim())
+    collection.$jazz.set("hemisphere", hemisphere)
     navigation.goBack()
+  }
+
+  const deleteCollection = () => {
+    if (!me) return
+
+    me.root.collections.$jazz.remove((c) => c.$jazz.id === collectionId)
+    navigation.popToTop()
   }
 
   useEffect(() => {
@@ -66,10 +84,11 @@ export default function EditCollectionScreen() {
       <TextField
         placeholder="Name of collection"
         size="large"
-        autoFocus={true}
         value={name}
         setValue={setName}
       />
+
+      <HemisphereSelect value={hemisphere} setValue={setHemisphere} />
 
       {collection?.sharedBy ? (
         <View className="px-6">
@@ -82,6 +101,35 @@ export default function EditCollectionScreen() {
           </Text>
         </View>
       ) : null}
+
+      <View className="gap-1">
+        <Text size="sm" className="ml-3">
+          Danger zone
+        </Text>
+
+        <View className="px-3 py-3 gap-3 rounded-lg bg-[--card]">
+          {collection?.plants.length ? (
+            <Text>
+              Deleting this collection while also delete all{" "}
+              {collection?.plants.length} plants.
+            </Text>
+          ) : (
+            <Text>
+              This collection contains no plants and can be deleted without
+              losing any precious data.
+            </Text>
+          )}
+
+          <View className="items-start">
+            <ConfirmButton
+              title="Delete collection"
+              confirm="Really delete collection?"
+              variant="dangerous"
+              onPress={deleteCollection}
+            />
+          </View>
+        </View>
+      </View>
     </ScrollableScreenContainer>
   )
 }

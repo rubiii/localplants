@@ -51,7 +51,7 @@ export default function PermissionsScreen() {
 
       <Button
         title="Continue"
-        size="large"
+        size="lg"
         onPress={finishWelcome}
         disabled={!permissionsGranted}
       />

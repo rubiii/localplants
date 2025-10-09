@@ -1,9 +1,9 @@
-import HeaderContextMenu from "@/components/HeaderContextMenu"
 import HeaderIconButton from "@/components/HeaderIconButton"
 import HeaderView from "@/components/HeaderView"
 import ScrollableScreenContainer from "@/components/ScrollableScreenContainer"
 import Text from "@/components/Text"
 import useNavigation, { RootStackParamList } from "@/hooks/useNavigation"
+import { scaleToFit } from "@/lib/imageUtils"
 import timeAgo from "@/lib/timeAgo"
 import { PlantCollection, PlantCollectionType, PlantType } from "@/schema"
 import { RouteProp } from "@react-navigation/native"
@@ -29,40 +29,17 @@ function HeaderRight() {
   const { collectionId, readOnly } = route.params
   const collectionName = route.params.title
 
+  const addPlant = () => navigation.navigate("AddPlant", { collectionId })
+  const editCollection = () =>
+    navigation.navigate("EditCollection", { collectionId, collectionName })
+
   return (
     <HeaderView>
       {readOnly ? null : (
-        <HeaderIconButton
-          icon="plus"
-          community={true}
-          onPress={() => navigation.navigate("AddPlant", { collectionId })}
-        />
+        <HeaderIconButton icon="plus" community onPress={addPlant} />
       )}
 
-      <HeaderContextMenu
-        icon="dots-horizontal"
-        onPress={(index) => {
-          if (index === 0) {
-            navigation.navigate("EditCollection", {
-              collectionId,
-              collectionName,
-            })
-          } else if (index === 1) {
-            navigation.navigate("RemoveCollection", {
-              collectionId,
-              collectionName,
-            })
-          }
-        }}
-        actions={[
-          { title: "Edit Collection", systemIcon: "square.and.pencil" },
-          {
-            title: "Remove Collection",
-            systemIcon: "trash",
-            destructive: true,
-          },
-        ]}
-      />
+      <HeaderIconButton icon="pencil" community onPress={editCollection} />
     </HeaderView>
   )
 }
@@ -84,11 +61,15 @@ export default function CollectionScreen() {
   }, [navigation, collection])
 
   return (
-    <ScrollableScreenContainer className="px-4 py-2">
+    <ScrollableScreenContainer className="px-4 py-6">
+      <Text size="6xl" weight={900}>
+        {collection?.name}
+      </Text>
+
       <View className="-m-1 mt-3">
         <FlashList
           data={collection?.plants}
-          keyExtractor={(item, index) => item?.$jazz.id || index.toString()}
+          keyExtractor={(item, index) => item?.$jazz.id || String(index)}
           numColumns={2}
           renderItem={({ item }) =>
             item ? (
@@ -143,29 +124,40 @@ function PlantView({
     addedAt = timeAgo(new Date(), new Date(lastImage.$jazz.createdAt))
   }
 
+  const { width, height } = scaleToFit(
+    plant.primaryImage.image.originalSize,
+    500,
+  )
+
   return (
     <Pressable
       key={plant.$jazz.id}
       onPress={openPlant}
       onLongPress={openPlantImageModal}
-      className="group gap-2 mb-16 aspect-square"
+      className="group p-1.5 gap-2.5"
+      style={{
+        maxWidth: width,
+        height: 200 + 60,
+      }}
     >
       <Image
         imageId={plant.primaryImage.image.$jazz.id}
         resizeMode="cover"
         style={{
-          width: "100%",
-          height: "100%",
+          maxWidth: "100%",
+          height: 200,
           borderRadius: 8,
         }}
-        height={140}
-        width={140}
+        height={width}
+        width={height}
       />
 
-      <View>
-        <Text activeColor="primary">{plant.name}</Text>
+      <View className="px-1 gap-0.5">
+        <Text size="xl" activeColor="primary">
+          {plant.name}
+        </Text>
         {addedAt ? (
-          <Text color="secondary" size="xs">
+          <Text color="muted" size="sm">
             Added: {addedAt} ago
           </Text>
         ) : null}

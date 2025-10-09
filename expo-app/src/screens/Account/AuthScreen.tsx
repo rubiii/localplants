@@ -1,4 +1,5 @@
 import Button from "@/components/Button"
+import Card from "@/components/Card"
 import HeaderTextButton from "@/components/HeaderTextButton"
 import Icon from "@/components/Icon"
 import ListItem from "@/components/ListItem"
@@ -47,39 +48,39 @@ export default function AuthScreen() {
   }
 
   return (
-    <ScrollableScreenContainer className="px-4 py-6 gap-8">
-      <View className="max-w-[280] gap-4">
-        <ListItem
-          size="lg"
-          text="You’re currently not authenticated, which means your data is only
-        stored locally on this device."
-        />
-        <ListItem
-          size="lg"
-          text="You can keep working completely offline, but it also means you will lose your data if
-          you lose this device."
-        />
-        <ListItem
-          size="lg"
-          text="Opt-in to authentication at any time, keep the data you already created and enable additional features."
-        />
-      </View>
+    <ScrollableScreenContainer className="px-4 py-6 gap-3">
+      <Card className="gap-3">
+        <ListItem>
+          You’re currently not authenticated, which means your data is only
+          stored locally on this device.
+        </ListItem>
+        <ListItem>
+          You can keep working completely offline, but you will lose your data
+          if you uninstall the app or lose this device.
+        </ListItem>
+        <ListItem>
+          Opt-in to authentication at any time, keep the data you already
+          created and enable additional features.
+        </ListItem>
+      </Card>
 
-      <View className="mt-4 gap-3">
+      <Card className="gap-3">
         <Text>
           Authenticate using the following passphrase.{"\n"}
-          Just click to copy it and store it somewhere save.{"\n"}
+          Just click to copy and store it somewhere save.{"\n"}
           When you’re ready click Sign up.
         </Text>
 
         <Pressable
           onPress={copyPassphrase}
-          className="group flex-row px-5 py-3 rounded-lg bg-[--card]"
+          className="group flex-row px-5 py-3 rounded-2xl border border-[--mutedText]"
         >
-          <View className="w-10/12">
-            <Text>{auth.passphrase}</Text>
+          <View className="w-11/12">
+            <Text weight={600} activeColor="primary">
+              {auth.passphrase}
+            </Text>
           </View>
-          <View className="w-2/12 items-end justify-center">
+          <View className="w-1/12 items-end justify-center">
             <Icon
               name="content-copy"
               size={20}
@@ -92,12 +93,12 @@ export default function AuthScreen() {
         <View className="items-start">
           <Button title="Sign up" onPress={signUp} />
         </View>
-      </View>
+      </Card>
 
-      <View className="gap-2">
-        <Text>Aready have an account?</Text>
+      <View className="mt-2 gap-2">
+        <Text>Already have an account?</Text>
         <View className="items-start">
-          <Button title="Login" onPress={openLogin} />
+          <Button title="Login again" onPress={openLogin} />
         </View>
       </View>
     </ScrollableScreenContainer>

@@ -1,7 +1,9 @@
 import HeaderTextButton from "@/components/HeaderTextButton"
+import HemisphereSelect from "@/components/HemisphereSelect"
 import ScrollableScreenContainer from "@/components/ScrollableScreenContainer"
 import TextField from "@/components/TextField"
 import useNavigation from "@/hooks/useNavigation"
+import { Hemisphere } from "@/lib/watering/types"
 import { MyAppAccount, PlantCollection } from "@/schema"
 import type { NativeStackNavigationOptions } from "@react-navigation/native-stack"
 import { useAccount } from "jazz-tools/expo"
@@ -40,15 +42,15 @@ export default function AddCollectionScreen() {
   })
 
   const [name, setName] = useState<string | undefined>()
-  const valid = !!name
+  const [hemisphere, setHemisphere] = useState<Hemisphere | undefined>()
+  const valid = !!(name && hemisphere)
 
   const createCollection = () => {
     if (!valid || !me) return
 
     const collection = PlantCollection.create({
-      name,
-      // TODO: let user enter hemisphere
-      hemisphere: "north",
+      name: name.trim(),
+      hemisphere,
       plants: [],
     })
     me.root.collections.$jazz.unshift(collection)
@@ -73,6 +75,8 @@ export default function AddCollectionScreen() {
         value={name}
         setValue={setName}
       />
+
+      <HemisphereSelect value={hemisphere} setValue={setHemisphere} />
     </ScrollableScreenContainer>
   )
 }

@@ -1,15 +1,11 @@
 import HeaderIconButton from "@/components/HeaderIconButton"
 import HeaderView from "@/components/HeaderView"
-import Icon from "@/components/Icon"
+import IconButton from "@/components/IconButton"
 import ScrollableScreenContainer from "@/components/ScrollableScreenContainer"
 import Text from "@/components/Text"
 import useNavigation from "@/hooks/useNavigation"
-import {
-  MyAppAccount,
-  PlantCollection,
-  PlantCollectionType,
-  PlantType,
-} from "@/schema"
+import { scaleToFit } from "@/lib/imageUtils"
+import { MyAppAccount, PlantCollection, PlantType } from "@/schema"
 import type { NativeStackNavigationOptions } from "@react-navigation/native-stack"
 import { FlashList } from "@shopify/flash-list/src"
 import * as Haptics from "expo-haptics"
@@ -27,15 +23,12 @@ function HeaderRight() {
   const { navigation } = useNavigation<"Plants">()
 
   const openAccount = () => navigation.navigate("Account")
+  const openAddCollection = () => navigation.navigate("AddCollection")
 
   return (
     <HeaderView>
-      {/*<HeaderIconButton
-        icon="plus"
-        community={true}
-        onPress={() => navigation.navigate("AddCollection")}
-      />*/}
-      <HeaderIconButton icon="account" community={true} onPress={openAccount} />
+      <HeaderIconButton icon="plus" community onPress={openAddCollection} />
+      <HeaderIconButton icon="account" community onPress={openAccount} />
     </HeaderView>
   )
 }
@@ -46,26 +39,23 @@ export default function HomeScreen() {
   })
 
   return (
-    <ScrollableScreenContainer className="px-4 pt-6 pb-4 gap-8">
+    <ScrollableScreenContainer className="px-4 py-6 gap-8">
       <FlashList
         data={me?.root.collections}
-        keyExtractor={(item, index) => item?.$jazz.id || index.toString()}
+        keyExtractor={(item, index) => item?.$jazz.id || String(index)}
+        maintainVisibleContentPosition={{
+          autoscrollToTopThreshold: 0,
+        }}
         numColumns={1}
         renderItem={({ item }) =>
-          item ? <PlantCollectionView shallowCollection={item} /> : null
+          item ? <PlantCollectionView collectionId={item.$jazz.id} /> : null
         }
       />
     </ScrollableScreenContainer>
   )
 }
 
-function PlantCollectionView({
-  shallowCollection,
-}: {
-  shallowCollection: PlantCollectionType
-}) {
-  const collectionId = shallowCollection.$jazz.id
-
+function PlantCollectionView({ collectionId }: { collectionId: string }) {
   const { navigation } = useNavigation<"Plants">()
   const collection = useCoState(PlantCollection, collectionId, {
     resolve: {
@@ -73,7 +63,6 @@ function PlantCollectionView({
       plants: { $each: { primaryImage: { image: true } } },
     },
   })
-  const collectionName = collection?.name || shallowCollection.name
 
   const openPlant = (plant: PlantType) => {
     if (!collection || !plant.primaryImage?.image) return
@@ -100,35 +89,37 @@ function PlantCollectionView({
     if (!collection) return
 
     navigation.navigate("Collection", {
-      title: collectionName,
+      title: collection.name,
       collectionId,
       readOnly: !!collection.sharedBy,
     })
   }
 
-  return (
-    <View className="gap-4">
-      <Pressable onPress={openCollection} className="group flex-row items-end">
-        <Text size="2xl" weight={800}>
-          {collectionName}
-        </Text>
+  const openAddPlant = () => {
+    navigation.navigate("AddPlant", { collectionId })
+  }
 
-        <Icon
-          community
-          name="chevron-right"
-          size={28}
-          color="muted"
-          activeColor="primary"
-          className="-ml-1"
-        />
+  return (
+    <View className="mb-12 gap-3">
+      <Pressable onPress={openCollection} className="group">
+        <Text size="6xl" weight={900} activeColor="primary">
+          {collection?.name || "…"}
+          <View className="pl-2">
+            <IconButton
+              onPress={openAddPlant}
+              name="plus"
+              community
+              className="-mb-[2]"
+            />
+          </View>
+        </Text>
       </Pressable>
 
       <FlashList
         data={collection?.plants}
-        keyExtractor={(item, index) => item?.$jazz.id || index.toString()}
+        keyExtractor={(item, index) => item?.$jazz.id || String(index)}
         numColumns={2}
         className="-m-1"
-        masonry // TODO: use masonry
         renderItem={({ item }) =>
           item ? (
             <PlantItem
@@ -154,6 +145,11 @@ function PlantItem({
 }) {
   if (!plant.primaryImage?.image) return
 
+  const { width, height } = scaleToFit(
+    plant.primaryImage.image.originalSize,
+    500,
+  )
+
   return (
     <Pressable
       onPress={() => onPress(plant)}
@@ -168,9 +164,8 @@ function PlantItem({
           height: "100%",
           borderRadius: 8,
         }}
-        className="aspect-ratio"
-        height={500}
-        width={500}
+        height={width}
+        width={height}
       />
     </Pressable>
   )

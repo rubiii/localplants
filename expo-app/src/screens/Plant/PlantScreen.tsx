@@ -1,5 +1,4 @@
 import Icon from "@/components/Icon"
-import IconButton from "@/components/IconButton"
 import ScrollableScreenContainer from "@/components/ScrollableScreenContainer"
 import SmallButton from "@/components/SmallButton"
 import Text from "@/components/Text"
@@ -56,7 +55,7 @@ export default function PlantScreeen() {
     <ScrollableScreenContainer className="p-4">
       <PrimaryImageView primaryImageId={primaryImageId} />
 
-      <Text size="4xl" weight={700} className="pl-2.5 mt-4 text-center">
+      <Text size="5xl" weight={900} className="pl-2.5 mt-4 text-center">
         {plant?.name || title}
       </Text>
 
@@ -131,10 +130,18 @@ function MainButtonArea({
 
   return (
     <View className="pl-2.5 mt-2 flex flex-row items-center mx-auto">
-      <SmallButton text="Edit" onPress={editPlant} />
-      <IconButton icon="camera" onPress={addPhoto} />
-      <SmallButton text="Share" onPress={sharePlant} />
+      <SmallButton onPress={editPlant}>Edit</SmallButton>
+      <AddPhotoButton onPress={addPhoto} />
+      <SmallButton onPress={sharePlant}>Share</SmallButton>
     </View>
+  )
+}
+
+function AddPhotoButton({ onPress }: { onPress: () => void }) {
+  return (
+    <Pressable onPress={onPress} className="group">
+      <Icon name="camera" size={42} activeColor="primary" />
+    </Pressable>
   )
 }
 
@@ -161,11 +168,9 @@ function Identity({
 
   if (!plant?.identity.result) {
     return (
-      <SmallButton
-        text="Identify this plant"
-        onPress={openIdentity}
-        className="mx-auto"
-      />
+      <SmallButton onPress={openIdentity} className="mx-auto">
+        Identify this plant
+      </SmallButton>
     )
   }
 

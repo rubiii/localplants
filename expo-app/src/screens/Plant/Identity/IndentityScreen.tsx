@@ -110,12 +110,12 @@ export default function PlantIdentityScreen() {
       </View>
 
       {plant.identity.state === "none" ? (
-        <Button onPress={identifyPlant} title="Identify plant" size="large" />
+        <Button onPress={identifyPlant} title="Identify plant" size="lg" />
       ) : null}
 
       {plant.identity.state === "scheduled" ? (
         <>
-          <Button title="Identifying …" size="large" disabled={true} />
+          <Button title="Identifying …" size="lg" disabled={true} />
           <Button onPress={resetState} title="Reset state" />
         </>
       ) : null}
@@ -125,11 +125,11 @@ export default function PlantIdentityScreen() {
           {plant.identity.request?.error ? (
             <Button
               title={`${plant.identity.request.error.status} ${plant.identity.request.error.statusText}`}
-              size="large"
+              size="lg"
               disabled={true}
             />
           ) : (
-            <Button title="Unknown error :/" size="large" disabled={true} />
+            <Button title="Unknown error :/" size="lg" disabled={true} />
           )}
           <Button onPress={resetState} title="Reset state" />
         </>

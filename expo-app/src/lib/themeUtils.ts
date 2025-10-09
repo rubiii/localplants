@@ -25,7 +25,7 @@ export function activeColorClasses(value?: ThemeColor) {
   })
 }
 
-export function sizeClasses(value?: FontSize) {
+export function textSizeClasses(value?: FontSize) {
   return clsx({
     "text-xs": value === "xs",
     "text-sm": value === "sm",
@@ -35,11 +35,11 @@ export function sizeClasses(value?: FontSize) {
     "text-2xl": value === "2xl",
     "text-3xl": value === "3xl",
     "text-4xl": value === "4xl",
-    "text-5xl": value === "5xl",
-    "text-6xl": value === "6xl",
-    "text-7xl": value === "7xl",
-    "text-8xl": value === "8xl",
-    "text-9xl": value === "9xl",
+    "text-5xl leading-[1.02]": value === "5xl",
+    "text-6xl leading-[1.02]": value === "6xl",
+    "text-7xl leading-[1.02]": value === "7xl",
+    "text-8xl leading-[1.02]": value === "8xl",
+    "text-9xl leading-[1.02]": value === "9xl",
   })
 }
 

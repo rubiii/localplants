@@ -14,17 +14,15 @@ export default function HemisphereSelect({
 }) {
   return (
     <View className="px-1.5 flex-row gap-3">
-      <Hemisphere
-        value={undefined}
-        title={
-          autoValue
-            ? `Same as\ncollection\n(${capitalize(autoValue)})`
-            : "Same as\ncollection"
-        }
-        icon="autorenew"
-        onPress={setValue}
-        active={!value}
-      />
+      {autoValue ? (
+        <Hemisphere
+          value={undefined}
+          title={`Same as\ncollection\n(${capitalize(autoValue)})`}
+          icon="autorenew"
+          onPress={setValue}
+          active={!value}
+        />
+      ) : null}
       <Hemisphere
         value="north"
         title="North"

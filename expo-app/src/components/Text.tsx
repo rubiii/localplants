@@ -2,7 +2,7 @@ import {
   activeColorClasses,
   colorClasses,
   fontFamily,
-  sizeClasses,
+  textSizeClasses,
   type FontWeight,
 } from "@/lib/themeUtils"
 import { FontSize, ThemeColor } from "@/theme"
@@ -26,7 +26,7 @@ export default function Text(props: {
     className,
     colorClasses(color),
     activeColorClasses(activeColor),
-    sizeClasses(size),
+    textSizeClasses(size),
   )
 
   const defaultStyle = {
