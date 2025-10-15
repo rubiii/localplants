@@ -1,0 +1,21 @@
+diff --git a/react-native-image-resizer.podspec b/react-native-image-resizer.podspec
+index 1848ae8bf8e743e969d40628994b0282bb552790..818726060f3601c753f2eb930e932790ccb78357 100644
+--- a/react-native-image-resizer.podspec
++++ b/react-native-image-resizer.podspec
+@@ -27,13 +27,14 @@ Pod::Spec.new do |s|
+         "CLANG_CXX_LANGUAGE_STANDARD" => "c++17"
+     }
+     s.dependency "React-Codegen"
+-    s.dependency "RCT-Folly"
+     s.dependency "RCTRequired"
+     s.dependency "RCTTypeSafety"
+     s.dependency "ReactCommon/turbomodule/core"
++    if ENV['RCT_USE_PREBUILT_RNCORE'] != '1' then
++      s.dependency "RCT-Folly"
++    end
+     install_modules_dependencies(s)
+   else
+     s.dependency "React-Core"
+   end
+ end
+-

@@ -1,0 +1,22 @@
+{
+  // "extends": ["../../tsconfig.base.json"],
+  // https://www.typescriptlang.org/tsconfig/
+  "compilerOptions": {
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "jsx": "react-jsx",
+    "verbatimModuleSyntax": true,
+    "isolatedModules": true,
+    "moduleDetection": "force",
+    "skipLibCheck": true,
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "target": "ES2022",
+    "lib": ["esnext"],
+    "types": ["node"],
+    "esModuleInterop": true,
+    "allowImportingTsExtensions": true,
+    "noEmit": true
+  },
+  "references": [{ "path": "../../packages/jazz" }]
+}

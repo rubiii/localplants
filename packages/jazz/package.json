@@ -1,0 +1,13 @@
+{
+  "name": "@localplants/jazz",
+  "description": "Jazz utilities for Local Plants",
+  "version": "1.0.0",
+  "private": true,
+  "exports": {
+    ".": "./src/index.ts",
+    "./schema": "./src/schema.ts"
+  },
+  "dependencies": {
+    "jazz-tools": "catalog:"
+  }
+}

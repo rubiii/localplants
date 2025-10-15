@@ -1,0 +1,10 @@
+{
+  "name": "@localplants/utils",
+  "description": "Utils for Local Plants",
+  "version": "1.0.0",
+  "private": true,
+  "exports": {
+    ".": "./src/index.ts",
+    "./watering": "./src/watering/index.ts"
+  }
+}

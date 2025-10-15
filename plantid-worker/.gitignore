@@ -1,8 +1,0 @@
-# Build
-dist
-
-# dependencies
-node_modules
-
-# local env files
-.env*.local

@@ -1,0 +1,16 @@
+{
+  "extends": ["../../tsconfig.base.json", "expo/tsconfig.base"],
+  "compilerOptions": {
+    "jsx": "react-native",
+    "jsxImportSource": "react",
+    "paths": {
+      "@assets/*": ["./assets/*"],
+      "@/*": ["./src/*"]
+    }
+  },
+  "references": [
+    { "path": "../../packages/jazz" },
+    { "path": "../../packages/utils" }
+  ],
+  "exclude": ["./src-tauri", "./builds"]
+}

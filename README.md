@@ -1,6 +1,8 @@
-# 🌱 Local Plants - Monorepo
+# 🪴 Local Plants - Monorepo
 
-Local-First Plant care app for iOS and Android build with [Expo](https://expo.dev) and [Jazz](https://jazz.tools).
+Plant care app for iOS and Android build with [Expo](https://expo.dev) and [Jazz](https://jazz.tools).
+
+### Build on Local-First principles
 
 * Works completely offline  
 * Fully end-to-end encrypted  
@@ -9,13 +11,19 @@ Local-First Plant care app for iOS and Android build with [Expo](https://expo.de
 
 ### Features
 
-* Watch your plant grow over time
-* Share plants or entire collections
+* Watch your plants grow over time
+* Share plants with family and friends
 * Identify plants via [Pl@antNet](https://my.plantnet.org/)
 * Get watering schedule suggestions
-* TODO: Get watering notifications
+* TODO: Watering notifications
 
-### Readmes
+### Apps
 
-[Expo App](./expo-app/README.md)  
-[PlantID worker](./plantid-worker/README.md)
+* [Expo App](./apps/expo-app/README.md)
+* [Tauri App](./apps/tauri-app/README.md)
+* [PlantID worker](./apps/plantid-worker/README.md)
+
+### Packages
+
+* [Jazz](./packages/jazz/README.md)
+* [Utils](./packages/utils/README.md)

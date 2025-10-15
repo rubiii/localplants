@@ -1,0 +1,10 @@
+{
+  "files": [],
+  "references": [
+    { "path": "./apps/expo-app" },
+    { "path": "./apps/tauri-app" },
+    { "path": "./apps/plantid-worker" },
+    { "path": "./packages/jazz" },
+    { "path": "./packages/utils" }
+  ]
+}

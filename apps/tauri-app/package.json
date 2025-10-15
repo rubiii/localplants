@@ -1,0 +1,36 @@
+{
+  "name": "@localplants/tauri-app",
+  "description": "Tauri app of Local Plants",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "tauri": "tauri",
+    "build:macos:dev": "tauri build --bundles app"
+  },
+  "dependencies": {
+    "@localplants/jazz": "*",
+    "@localplants/utils": "*",
+    "@tauri-apps/api": "^2",
+    "@tauri-apps/plugin-opener": "^2",
+    "framer-motion": "^12.23.24",
+    "jazz-tools": "catalog:",
+    "react": "19.1.0",
+    "react-dom": "19.1.0",
+    "wouter": "^3.7.1"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.1.14",
+    "@tauri-apps/cli": "^2",
+    "@types/react": "19.1.8",
+    "@types/react-dom": "19.1.6",
+    "@vitejs/plugin-react": "^4.6.0",
+    "tailwindcss": "^4.1.14",
+    "typescript": "~5.8.3",
+    "vite": "^7.0.4",
+    "vite-tsconfig-paths": "^5.1.4"
+  }
+}

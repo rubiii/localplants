@@ -1,0 +1,13 @@
+packages:
+  - apps/*
+  - packages/*
+
+catalog:
+  expo: 54.0.13
+  jazz-tools: ^0.18.25
+
+linkWorkspacePackages: true
+preferWorkspacePackages: true
+
+patchedDependencies:
+  "@bam.tech/react-native-image-resizer": patches/@bam.tech__react-native-image-resizer.patch

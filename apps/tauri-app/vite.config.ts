@@ -1,0 +1,30 @@
+import tailwindcss from "@tailwindcss/vite"
+import react from "@vitejs/plugin-react"
+import { defineConfig, type PluginOption } from "vite"
+import tsconfigPaths from "vite-tsconfig-paths"
+
+// FIX: type mismatch
+const castedTSconfigPaths = tsconfigPaths() as unknown as PluginOption
+
+const host = process.env.TAURI_DEV_HOST
+const hmr = host ? { protocol: "ws", host: host, port: 1421 } : undefined
+
+// https://vite.dev/config/
+export default defineConfig({
+  plugins: [castedTSconfigPaths, react(), tailwindcss()],
+
+  // Vite options tailored for Tauri development and only applied in `tauri dev` or `tauri build`
+  // 1. prevent Vite from obscuring rust errors
+  clearScreen: false,
+  // 2. tauri expects a fixed port, fail if that port is not available
+  server: {
+    port: 1420,
+    strictPort: true,
+    host: host || false,
+    hmr: hmr,
+    watch: {
+      // 3. tell Vite to ignore watching `src-tauri`
+      ignored: ["**/src-tauri/**"],
+    },
+  },
+})
