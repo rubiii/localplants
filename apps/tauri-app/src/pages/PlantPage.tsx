@@ -1,7 +1,6 @@
 import useWindowDimensions from "@/hooks/useWindowDimensions"
 import { Plant } from "@localplants/jazz/schema"
-import { Image } from "jazz-tools/expo"
-import { useCoState } from "jazz-tools/react"
+import { Image, useCoState } from "jazz-tools/react"
 import { Link, useRoute } from "wouter"
 
 export default function PlantPage() {

@@ -1,11 +1,10 @@
 import ImageGrid, { ImageGridItem } from "@/components/ImageGrid"
 import {
-  MyAppAccount,
-  PlantCollection,
-  type PlantType,
+    MyAppAccount,
+    PlantCollection,
+    type PlantType,
 } from "@localplants/jazz/schema"
-import { Image } from "jazz-tools/expo"
-import { useAccount, useCoState } from "jazz-tools/react"
+import { Image, useAccount, useCoState } from "jazz-tools/react"
 import { Link } from "wouter"
 
 export default function HomePage() {
