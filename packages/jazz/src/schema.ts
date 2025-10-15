@@ -1,5 +1,4 @@
-// import config from "@/config"
-import { co, z } from "jazz-tools"
+import { co, Group, z } from "jazz-tools"
 
 export const IdentityResultError = co.map({
   status: z.number(),
@@ -104,7 +103,6 @@ export const PlantNetApi = co.map({
 
 const AccountRoot = co.map({
   collections: PlantCollections,
-  plantNetApi: PlantNetApi,
 })
 export type AccountRootType = co.loaded<typeof AccountRoot>
 
@@ -117,52 +115,39 @@ export const MyAppAccount = co.account({
   root: AccountRoot,
   profile: AccountProfile,
 })
-// .withMigration(async (account) => {
-//   if (!account.$jazz.has("root")) {
-//     const collectionOwner = Group.create()
-//     const plantsOwner = Group.create()
-//     plantsOwner.addMember(collectionOwner)
 
-//     const firstCollection = PlantCollection.create(
-//       {
-//         name: "Your plants",
-//         hemisphere: "north",
-//         plants: Plants.create([], plantsOwner),
-//       },
-//       collectionOwner,
-//     )
-//     const plantNetApi = await PlantNetApi.load(config.plantNetApiCoValue)
-//     account.$jazz.set("root", {
-//       collections: [firstCollection],
-//       plantNetApi,
-//     })
-//     account.$jazz.set("profile", { name: "Anonymous Plant Owner" })
-//   }
-// })
+MyAppAccount.withMigration(async (account) => {
+  if (!account.$jazz.has("root")) {
+    const collectionOwner = Group.create()
+    const plantsOwner = Group.create()
+    plantsOwner.addMember(collectionOwner)
 
-export const PlantIdWorkerAccount = co.account({
-  root: co.map({
-    identityRequests: IdentityRequests,
-    plantNetApi: PlantNetApi,
-  }),
-  profile: co.profile(),
+    const firstCollection = PlantCollection.create(
+      {
+        name: "Your plants",
+        hemisphere: "north",
+        plants: Plants.create([], plantsOwner),
+      },
+      collectionOwner
+    )
+
+    account.$jazz.set("root", {
+      collections: [firstCollection],
+    })
+    account.$jazz.set("profile", { name: "Anonymous Plant Owner" })
+  }
 })
-// .withMigration(async (account) => {
-//   if (!account.$jazz.has("root")) {
-//     // const plantNetApiGroup = Group.create()
-//     // plantNetApiGroup.addMember("everyone", "reader")
-//     // const plantNetApi = PlantNetApi.create(
-//     //   {
-//     //     resetInSeconds: 0,
-//     //     remainingRequests: 500,
-//     //   },
-//     //   plantNetApiGroup,
-//     // )
-//     // This creates a singleton. We reuse this exact coValue for every account.
-//     // console.log("Created PlantNetApi:", { coValue: plantNetApi.$jazz.id })
 
-//     const plantNetApi = await PlantNetApi.load(config.plantNetApiCoValue)
-//     account.$jazz.set("root", { identityRequests: [], plantNetApi })
-//     account.root?.$jazz.owner.makePublic()
-//   }
-// })
+export const PlantIdWorkerAccount = co
+  .account({
+    root: co.map({
+      identityRequests: IdentityRequests,
+    }),
+    profile: co.profile(),
+  })
+  .withMigration(async (account) => {
+    if (!account.$jazz.has("root")) {
+      account.$jazz.set("root", { identityRequests: [] })
+      account.root?.$jazz.owner.makePublic()
+    }
+  })
