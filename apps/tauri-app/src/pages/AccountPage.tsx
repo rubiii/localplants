@@ -1,9 +1,10 @@
+import AnimatedRoute from "@/components/AnimatedRoute"
 import { wordlist } from "@localplants/utils"
 import { usePassphraseAuth } from "jazz-tools/react"
 import { useState } from "react"
-import { Link, useLocation } from "wouter"
+import { useLocation } from "wouter"
 
-export default function LoginPage() {
+export default function AccountPage() {
   const [, navigate] = useLocation()
   const auth = usePassphraseAuth({ wordlist })
 
@@ -28,11 +29,7 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="px-12 py-6">
-      <div className="mb-6">
-        <Link href="/">Home</Link>
-      </div>
-
+    <AnimatedRoute backTo="/" title="Account">
       <form onSubmit={login} className="flex flex-col gap-4">
         <div>
           <input
@@ -48,6 +45,6 @@ export default function LoginPage() {
           Login
         </button>
       </form>
-    </div>
+    </AnimatedRoute>
   )
 }

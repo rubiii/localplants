@@ -1,7 +1,8 @@
+import AnimatedRoute from "@/components/AnimatedRoute"
 import useWindowDimensions from "@/hooks/useWindowDimensions"
 import { Plant } from "@localplants/jazz/schema"
 import { Image, useCoState } from "jazz-tools/react"
-import { Link, useRoute } from "wouter"
+import { useRoute } from "wouter"
 
 export default function PlantPage() {
   const [, params] = useRoute("/plants/:id")
@@ -13,26 +14,22 @@ export default function PlantPage() {
   })
 
   return (
-    <div className="px-12 py-6">
-      <div className="mb-6">
-        <Link to="/">Back</Link>
-      </div>
-
+    <AnimatedRoute title={plant?.name} backTo="/">
       <PrimaryImageView primaryImageId={plant?.primaryImage.image.$jazz.id} />
 
       <h1 className="text-5xl font-black mt-4 !text-left">{plant?.name}</h1>
-    </div>
+    </AnimatedRoute>
   )
 }
 
 function PrimaryImageView({ primaryImageId }: { primaryImageId?: string }) {
   const window = useWindowDimensions()
-  const imageHeight = window.height / 1.7
+  const imageHeight = window.height * 0.75
 
   if (!primaryImageId) return
 
   return (
-    <div className="h-[360px] max-h-[360px]">
+    <div style={{ height: imageHeight }}>
       <Image
         imageId={primaryImageId}
         height="original"
