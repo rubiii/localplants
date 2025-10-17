@@ -1,3 +1,3 @@
 # 🪴 Local Plants - Utils
 
-Shared utils.
+Shared utility code.

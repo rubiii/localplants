@@ -1,8 +1,8 @@
 # 🪴 Local Plants - Monorepo
 
-Plant care app for iOS and Android build with [Expo](https://expo.dev) and [Jazz](https://jazz.tools).
+Plant care app for iOS and Android build with [Expo](https://expo.dev), [Tauri](https://tauri.app/) and [Jazz](https://jazz.tools).
 
-### Build on Local-First principles
+### Build on [Local-First principles](https://www.inkandswitch.com/essay/local-first/)
 
 * Works completely offline  
 * Fully end-to-end encrypted  
