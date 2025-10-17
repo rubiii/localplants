@@ -42,7 +42,7 @@ export default function Header({ title, backTo }: Props) {
         <div className="flex items-center gap-4">
           <button
             ref={ref}
-            onClick={() => toggleSwitchTheme}
+            onClick={() => void toggleSwitchTheme()}
             className="cursor-pointer"
           >
             {isDarkMode ? (
