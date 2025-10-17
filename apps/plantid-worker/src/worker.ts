@@ -6,6 +6,7 @@ import {
   IdentityResultImages,
   Plant,
   PlantIdWorkerAccount,
+  PlantNetApi,
   type IdentityRequestType,
   type PlantType,
 } from "@localplants/jazz/schema"
@@ -18,77 +19,82 @@ import logger from "./logger.ts"
 import {
   parseRateLimitHeader,
   plantNetIdentityRequest,
-  type PlantNetRateLimit,
+  type PlantNetRateLimit
 } from "./plantNet/index.ts"
 import type { PlantNetResponse } from "./plantNet/types.ts"
 
 setupProcessExitHandling()
 
 type InboxType =
-  | {
-      subscribe: Inbox["subscribe"]
-    }
-  | {
-      subscribe: () => void
-    }
+  | { subscribe: Inbox["subscribe"] }
+  | { subscribe: () => void }
 
 async function main() {
   const { worker, inbox } = await startWorker()
 
-  subscribe(inbox, async ({ idRequest }) => {
-    logger.debug("Resolving request and plant values.")
-    await idRequest.$jazz.ensureLoaded({ resolve: { results: true } })
-    const plant = await Plant.load(idRequest.plantId, {
-      resolve: { primaryImage: { image: true }, identity: true },
-    })
-
-    if (plant === null) {
-      logger.error("Failed to resolve plant value:", { plant })
-      return
-    }
-
-    let response
-    try {
-      response = await plantNetIdentityRequest({
-        imageId: plant.primaryImage.image.$jazz.id,
-      })
-    } catch (error) {
-      handleRequestError({ error: error as AxiosError, plant, idRequest })
-    }
-    if (!response) return
-
-    logger.debug("Received PlantNet response:", {
-      status: response.status,
-      statusText: response.statusText,
-    })
-
-    const rateLimit = parseRateLimitHeader(response.headers["ratelimit"])
-    if (rateLimit) {
-      logger.debug("Current PlantNet rate limit:", rateLimit)
-      await updatePlantNetApi({ worker, rateLimit })
-    } else {
-      logger.error("Failed to parse rate limit header.")
-    }
-
-    await processResponse({ idRequest, data: response.data })
-
-    logger.debug("Removing worker from plant.")
-    plant.$jazz.owner.removeMember(worker)
-
-    logger.info("Finished identifying plant.")
-    idRequest.$jazz.set("completedAt", new Date().toISOString())
-    plant.identity.$jazz.set("state", "processed")
-    worker.root.identityRequests.$jazz.unshift(idRequest)
-
-    return idRequest
-  })
+  logger.info("Subscribing to inbox.")
+  subscribe(inbox, ({ idRequest }) => handleInboxMessage({ worker, idRequest }))
 
   logger.info("Waiting for messages.")
+}
+
+async function handleInboxMessage({
+  worker,
+  idRequest
+}: {
+  worker: co.loaded<typeof PlantIdWorkerAccount>
+  idRequest: IdentityRequestType
+}) {
+  logger.debug("Resolving request and plant values.")
+  await idRequest.$jazz.ensureLoaded({ resolve: { results: true } })
+  const plant = await Plant.load(idRequest.plantId, {
+    resolve: { primaryImage: { image: true }, identity: true },
+  })
+
+  if (plant === null) {
+    logger.error("Failed to resolve plant value:", { plant })
+    return
+  }
+
+  let response
+  try {
+    response = await plantNetIdentityRequest({
+      imageId: plant.primaryImage.image.$jazz.id,
+    })
+  } catch (error) {
+    handleRequestError({ error: error as AxiosError, plant, idRequest })
+  }
+  if (!response) return
+
+  logger.debug("Received PlantNet response:", {
+    status: response.status,
+    statusText: response.statusText,
+  })
+
+  const rateLimit = parseRateLimitHeader(response.headers.ratelimit as string)
+  if (rateLimit) {
+    logger.debug("Current PlantNet rate limit:", rateLimit)
+    await updatePlantNetApi({ rateLimit })
+  } else {
+    logger.error("Failed to parse rate limit header.")
+  }
+
+  processResponse({ idRequest, data: response.data })
+
+  logger.debug("Removing worker from plant.")
+  plant.$jazz.owner.removeMember(worker)
+
+  logger.info("Finished identifying plant.")
+  idRequest.$jazz.set("completedAt", new Date().toISOString())
+  plant.identity.$jazz.set("state", "processed")
+
+  return idRequest
 }
 
 async function startWorker() {
   logger.info("Starting worker.")
 
+  console.log("sync", config.jazzSyncServer)
   const {
     worker,
     experimental: { inbox },
@@ -108,7 +114,7 @@ async function startWorker() {
 
 function subscribe(
   inbox: InboxType,
-  cb: ({ idRequest }: { idRequest: co.loaded<typeof IdentityRequest> }) => void
+  cb: ({ idRequest }: { idRequest: co.loaded<typeof IdentityRequest> }) => Promise<unknown>
 ) {
   logger.info("Subscribing to inbox.")
   inbox.subscribe(IdentityRequest, async (idRequest, senderID) => {
@@ -119,11 +125,11 @@ function subscribe(
       createdAt: new Date(idRequest.$jazz.createdAt).toISOString(),
     })
 
-    cb({ idRequest })
+    await cb({ idRequest })
   })
 }
 
-async function processResponse({
+function processResponse({
   idRequest,
   data,
 }: {
@@ -242,26 +248,15 @@ function handleRequestError({
   }
 }
 
-async function updatePlantNetApi({
-  worker,
-  rateLimit,
-}: {
-  worker: co.loaded<typeof PlantIdWorkerAccount>
-  rateLimit: PlantNetRateLimit
-}) {
-  await worker.$jazz.ensureLoaded({
-    resolve: { root: { plantNetApi: true } },
-  })
-  if (!worker.root?.plantNetApi) return
+async function updatePlantNetApi({ rateLimit, }: { rateLimit?: PlantNetRateLimit }) {
+  const plantNetApi = await PlantNetApi.load("co_znB5nmnzWLuhqwqUnKNnqmssVB9")
+  if (!plantNetApi) throw new Error("Unable to find PlantNetApi CoValue.")
 
-  const plantNetApi = worker.root.plantNetApi
-  logger.debug("Updating PlantNetApi CoValue:", {
-    coValueId: plantNetApi.$jazz.id,
-  })
   if (rateLimit) {
+    logger.debug("Updating PlantNetApi CoValue with", { rateLimit })
     plantNetApi.$jazz.set("remainingRequests", rateLimit.remainingRequests)
     plantNetApi.$jazz.set("resetInSeconds", rateLimit.resetInSeconds)
   }
 }
 
-main()
+await main()

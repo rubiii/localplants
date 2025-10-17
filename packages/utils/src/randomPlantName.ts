@@ -51,5 +51,5 @@ export default function randomPlantName(currentName?: string): string {
 }
 
 function getRandomPlantName(): string {
-  return names[Math.floor(Math.random() * names.length)]!
+  return names[Math.floor(Math.random() * names.length)]
 }

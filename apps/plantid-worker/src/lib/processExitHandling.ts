@@ -14,20 +14,20 @@ export default function setupProcessExitHandling() {
 
   // just in case some user like using "kill"
   process.on("SIGTERM", (signal) => {
-    logger.info(`Process ${process.pid} received SIGTERM signal ${signal}`)
+    logger.info(`Process ${String(process.pid)} received SIGTERM signal ${signal}`)
     process.exit(0)
   })
 
   // catch ctrl-c, so that event 'exit' always works
   process.on("SIGINT", (signal) => {
-    logger.info(`Process ${process.pid} interrupted with signal ${signal}`)
+    logger.info(`Process ${String(process.pid)} interrupted with signal ${signal}`)
     process.exit(0)
   })
 
   // what about errors
   // try remove/comment this handler, 'exit' event still works
   process.on("uncaughtException", (err) => {
-    logger.info(`Uncaught Exception: ${err.message}\n${err.stack}`)
+    logger.info(`Uncaught Exception: ${err.message}\n${err.stack ?? ""}`)
     process.exit(1)
   })
 }

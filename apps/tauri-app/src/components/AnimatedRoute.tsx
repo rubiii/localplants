@@ -1,9 +1,9 @@
-import Header, { type Props as HeaderProps } from "@/Header";
-import { clsx } from "clsx";
-import { motion } from "framer-motion";
-import { type ReactNode } from "react";
+import Header, { type Props as HeaderProps } from "@/Header"
+import { clsx } from "clsx"
+import { motion } from "framer-motion"
+import { type ReactNode } from "react"
 
-type Props = {
+interface Props {
   className?: string
   children: ReactNode
 }

@@ -1,18 +1,16 @@
 // @ts-check
 
-import eslint from "@eslint/js"
-import { defineConfig } from "eslint/config"
-import expoConfig from "eslint-config-expo/flat.js"
+import eslint from "@eslint/js";
+import { defineConfig, globalIgnores } from "eslint/config";
+import expoConfig from "eslint-config-expo/flat.js";
+import globalLintRules from "../../globalLintRules.js";
 
 // https://typescript-eslint.io/users/configs/#recommended
-export default defineConfig(expoConfig, eslint.configs.recommended, {
-  files: ["**/*.ts", "**/*.tsx"],
-  rules: {
-    // https://typescript-eslint.io/rules/consistent-type-imports/
-    "@typescript-eslint/consistent-type-imports": "error",
+export default defineConfig(
+  globalIgnores(["dist", "builds"]),
+  expoConfig,
+  eslint.configs.recommended,
 
-    // https://typescript-eslint.io/rules/no-unused-vars
-    "no-unused-vars": "off",
-    "@typescript-eslint/no-unused-vars": "warn",
-  },
-})
+  // Include global rules
+  ...globalLintRules,
+);

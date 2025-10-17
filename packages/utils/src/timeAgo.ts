@@ -11,21 +11,21 @@ export default function timeAgo(soonest: Date, latest: Date) {
 
   if (elapsed < msPerMinute) {
     const seconds = Math.round(elapsed / 1000)
-    return `${seconds} ${pluralize(seconds, "second")}`
+    return `${String(seconds)} ${pluralize(seconds, "second")}`
   } else if (elapsed < msPerHour) {
     const minutes = Math.round(elapsed / msPerMinute)
-    return `${minutes} ${pluralize(minutes, "minute")}`
+    return `${String(minutes)} ${pluralize(minutes, "minute")}`
   } else if (elapsed < msPerDay) {
     const hours = Math.round(elapsed / msPerHour)
-    return `${hours} ${pluralize(hours, "hour")}`
+    return `${String(hours)} ${pluralize(hours, "hour")}`
   } else if (elapsed < msPerMonth) {
     const days = Math.round(elapsed / msPerDay)
-    return `${days} ${pluralize(days, "day")}`
+    return `${String(days)} ${pluralize(days, "day")}`
   } else if (elapsed < msPerYear) {
     const months = Math.round(elapsed / msPerMonth)
-    return `${months} ${pluralize(months, "month")}`
+    return `${String(months)} ${pluralize(months, "month")}`
   } else {
     const years = Math.round(elapsed / msPerYear)
-    return `${years} ${pluralize(years, "year")}`
+    return `${String(years)} ${pluralize(years, "year")}`
   }
 }

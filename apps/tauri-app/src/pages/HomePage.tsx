@@ -17,7 +17,7 @@ export default function HomePage() {
   return (
     <AnimatedRoute title="Local Plants">
       <ol>
-        {(me?.root.collections || []).map((collection) => (
+        {(me?.root.collections ?? []).map((collection) => (
           <li key={collection.$jazz.id}>
             <PlantCollectionView collectionId={collection.$jazz.id} />
           </li>
@@ -38,11 +38,11 @@ function PlantCollectionView({ collectionId }: { collectionId: string }) {
   return (
     <div className="mb-12">
       <Link to="/" className="hover:text-primary">
-        <div className="mb-4 text-5xl font-black">{collection?.name || "…"}</div>
+        <div className="mb-4 text-5xl font-black">{collection?.name ?? "…"}</div>
       </Link>
 
       <ImageGrid>
-        {(collection?.plants || []).map((plant) => (
+        {(collection?.plants ?? []).map((plant) => (
           <ImageGridItem key={plant.$jazz.id} id={plant.$jazz.id}>
             <PlantItem plant={plant} />
           </ImageGridItem>

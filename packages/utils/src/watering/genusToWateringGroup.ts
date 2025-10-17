@@ -1,6 +1,6 @@
 import { type WateringGroupId } from "./types"
 
-const genusToWateringGroup: Record<string, WateringGroupId> = {
+const genusToWateringGroup: Partial<Record<string, WateringGroupId>> = {
   // Succulent & Cactus
   "Aloe": "succulentCactus",
   "Echeveria": "succulentCactus",

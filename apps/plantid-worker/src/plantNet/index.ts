@@ -1,4 +1,4 @@
-import axios from "axios"
+import axios, { type AxiosError } from "axios"
 import { loadImageBySize } from "jazz-tools/media"
 import config from "../config.ts"
 import { logError } from "../lib/axiosErrorHandling.ts"
@@ -28,8 +28,9 @@ const client = axios.create({
 client.interceptors.response.use(
   (response) => response,
   (error) => {
-    logError(error)
-    return Promise.reject(error)
+    const axiosError = error as AxiosError
+    logError(axiosError)
+    return Promise.reject(axiosError)
   }
 )
 
@@ -69,7 +70,7 @@ function request(formData: FormData) {
   })
 }
 
-export type PlantNetRateLimit = {
+export interface PlantNetRateLimit {
   resetInSeconds: number
   remainingRequests: number
 }

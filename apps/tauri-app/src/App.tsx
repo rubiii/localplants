@@ -7,9 +7,10 @@ import AccountPage from "./pages/AccountPage"
 import HomePage from "./pages/HomePage"
 import PlantPage from "./pages/PlantPage"
 
-export default function App() {
-  const jazzSyncServer = import.meta.env.VITE_JAZZ_SYNC_SERVER
+type SyncServerUrl = `wss://${string}`
+const jazzSyncServer = import.meta.env.VITE_JAZZ_SYNC_SERVER as SyncServerUrl
 
+export default function App() {
   return (
     <JazzReactProvider
       AccountSchema={MyAppAccount}

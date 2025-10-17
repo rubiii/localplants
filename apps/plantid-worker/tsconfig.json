@@ -1,9 +1,7 @@
 {
-  // "extends": ["../../tsconfig.base.json"],
+  "extends": ["../../tsconfig.base.json"],
   // https://www.typescriptlang.org/tsconfig/
   "compilerOptions": {
-    "strict": true,
-    "forceConsistentCasingInFileNames": true,
     "jsx": "react-jsx",
     "verbatimModuleSyntax": true,
     "isolatedModules": true,

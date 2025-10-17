@@ -5,6 +5,7 @@ packages:
 catalog:
   expo: 54.0.13
   jazz-tools: ^0.18.25
+  eslint: ^9.37.0
 
 linkWorkspacePackages: true
 preferWorkspacePackages: true

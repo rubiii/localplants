@@ -12,7 +12,7 @@ export default function AccountPage() {
   const [error, setError] = useState("")
   const [loginPassphrase, setLoginPassphrase] = useState("")
 
-  const login = async () => {
+  const login = async (): Promise<void> => {
     setBusy(true)
 
     try {
@@ -30,13 +30,13 @@ export default function AccountPage() {
 
   return (
     <AnimatedRoute backTo="/" title="Account">
-      <form onSubmit={login} className="flex flex-col gap-4">
+      <form onSubmit={(e) => { e.preventDefault(); void login() }} className="flex flex-col gap-4">
         <div>
           <input
             type="text"
             placeholder="Enter your passphrase"
             value={loginPassphrase}
-            onChange={(event) => setLoginPassphrase(event.target.value)}
+            onChange={(event) => { setLoginPassphrase(event.target.value) }}
           />
           {error ? <div className="mt-1">{error}</div> : null}
         </div>

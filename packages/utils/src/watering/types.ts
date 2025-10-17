@@ -2,7 +2,7 @@
 export type Season = "growing" | "dormant"
 
 // Define watering frequency as an interval in days
-export type WateringInterval = {
+export interface WateringInterval {
   minDays: number // shortest interval
   maxDays: number // longest interval
 }
@@ -15,14 +15,14 @@ export type WateringGroupId =
   | "carnivorousAquatic"
 
 // Watering groups with seasonal intervals
-export type WateringGroup = {
+export interface WateringGroup {
   id: WateringGroupId
   label: string
   description: string[]
   intervals: Record<Season, WateringInterval>
 }
 
-export type WateringRecommendation = {
+export interface WateringRecommendation {
   minDays?: number
   maxDays?: number
   note: string
@@ -32,7 +32,7 @@ export type WateringRecommendation = {
 export type Hemisphere = "north" | "south"
 
 export type PlantSize = "xs" | "sm" | "md" | "lg"
-export type PlantSizeSpec = {
+export interface PlantSizeSpec {
   id: PlantSize
   diameterRangeCm: [number, number] // inclusive range in cm
   description: string

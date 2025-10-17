@@ -29,8 +29,8 @@ export const IdentityResult = co.map({
   scientificFamilyName: z.string(),
   scientificName: z.string(),
   commonNames: z.array(z.string()),
-  gbifID: z.string(),
-  powoID: z.string(),
+  gbifID: z.optional(z.string()),
+  powoID: z.optional(z.string()),
   images: IdentityResultImages,
 })
 export type IdentityResultType = co.loaded<typeof IdentityResult>
@@ -116,7 +116,7 @@ export const MyAppAccount = co.account({
   profile: AccountProfile,
 })
 
-MyAppAccount.withMigration(async (account) => {
+MyAppAccount.withMigration((account) => {
   if (!account.$jazz.has("root")) {
     const collectionOwner = Group.create()
     const plantsOwner = Group.create()
@@ -145,7 +145,7 @@ export const PlantIdWorkerAccount = co
     }),
     profile: co.profile(),
   })
-  .withMigration(async (account) => {
+  .withMigration((account) => {
     if (!account.$jazz.has("root")) {
       account.$jazz.set("root", { identityRequests: [] })
       account.root?.$jazz.owner.makePublic()

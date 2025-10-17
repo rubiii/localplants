@@ -1,5 +1,5 @@
-export type PlantNetResponse = {
-  results: Array<{
+export interface PlantNetResponse {
+  results: {
     score: number
     species: {
       scientificNameWithoutAuthor: string
@@ -17,7 +17,7 @@ export type PlantNetResponse = {
       commonNames: string[]
       scientificName: string
     }
-    images: Array<{
+    images: {
       organ: string
       author: string
       license: string
@@ -31,16 +31,16 @@ export type PlantNetResponse = {
         s: string
       }
       citation: string
-    }>
-    gbif: {
+    }[]
+    gbif?: {
       id: string
     }
-    powo: {
+    powo?: {
       id: string
     }
     iucn?: {
       id: string
       category: string
     }
-  }>
+  }[]
 }

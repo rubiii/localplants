@@ -6,20 +6,19 @@ import PlantImageSelect from "@/components/PlantImageSelect"
 import PlantSizeSelect from "@/components/PlantSizeSelect"
 import ScrollableScreenContainer from "@/components/ScrollableScreenContainer"
 import useNavigation from "@/hooks/useNavigation"
+import { createPlantImage } from "@localplants/jazz"
 import {
   Plant,
   PlantCollection,
   PlantIdentity,
-  PlantImage,
   PlantImages,
-  type PlantImageType,
+  type PlantImageType
 } from "@localplants/jazz/schema"
 import { randomPlantName } from "@localplants/utils"
 import { type Hemisphere, type PlantSize } from "@localplants/utils/watering"
 import type { NativeStackNavigationOptions } from "@react-navigation/native-stack"
 import { Group } from "jazz-tools"
 import { useCoState } from "jazz-tools/expo"
-import { createImage } from "jazz-tools/media"
 import { useEffect, useState } from "react"
 import { Platform, Pressable } from "react-native"
 import { type Asset } from "react-native-image-picker"
@@ -64,30 +63,13 @@ export default function AddPlantScreen() {
     resolve: { plants: true },
   })
 
-  const createPlantImage = async (asset: Asset) => {
-    if (!collection) return
+  const createPlantImageFromAsset = async (asset: Asset) => {
+    if (!collection || !asset.uri) return
 
-    console.debug("[createPlantImage] creating image")
-    const image = await createImage(asset.uri as string, {
-      owner: Group.create(),
-      progressive: true,
-      placeholder: "blur",
-      maxSize: 2400,
+    const newPlantImage = await createPlantImage({
+      uri: asset.uri,
+      timestamp: asset.timestamp,
     })
-    console.debug("[createPlantImage] created image")
-
-    const fileCreatedAt = asset.timestamp
-      ? new Date(asset.timestamp).toISOString()
-      : undefined
-
-    const newPlantImage = PlantImage.create(
-      {
-        image,
-        assetUri: asset.uri,
-        fileCreatedAt,
-      },
-      Group.create()
-    )
 
     setPlantImage(newPlantImage)
   }
@@ -142,7 +124,7 @@ export default function AddPlantScreen() {
     <ScrollableScreenContainer className="px-4 py-6 gap-8">
       <PlantImageSelect
         plantImage={plantImage}
-        createPlantImage={createPlantImage}
+        createPlantImage={createPlantImageFromAsset}
       />
 
       <TextField

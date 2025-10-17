@@ -15,7 +15,7 @@ export function logError(error: unknown) {
     logger.error("Response data:", { data: response.data })
   } else if (axiosError.request) {
     logger.error("PlantNet did not return a response.")
-    logger.error("Request:", { request: axiosError.request })
+    logger.error("Request:", axiosError.request)
   } else {
     logger.error("Failed to setup PlantNet request", {
       error: axiosError.message,

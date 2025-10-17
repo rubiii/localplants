@@ -1,7 +1,7 @@
 import { AnimatePresence, motion } from "framer-motion"
 import { type ReactNode } from "react"
 
-type ImageGridItem = {
+interface ImageGridItem {
   id: string
   content: ReactNode
 }
