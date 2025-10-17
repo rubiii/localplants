@@ -1,6 +1,6 @@
 # 🪴 Local Plants - Monorepo
 
-Plant care app for iOS and Android build with [Expo](https://expo.dev), [Tauri](https://tauri.app/) and [Jazz](https://jazz.tools).
+Plant care app for web, mobile and desktop build with [Expo](https://expo.dev), [Tauri](https://tauri.app/) and [Jazz](https://jazz.tools).
 
 [![Lint](https://github.com/rubiii/localplants/actions/workflows/main.yml/badge.svg?branch=main)](https://github.com/rubiii/localplants/actions/workflows/main.yml)
 
