@@ -1,9 +1,9 @@
 import AnimatedRoute from "@/components/AnimatedRoute"
 import ImageGrid, { ImageGridItem } from "@/components/ImageGrid"
 import {
-    MyAppAccount,
-    PlantCollection,
-    type PlantType,
+  MyAppAccount,
+  PlantCollection,
+  type PlantType,
 } from "@localplants/jazz/schema"
 import { motion } from "framer-motion"
 import { Image, useAccount, useCoState } from "jazz-tools/react"
@@ -63,12 +63,12 @@ function PlantItem({ plant }: { plant: PlantType }) {
         whileHover={{ scale: 1.01, boxShadow: "0 5px 15px 5px rgba(0,0,0,0.125)", z: 9 }}
         transition={{ ease: "easeOut", duration: 0.1 }}
       >
-      <Image
-        imageId={plant.primaryImage.image.$jazz.id}
-        style={{ width: "100%", height: "100%", borderRadius: 8 }}
-        height={500}
-        width={500}
-      />
+        <Image
+          imageId={plant.primaryImage.image.$jazz.id}
+          style={{ width: "100%", height: "100%", borderRadius: 8 }}
+          height={500}
+          width={500}
+        />
       </motion.div>
     </Link>
   )

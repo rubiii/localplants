@@ -71,7 +71,7 @@ async function handleInboxMessage({
     statusText: response.statusText,
   })
 
-  const rateLimit = parseRateLimitHeader(response.headers.ratelimit as string)
+  const rateLimit = parseRateLimitHeader(response.headers["ratelimit"] as string)
   if (rateLimit) {
     logger.debug("Current PlantNet rate limit:", rateLimit)
     await updatePlantNetApi({ rateLimit })

@@ -2,8 +2,8 @@ import { createLogger, format, transports } from "winston"
 const { combine, colorize, timestamp, printf, metadata } = format
 
 const customFormat = printf((info) => {
-  const { requestId, ...metadata } = info.metadata as Record<string, string>
-  const result = [info.timestamp]
+  const { requestId, ...metadata } = info["metadata"] as Record<string, string>
+  const result = [info["timestamp"]]
 
   if (requestId) result.push(`[${requestId}]`)
 
@@ -33,7 +33,7 @@ const logger = createLogger({
 })
 
 // Also log to console when not in production.
-if (process.env.NODE_ENV !== "production") {
+if (process.env["NODE_ENV"] !== "production") {
   logger.add(
     new transports.Console({
       format: combine(colorize(), customFormat),

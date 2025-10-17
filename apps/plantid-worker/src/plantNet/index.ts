@@ -84,8 +84,8 @@ export function parseRateLimitHeader(
 
   if (!remainingValue || !resetValue) return
 
-  const remainingRequests = parseInt(remainingValue.split("=")[1] || "0", 10)
-  const resetInSeconds = parseInt(resetValue.split("=")[1] || "0", 10)
+  const remainingRequests = parseInt(remainingValue.split("=")[1] ?? "0", 10)
+  const resetInSeconds = parseInt(resetValue.split("=")[1] ?? "0", 10)
 
   return { resetInSeconds, remainingRequests }
 }

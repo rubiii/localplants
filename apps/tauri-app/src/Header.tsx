@@ -13,7 +13,7 @@ import { Link } from "wouter"
 const ICON_SIZE = 20
 
 export interface Props {
-  title?: string;
+  title?: string | undefined;
   backTo?: string;
 }
 

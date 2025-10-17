@@ -5,6 +5,10 @@
   "private": true,
   "type": "module",
   "main": "src/worker.ts",
+  "engines": {
+    "node": ">=18.0.0",
+    "pnpm": ">=10.0.0"
+  },
   "scripts": {
     "start": "dotenvx run --env-file=.env.local --env-file=.env -- tsx src/worker.ts",
     "lint": "tsc -b && eslint"

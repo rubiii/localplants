@@ -47,9 +47,9 @@ export default function randomPlantName(currentName?: string): string {
     tries += 1
   }
 
-  return newName || "Unexpected Name"
+  return newName ?? "Unexpected Name"
 }
 
-function getRandomPlantName(): string {
+function getRandomPlantName() {
   return names[Math.floor(Math.random() * names.length)]
 }
