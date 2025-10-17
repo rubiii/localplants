@@ -249,7 +249,7 @@ function handleRequestError({
 }
 
 async function updatePlantNetApi({ rateLimit, }: { rateLimit?: PlantNetRateLimit }) {
-  const plantNetApi = await PlantNetApi.load("co_znB5nmnzWLuhqwqUnKNnqmssVB9")
+  const plantNetApi = await PlantNetApi.load(config.plantNetApiCoValue)
   if (!plantNetApi) throw new Error("Unable to find PlantNetApi CoValue.")
 
   if (rateLimit) {
