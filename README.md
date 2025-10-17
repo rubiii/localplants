@@ -2,6 +2,8 @@
 
 Plant care app for iOS and Android build with [Expo](https://expo.dev), [Tauri](https://tauri.app/) and [Jazz](https://jazz.tools).
 
+[![Lint](https://github.com/rubiii/localplants/actions/workflows/main.yml/badge.svg?branch=main)](https://github.com/rubiii/localplants/actions/workflows/main.yml)
+
 ### Build on [Local-First principles](https://www.inkandswitch.com/essay/local-first/)
 
 * Works completely offline  
