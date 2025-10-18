@@ -9,7 +9,7 @@ import {
   PlantImage,
   type PlantImageType,
 } from "@localplants/jazz/schema"
-import type { NativeStackNavigationOptions } from "@react-navigation/native-stack"
+import { type NativeStackNavigationOptions } from "@react-navigation/native-stack"
 import { Group } from "jazz-tools"
 import { useCoState } from "jazz-tools/expo"
 import { createImage } from "jazz-tools/media"

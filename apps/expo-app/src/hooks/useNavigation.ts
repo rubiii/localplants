@@ -4,7 +4,7 @@ import {
   useNavigation as useReactNativeNavigation,
   useRoute as useReactNativeRoute,
 } from "@react-navigation/native"
-import type { NativeStackNavigationProp } from "@react-navigation/native-stack"
+import { type NativeStackNavigationProp } from "@react-navigation/native-stack"
 
 type Keyof<T extends object> = Extract<keyof T, string>
 

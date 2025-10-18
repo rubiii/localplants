@@ -16,7 +16,7 @@ import {
 } from "@localplants/jazz/schema"
 import { randomPlantName } from "@localplants/utils"
 import { type Hemisphere, type PlantSize } from "@localplants/utils/watering"
-import type { NativeStackNavigationOptions } from "@react-navigation/native-stack"
+import { type NativeStackNavigationOptions } from "@react-navigation/native-stack"
 import { Group } from "jazz-tools"
 import { useCoState } from "jazz-tools/expo"
 import { useEffect, useState } from "react"

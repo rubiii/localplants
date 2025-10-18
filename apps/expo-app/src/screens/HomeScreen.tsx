@@ -8,7 +8,7 @@ import {
   PlantCollection,
   type PlantType,
 } from "@localplants/jazz/schema"
-import type { NativeStackNavigationOptions } from "@react-navigation/native-stack"
+import { type NativeStackNavigationOptions } from "@react-navigation/native-stack"
 import { FlashList } from "@shopify/flash-list/src"
 import * as Haptics from "expo-haptics"
 import { Image, useAccount, useCoState } from "jazz-tools/expo"

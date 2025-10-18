@@ -2,7 +2,7 @@ import { Button, ListItem, Text } from "@/components/base"
 import ScrollableScreenContainer from "@/components/ScrollableScreenContainer"
 import useNavigation from "@/hooks/useNavigation"
 import AsyncStorage from "@react-native-async-storage/async-storage"
-import type { NativeStackNavigationOptions } from "@react-navigation/native-stack"
+import { type NativeStackNavigationOptions } from "@react-navigation/native-stack"
 import { View } from "react-native"
 
 export const routeOptions: NativeStackNavigationOptions = {

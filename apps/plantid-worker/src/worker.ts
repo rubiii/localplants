@@ -21,7 +21,7 @@ import {
   plantNetIdentityRequest,
   type PlantNetRateLimit
 } from "./plantNet/index.ts"
-import type { PlantNetResponse } from "./plantNet/types.ts"
+import { type PlantNetResponse } from "./plantNet/types.ts"
 
 setupProcessExitHandling()
 

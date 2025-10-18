@@ -55,7 +55,7 @@ import WelcomeScreen, {
   routeOptions as welcomeRouteOptions,
 } from "@/screens/WelcomeScreen"
 import { NavigationContainer } from "@react-navigation/native"
-import type { NativeStackNavigationOptions } from "@react-navigation/native-stack"
+import { type NativeStackNavigationOptions } from "@react-navigation/native-stack"
 import * as Linking from "expo-linking"
 import Stack from "./Stack"
 

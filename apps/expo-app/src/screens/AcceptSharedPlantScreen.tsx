@@ -7,7 +7,7 @@ import {
   PlantCollection,
   type PlantType,
 } from "@localplants/jazz/schema"
-import type { NativeStackNavigationOptions } from "@react-navigation/native-stack"
+import { type NativeStackNavigationOptions } from "@react-navigation/native-stack"
 import { Group } from "jazz-tools"
 import { useAccount } from "jazz-tools/expo"
 import { View } from "react-native"

@@ -11,7 +11,7 @@ import {
 } from "@localplants/jazz/schema"
 import { timeAgo } from "@localplants/utils"
 import { type RouteProp } from "@react-navigation/native"
-import type { NativeStackNavigationOptions } from "@react-navigation/native-stack"
+import { type NativeStackNavigationOptions } from "@react-navigation/native-stack"
 import { FlashList } from "@shopify/flash-list/src"
 import * as Haptics from "expo-haptics"
 import { Image, useCoState } from "jazz-tools/expo"

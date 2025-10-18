@@ -3,7 +3,7 @@ import { loadImageBySize } from "jazz-tools/media"
 import config from "../config.ts"
 import { logError } from "../lib/axiosErrorHandling.ts"
 import logger from "../logger.ts"
-import type { PlantNetResponse } from "./types"
+import { type PlantNetResponse } from "./types"
 
 const RESULTS_TO_REQUEST = 3
 
