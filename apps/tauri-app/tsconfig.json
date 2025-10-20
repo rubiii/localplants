@@ -23,6 +23,7 @@
   "references": [
     { "path": "./tsconfig.node.json" },
     { "path": "../../packages/jazz" },
-    { "path": "../../packages/utils" }
+    { "path": "../../packages/utils" },
+    { "path": "../../packages/theme" }
   ]
 }

@@ -1,10 +1,10 @@
-import useTheme from "@/hooks/useTheme"
 import { hexToRgb, luminance } from "@/lib/colorUtils"
+import { useThemeContext } from "@/lib/theme/ThemeProvider"
 import PoweredByPlantNetDark from "@assets/plantnet/powered-by-plantnet-dark-nobg.svg"
 import PoweredByPlantNetLight from "@assets/plantnet/powered-by-plantnet-light-nobg.svg"
 
 export default function PlantNetLogo() {
-  const { colors } = useTheme()
+  const { colors } = useThemeContext()
   const width = 160
   const height = 38
 

@@ -6,11 +6,15 @@
     "paths": {
       "@assets/*": ["./assets/*"],
       "@/*": ["./src/*"]
-    }
+    },
+
+    // FIX: This currently causes errors with Jazz
+    "exactOptionalPropertyTypes": false
   },
   "references": [
     { "path": "../../packages/jazz" },
-    { "path": "../../packages/utils" }
+    { "path": "../../packages/utils" },
+    { "path": "../../packages/theme" }
   ],
   "exclude": ["./src-tauri", "./builds"]
 }

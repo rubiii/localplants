@@ -10,14 +10,14 @@ import {
 import HeaderTextButton from "@/components/HeaderTextButton"
 import ScrollableScreenContainer from "@/components/ScrollableScreenContainer"
 import useNavigation from "@/hooks/useNavigation"
-import useTheme from "@/hooks/useTheme"
+import { useThemeContext } from "@/lib/theme/ThemeProvider"
 import { MyAppAccount } from "@localplants/jazz/schema"
+import { THEME_COLORS, themePrimaryColors, type ThemeColor } from "@localplants/theme"
 import { type NativeStackNavigationOptions } from "@react-navigation/native-stack"
 import { clsx } from "clsx"
 import { useAccount, useIsAuthenticated } from "jazz-tools/expo"
 import { useState } from "react"
 import { Platform, Pressable, View } from "react-native"
-import ContextMenu from "react-native-context-menu-view"
 
 export const routeOptions: NativeStackNavigationOptions = {
   title: "Your Account",
@@ -70,7 +70,8 @@ export default function AccountScreen() {
         <LoggedOutCard openAuth={openAuth} />
       )}
 
-      <ThemeSelect />
+      <ThemeModeSelect />
+      <ThemeColorSelect />
     </ScrollableScreenContainer>
   )
 }
@@ -104,7 +105,7 @@ function LoggedInCard({ logOut }: { logOut: () => void }) {
 
       <View className="mb-1 flex-row gap-1.5 items-center">
         <Icon name="check-circle-outline" community size={18} color="success" />
-        <Text size="xl">You’re logged in</Text>
+        <Text size="xl">You&apos;re logged in</Text>
       </View>
 
       <Text className="mb-4 text-sm">
@@ -124,84 +125,67 @@ function LoggedInCard({ logOut }: { logOut: () => void }) {
   )
 }
 
-function ThemeSelect() {
-  const { navigation } = useNavigation<"Account">()
-  const {
-    theme,
-    setTheme,
-    hasCustomTheme,
-    removeCustomTheme, // TODO: expand on themes
-    usesSystemTheme,
-  } = useTheme()
+function ThemeModeSelect() {
+  const { mode, setMode } = useThemeContext()
+  const systemIcon = Platform.OS === "ios"
+    ? "apple"
+    : (Platform.OS === "android" ? "android" : "devices")
 
   return (
     <Card className="py-2 gap-2.5">
       <Text size="2xl" weight={900}>
-        Theme
+        Theme Mode
       </Text>
       <Text size="base" className="-mt-2 mb-3">
-        Select a theme or create your own.
+        Choose between light, dark, or system theme.
       </Text>
 
       <View className="flex-row gap-3">
         <ThemeButton
-          icon={Platform.OS === "ios" ? "apple" : "android"}
+          icon={systemIcon}
+          label="System"
           community={true}
-          onPress={() => setTheme("system")}
-          active={usesSystemTheme}
+          onPress={() => setMode("system")}
+          active={mode === "system"}
         />
         <ThemeButton
           icon="light-mode"
-          onPress={() => setTheme("light")}
-          active={!usesSystemTheme && theme === "light"}
+          label="Light"
+          onPress={() => setMode("light")}
+          active={mode === "light"}
         />
         <ThemeButton
           icon="dark-mode"
-          onPress={() => setTheme("dark")}
-          active={!usesSystemTheme && theme === "dark"}
+          label="Dark"
+          onPress={() => setMode("dark")}
+          active={mode === "dark"}
         />
+      </View>
+    </Card>
+  )
+}
 
-        {hasCustomTheme ? (
-          <ContextMenu
-            onPress={({ nativeEvent: { index } }) => {
-              if (index === 0) {
-                navigation.navigate("CustomTheme")
-              } else if (index === 1) {
-                removeCustomTheme()
-              }
-            }}
-            dropdownMenuMode={true}
-            actions={[
-              { title: "Edit Theme", systemIcon: "pencil" },
-              {
-                title: "Remove Theme",
-                systemIcon: "trash",
-                destructive: true,
-              },
-            ]}
-          >
-            <ThemeButton
-              icon="account"
-              community={true}
-              onPress={() => setTheme("custom")}
-              active={theme === "custom"}
-            />
-          </ContextMenu>
-        ) : null}
+function ThemeColorSelect() {
+  const { color, setColor } = useThemeContext()
 
-        {!hasCustomTheme ? (
-          <Pressable
-            onPress={() => navigation.navigate("CustomTheme")}
-            className="w-14 aspect-square items-center justify-center rounded-lg border border-[--secondaryText]"
-          >
-            <Icon
-              community
-              name="plus"
-              size={24}
-              color={theme === "custom" ? undefined : "secondary"}
-            />
-          </Pressable>
-        ) : null}
+  return (
+    <Card className="py-2 gap-2.5">
+      <Text size="2xl" weight={900}>
+        Theme Color
+      </Text>
+      <Text size="base" className="-mt-2 mb-3">
+        Choose your preferred accent color.
+      </Text>
+
+      <View className="flex-row gap-3 flex-wrap">
+        {THEME_COLORS.map((themeColor) => (
+          <ThemeColorButton
+            key={themeColor}
+            color={themeColor}
+            onPress={() => setColor(themeColor)}
+            active={color === themeColor}
+          />
+        ))}
       </View>
     </Card>
   )
@@ -209,11 +193,13 @@ function ThemeSelect() {
 
 function ThemeButton({
   icon,
+  label,
   onPress,
   community = false,
   active = false,
 }: {
   icon: string
+  label: string
   onPress: () => void
   community?: boolean
   active?: boolean
@@ -222,19 +208,56 @@ function ThemeButton({
     <Pressable
       onPress={onPress}
       className={clsx(
-        "w-14 aspect-square items-center justify-center rounded-lg border",
+        "px-3 py-2 flex-row items-center gap-2 rounded-lg border",
         {
-          "border-[--border]": !active,
-          "text-[--backgorund] bg-[--text] border-[--text]": active,
+          "border-[--border] bg-[--background]": !active,
+          "border-[--text]": active,
         }
       )}
     >
-      <Icon
-        community={community}
-        name={icon as any}
-        size={24}
-        color={active ? "background" : "secondary"}
+      <Icon community={community} name={icon as any} size={20} color="text" />
+      <Text
+        size="base"
+        className={clsx({
+          "text-[--background]": active,
+          "text-[--text]": !active,
+        })}
+      >
+        {label}
+      </Text>
+    </Pressable>
+  )
+}
+
+function ThemeColorButton({
+  color,
+  onPress,
+  active = false,
+}: {
+  color: ThemeColor
+  onPress: () => void
+  active?: boolean
+}) {
+  const colorMap = themePrimaryColors
+
+  return (
+    <Pressable
+      onPress={onPress}
+      className={clsx(
+        "px-4 py-2 flex-row items-center gap-2 rounded-lg border capitalize",
+        {
+          "border-[--border] bg-[--background]": !active,
+          "border-[--text]": active,
+        }
+      )}
+    >
+      <View
+        className="w-4 h-4 rounded-full"
+        style={{ backgroundColor: colorMap[color] }}
       />
+      <Text size="base" style={{ color: colorMap[color] }} >
+        {color}
+      </Text>
     </Pressable>
   )
 }

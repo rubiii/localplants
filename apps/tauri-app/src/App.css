@@ -7,30 +7,38 @@ html,
 }
 
 :root {
-  --background: #f8fafc;
-  --copy: #1f1f1f;
-  --muted: #3f3f3f;
-  --title: #1f1f1f;
-  --primary: #19b6a9;
-  --border: #e8eaec;
+  --background: #fafaf9;
+  --card: #f5f5f4;
+  --button: #e8e7e6;
+  --text: #1c1917;
+  --secondaryText: #44403c;
+  --mutedText: #78716c;
+  --border: #d6d3d1;
+  --primary: #78716c;
+  --success: #15803d;
+  --error: #b91c1c;
+
+  --input: var(--card);
+  --copy: var(--text);
+  --muted: var(--secondaryText);
+  --title: var(--text);
 
   background-color: var(--background);
 }
 
-.dark {
-  --background: #1f1f1f;
-  --copy: #f8fafc;
-  --muted: #dddddd;
-  --title: #f8fafc;
-  --primary: #19d2c3;
-  --border: #2f2f2f;
-}
-
 @theme {
   --color-background: var(--background);
+  --color-card: var(--card);
+  --color-button: var(--button);
+  --color-input: var(--input);
+  --color-text: var(--text);
   --color-copy: var(--copy);
   --color-muted: var(--muted);
+  --color-mutedText: var(--mutedText);
+  --color-secondaryText: var(--secondaryText);
   --color-title: var(--title);
   --color-primary: var(--primary);
   --color-border: var(--border);
+  --color-success: var(--success);
+  --color-error: var(--error);
 }

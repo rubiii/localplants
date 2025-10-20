@@ -26,6 +26,6 @@
     "eslint": "catalog:",
     "express": "^5.1.0",
     "tsx": "^4.20.6",
-    "typescript": "^5.9.2"
+    "typescript": "~5.9.2"
   }
 }

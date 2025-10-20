@@ -8,7 +8,7 @@ export default function HeaderTextButton({
   disabled = false,
 }: {
   text: string
-  onPress?: () => void
+  onPress?: (() => void) | undefined
   variant?: "default" | "primary"
   disabled?: boolean
 }) {

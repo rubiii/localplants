@@ -1,14 +1,14 @@
+import "@/App.css"
+import { ThemeProvider } from "@/components/ThemeProvider"
+import HomePage from "@/pages/HomePage"
+import PlantPage from "@/pages/PlantPage"
 import { MyAppAccount } from "@localplants/jazz/schema"
 import { AnimatePresence } from "framer-motion"
 import { JazzReactProvider } from "jazz-tools/react"
 import { Route, Switch } from "wouter"
-import "./App.css"
-import AccountPage from "./pages/AccountPage"
-import HomePage from "./pages/HomePage"
-import PlantPage from "./pages/PlantPage"
 
 type SyncServerUrl = `wss://${string}`
-const jazzSyncServer = import.meta.env.VITE_JAZZ_SYNC_SERVER as SyncServerUrl
+const jazzSyncServer = import.meta.env["VITE_JAZZ_SYNC_SERVER"] as SyncServerUrl
 
 export default function App() {
   return (
@@ -16,16 +16,16 @@ export default function App() {
       AccountSchema={MyAppAccount}
       sync={{ peer: jazzSyncServer, when: "signedUp" }}
     >
-      <AnimatePresence mode="popLayout">
-        <Switch>
-          <Route path="/" component={HomePage} />
-          <Route path="/account" component={AccountPage} />
+      <ThemeProvider>
+        <AnimatePresence mode="popLayout">
+          <Switch>
+            <Route path="/" component={HomePage} />
+            <Route path="/plants/:id" component={PlantPage} />
 
-          <Route path="/plants/:id" component={PlantPage} />
-
-          <Route>404: No such page!</Route>
-        </Switch>
-      </AnimatePresence>
+            <Route>404: No such page!</Route>
+          </Switch>
+        </AnimatePresence>
+      </ThemeProvider>
     </JazzReactProvider>
   )
 }

@@ -26,7 +26,7 @@ export type Props = {
   size?: FontSize
   style?: StyleProp<TextStyle>
   className?: string
-  disabled?: boolean
+  disabled?: boolean | undefined
 }
 
 export default function Button({

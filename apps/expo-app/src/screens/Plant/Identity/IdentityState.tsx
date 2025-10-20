@@ -23,12 +23,12 @@ export default function IdentityState({
       if (!identity) return
 
       identity.$jazz.set("state", "processed")
-      identity.$jazz.set("result", undefined)
+      identity.$jazz.set("result", undefined as never)
     }
 
     navigation.setOptions({
       headerLeft: () => <HeaderLeft text="Back" onPress={resetResult} />,
-      headerRight: undefined,
+      headerRight: () => undefined,
     })
   }, [navigation, identity])
 
@@ -41,7 +41,7 @@ export default function IdentityState({
           Scientific name
         </Text>
         <Text size="lg" className="leading-tight">
-          {result?.scientificName}
+          {result ? result["scientificName"] : ""}
         </Text>
       </View>
 
@@ -50,7 +50,7 @@ export default function IdentityState({
           Genus
         </Text>
         <Text size="lg" className="leading-tight">
-          {result?.scientificGenusName}
+          {result ? result["scientificGenusName"] : ""}
         </Text>
       </View>
 
@@ -59,7 +59,7 @@ export default function IdentityState({
           Family
         </Text>
         <Text size="lg" className="leading-tight">
-          {result?.scientificFamilyName}
+          {result ? result["scientificFamilyName"] : ""}
         </Text>
       </View>
     </ScrollableScreenContainer>

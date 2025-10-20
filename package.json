@@ -8,12 +8,12 @@
     "lint": "pnpm -r run lint"
   },
   "devDependencies": {
-    "@eslint/js": "^9.37.0",
-    "@types/node": "^24.7.2",
+    "@eslint/js": "^9.38.0",
+    "@types/node": "^24.8.1",
     "eslint": "catalog:",
     "ts-node": "^10.9.2",
-    "typescript": "^5.9.3",
-    "typescript-eslint": "^8.46.0"
+    "typescript": "~5.9.3",
+    "typescript-eslint": "^8.46.1"
   },
   "dependencies": {
     "expo": "catalog:"

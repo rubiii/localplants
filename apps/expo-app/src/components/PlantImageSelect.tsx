@@ -122,7 +122,7 @@ function UploadState() {
   )
 }
 
-function ImageState({ plantImage }: { plantImage?: PlantImageType }) {
+function ImageState({ plantImage }: { plantImage?: PlantImageType | undefined }) {
   if (!plantImage?.image) return
 
   return (

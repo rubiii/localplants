@@ -1,6 +1,6 @@
 import config from "@/config"
 import "@/global.css"
-import { ThemeProvider } from "@/hooks/useTheme"
+import { ThemeProvider } from "@/lib/theme/ThemeProvider"
 import Navigation from "@/navigation/Navigation"
 import { fonts } from "@/theme"
 import "@bam.tech/react-native-image-resizer"

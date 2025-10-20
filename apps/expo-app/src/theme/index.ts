@@ -1,3 +1,4 @@
+import { themeColorSchemes } from "@localplants/theme"
 import fonts from "./fonts"
 export { fonts }
 
@@ -6,7 +7,7 @@ export {
   colorClasses,
   fontFamily,
   textSizeClasses,
-  type FontWeight,
+  type FontWeight
 } from "./utils"
 
 export type ThemeColors = {
@@ -44,27 +45,8 @@ export type FontSize =
   | "8xl"
   | "9xl"
 
+// Default themes using centralized color values from @localplants/theme
 export const defaultThemes: Record<string, ThemeColors> = {
-  light: {
-    background: "#eeeeee",
-    text: "#14532D",
-    secondaryText: "#737f92",
-    mutedText: "#a6afc0",
-    card: "#e6e6e6",
-    border: "#D1D5DB",
-    primary: "#059669",
-    success: "#10B981",
-    error: "#DC2626",
-  },
-  dark: {
-    background: "#131316",
-    text: "#F9FAFB",
-    secondaryText: "#9aa0ac",
-    mutedText: "#636871",
-    card: "#2e2e33",
-    border: "#3a3a3f",
-    primary: "#34D399",
-    success: "#22C55E",
-    error: "#EF4444",
-  },
+  light: themeColorSchemes.stone.light,
+  dark: themeColorSchemes.stone.dark,
 }

@@ -62,7 +62,7 @@ function CameraPermissions({
   status,
   configure,
 }: {
-  status?: PermissionResult
+  status?: PermissionResult | undefined
   configure: () => void
 }) {
   return (
@@ -93,7 +93,7 @@ function GalleryPermissions({
   status,
   configure,
 }: {
-  status?: PermissionResult
+  status?: PermissionResult | undefined
   configure: () => void
 }) {
   return (
@@ -125,7 +125,7 @@ const ConfigureButton = ({
   status,
 }: {
   configure: () => void
-  status?: PermissionResult
+  status?: PermissionResult | undefined
 }) => {
   if (status === "denied" || status === "blocked") {
     return (

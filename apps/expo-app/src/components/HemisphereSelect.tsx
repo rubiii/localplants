@@ -47,7 +47,7 @@ function Hemisphere({
   onPress,
   active,
 }: {
-  value?: HemisphereType
+  value?: HemisphereType | undefined
   title: string
   icon: string
   onPress: (value?: HemisphereType) => void

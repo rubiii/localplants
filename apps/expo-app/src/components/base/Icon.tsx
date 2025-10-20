@@ -36,8 +36,8 @@ type MaterialCommunityProps = {
 
 type BaseProps = {
   size: number
-  color?: ThemeColor
-  activeColor?: ThemeColor
+  color?: ThemeColor | undefined
+  activeColor?: ThemeColor | undefined
   className?: string
 }
 

@@ -35,7 +35,7 @@ type Props = (MaterialProps & BaseProps) | (MaterialCommunityProps & BaseProps)
 
 export default function IconButton({
   name,
-  community,
+  community = false,
   onPress,
   className,
   variant = "default",

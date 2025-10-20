@@ -3,12 +3,13 @@ packages:
   - packages/*
 
 catalog:
-  expo: 54.0.13
-  jazz-tools: ^0.18.25
-  eslint: ^9.37.0
+  eslint: ^9.38.0
+  expo: ~54.0.13
+  jazz-tools: ~0.18.27
 
 linkWorkspacePackages: true
-preferWorkspacePackages: true
 
 patchedDependencies:
-  "@bam.tech/react-native-image-resizer": patches/@bam.tech__react-native-image-resizer.patch
+  '@bam.tech/react-native-image-resizer': patches/@bam.tech__react-native-image-resizer.patch
+
+preferWorkspacePackages: true

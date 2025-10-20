@@ -8,11 +8,11 @@ import ScrollableScreenContainer from "@/components/ScrollableScreenContainer"
 import useNavigation from "@/hooks/useNavigation"
 import { createPlantImage } from "@localplants/jazz"
 import {
-  Plant,
-  PlantCollection,
-  PlantIdentity,
-  PlantImages,
-  type PlantImageType
+    Plant,
+    PlantCollection,
+    PlantIdentity,
+    PlantImages,
+    type PlantImageType
 } from "@localplants/jazz/schema"
 import { randomPlantName } from "@localplants/utils"
 import { type Hemisphere, type PlantSize } from "@localplants/utils/watering"
@@ -36,7 +36,7 @@ function HeaderLeft() {
   return <HeaderTextButton text="Cancel" onPress={() => navigation.goBack()} />
 }
 
-function HeaderRight({ onSave }: { onSave?: () => void }) {
+function HeaderRight({ onSave }: { onSave?: (() => void) | undefined }) {
   return (
     <HeaderTextButton
       text="Save"

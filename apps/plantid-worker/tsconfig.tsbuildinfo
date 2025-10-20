@@ -1,1 +1,0 @@
-{"root":["./src/config.ts","./src/logger.ts","./src/worker.ts","./src/lib/axioserrorhandling.ts","./src/lib/processexithandling.ts","./src/plantnet/index.ts","./src/plantnet/types.ts"],"version":"5.9.3"}

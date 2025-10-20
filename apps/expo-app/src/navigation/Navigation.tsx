@@ -1,5 +1,5 @@
-import useTheme from "@/hooks/useTheme"
 import { hexToRgb, luminance } from "@/lib/colorUtils"
+import { useThemeContext } from "@/lib/theme/ThemeProvider"
 import AcceptSharedPlantScreen, {
   routeOptions as acceptSharedPlantRouteOptions,
 } from "@/screens/AcceptSharedPlantScreen"
@@ -9,9 +9,7 @@ import AccountScreen, {
 import AuthScreen, {
   routeOptions as authRouteOptions,
 } from "@/screens/Account/AuthScreen"
-import CustomThemeScreen, {
-  routeOptions as customThemeRouteOptions,
-} from "@/screens/Account/CustomThemeScreen"
+
 import LoginScreen, {
   routeOptions as loginRouteOptions,
 } from "@/screens/Account/LoginScreen"
@@ -62,7 +60,7 @@ import Stack from "./Stack"
 const prefix = Linking.createURL("/")
 
 export default function Navigation({ skipWelcome }: { skipWelcome: boolean }) {
-  const { colors } = useTheme()
+  const { colors } = useThemeContext()
 
   const rootStackOptions: NativeStackNavigationOptions = {
     headerTintColor: colors.text,
@@ -136,11 +134,7 @@ export default function Navigation({ skipWelcome }: { skipWelcome: boolean }) {
             component={LoginScreen}
             options={loginRouteOptions}
           />
-          <Stack.Screen
-            name="CustomTheme"
-            component={CustomThemeScreen}
-            options={customThemeRouteOptions}
-          />
+
         </Stack.Group>
 
         {/* Plants modals */}

@@ -28,4 +28,5 @@ Plant care app for web, mobile and desktop build with [Expo](https://expo.dev), 
 ### Packages
 
 * [Jazz](./packages/jazz/README.md)
+* [Theme](./packages/theme/README.md)
 * [Utils](./packages/utils/README.md)

@@ -1,0 +1,21 @@
+{
+  "name": "@localplants/theme",
+  "description": "Platform-neutral theme management for Local Plants",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "lint": "tsc -b && eslint"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0 || ^19.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.0.0",
+    "eslint": "catalog:",
+    "typescript": "~5.9.2"
+  }
+}

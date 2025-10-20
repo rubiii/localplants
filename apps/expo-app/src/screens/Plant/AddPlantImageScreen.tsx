@@ -5,9 +5,9 @@ import ScrollableScreenContainer from "@/components/ScrollableScreenContainer"
 import { TextField } from "@/components/base"
 import useNavigation from "@/hooks/useNavigation"
 import {
-  Plant,
-  PlantImage,
-  type PlantImageType,
+    Plant,
+    PlantImage,
+    type PlantImageType,
 } from "@localplants/jazz/schema"
 import { type NativeStackNavigationOptions } from "@react-navigation/native-stack"
 import { Group } from "jazz-tools"
@@ -30,7 +30,7 @@ function HeaderLeft() {
   return <HeaderTextButton text="Cancel" onPress={() => navigation.goBack()} />
 }
 
-function HeaderRight({ onSave }: { onSave?: () => void }) {
+function HeaderRight({ onSave }: { onSave?: (() => void) | undefined }) {
   return (
     <HeaderTextButton
       text="Save"

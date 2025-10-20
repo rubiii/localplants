@@ -26,7 +26,7 @@ function Emote({
 }: {
   name: string
   onPress: (name: string) => void
-  activeEmote?: string
+  activeEmote?: string | undefined
 }) {
   return (
     <Pressable onPressIn={() => onPress(name)}>

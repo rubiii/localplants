@@ -1,7 +1,7 @@
 import { Icon, SmallButton, Text, Title } from "@/components/base"
 import ScrollableScreenContainer from "@/components/ScrollableScreenContainer"
 import useNavigation, { type RootStackParamList } from "@/hooks/useNavigation"
-import useTheme from "@/hooks/useTheme"
+import { useThemeContext } from "@/lib/theme/ThemeProvider"
 import { Zoomable } from "@likashefqet/react-native-image-zoom"
 import {
   Plant,
@@ -180,12 +180,12 @@ function Identity({
 
   const wateringRecommendation = collection?.hemisphere
     ? getWateringRecommendation({
-        species: result.scientificName,
-        genus: result.scientificGenusName,
-        family: result.scientificFamilyName,
-        hemisphere: collection.hemisphere,
-        size: plant.size,
-      })
+      species: result.scientificName,
+      genus: result.scientificGenusName,
+      family: result.scientificFamilyName,
+      hemisphere: collection.hemisphere,
+      size: plant.size,
+    })
     : null
 
   return (
@@ -321,7 +321,7 @@ function PlantImageView({ plantImage }: { plantImage: PlantImageType }) {
 }
 
 function Gradient() {
-  const { colors } = useTheme()
+  const { colors } = useThemeContext()
 
   return (
     <LinearGradient

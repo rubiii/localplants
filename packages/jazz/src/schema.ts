@@ -111,32 +111,32 @@ const AccountProfile = co.map({
 })
 export type AccountProfileType = co.loaded<typeof AccountProfile>
 
-export const MyAppAccount = co.account({
-  root: AccountRoot,
-  profile: AccountProfile,
-})
+export const MyAppAccount = co
+  .account({
+    root: AccountRoot,
+    profile: AccountProfile,
+  })
+  .withMigration((account) => {
+    if (!account.$jazz.has("root")) {
+      const collectionOwner = Group.create()
+      const plantsOwner = Group.create()
+      plantsOwner.addMember(collectionOwner)
 
-MyAppAccount.withMigration((account) => {
-  if (!account.$jazz.has("root")) {
-    const collectionOwner = Group.create()
-    const plantsOwner = Group.create()
-    plantsOwner.addMember(collectionOwner)
+      const firstCollection = PlantCollection.create(
+        {
+          name: "Your plants",
+          hemisphere: "north",
+          plants: Plants.create([], plantsOwner),
+        },
+        collectionOwner
+      )
 
-    const firstCollection = PlantCollection.create(
-      {
-        name: "Your plants",
-        hemisphere: "north",
-        plants: Plants.create([], plantsOwner),
-      },
-      collectionOwner
-    )
-
-    account.$jazz.set("root", {
-      collections: [firstCollection],
-    })
-    account.$jazz.set("profile", { name: "Anonymous Plant Owner" })
-  }
-})
+      account.$jazz.set("root", {
+        collections: [firstCollection],
+      })
+      account.$jazz.set("profile", { name: "Anonymous Plant Owner" })
+    }
+  })
 
 export const PlantIdWorkerAccount = co
   .account({

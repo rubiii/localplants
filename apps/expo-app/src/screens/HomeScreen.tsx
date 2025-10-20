@@ -172,14 +172,3 @@ function PlantItem({
     </Pressable>
   )
 }
-
-function PlantItemSkeleton() {
-  return (
-    <View className="w-4/12 h-[140] p-1.5 aspect-square">
-      <View
-        className="w-full h-full animate-pulse bg-[--card]"
-        style={{ borderRadius: 8 }}
-      ></View>
-    </View>
-  )
-}

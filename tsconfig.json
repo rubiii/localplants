@@ -5,6 +5,7 @@
     { "path": "./apps/tauri-app" },
     { "path": "./apps/plantid-worker" },
     { "path": "./packages/jazz" },
+    { "path": "./packages/theme" },
     { "path": "./packages/utils" }
   ]
 }

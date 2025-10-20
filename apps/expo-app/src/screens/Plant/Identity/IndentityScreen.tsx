@@ -78,7 +78,7 @@ export default function PlantIdentityScreen() {
 
     navigation.setOptions({
       headerLeft: () => <HeaderLeft text="Close" onPress={close} />,
-      headerRight: undefined,
+      headerRight: () => undefined,
     })
   }, [navigation, plant?.identity.state])
 

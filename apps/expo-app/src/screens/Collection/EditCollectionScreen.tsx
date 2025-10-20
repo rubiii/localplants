@@ -23,7 +23,7 @@ function HeaderLeft() {
   return <HeaderTextButton text="Cancel" onPress={() => navigation.goBack()} />
 }
 
-function HeaderRight({ onSave }: { onSave?: () => void }) {
+function HeaderRight({ onSave }: { onSave?: (() => void) | undefined }) {
   return (
     <HeaderTextButton
       text="Save"
