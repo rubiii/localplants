@@ -4,15 +4,13 @@ import PlantImageSelect from "@/components/PlantImageSelect"
 import ScrollableScreenContainer from "@/components/ScrollableScreenContainer"
 import { TextField } from "@/components/base"
 import useNavigation from "@/hooks/useNavigation"
+import { createPlantImage } from "@localplants/jazz"
 import {
-    Plant,
-    PlantImage,
-    type PlantImageType,
+  Plant,
+  type PlantImageType
 } from "@localplants/jazz/schema"
 import { type NativeStackNavigationOptions } from "@react-navigation/native-stack"
-import { Group } from "jazz-tools"
 import { useCoState } from "jazz-tools/expo"
-import { createImage } from "jazz-tools/media"
 import { useEffect, useState } from "react"
 import { Platform } from "react-native"
 import { type Asset } from "react-native-image-picker"
@@ -52,40 +50,18 @@ export default function AddPlantImageScreen() {
 
   const plant = useCoState(Plant, plantId, { resolve: { images: true } })
 
-  const createPlantImage = async (asset: Asset) => {
-    if (!plant) return
+  const createPlantImageFromAsset = async (asset: Asset) => {
+    if (!asset.uri) return
 
-    const imageOwner = Group.create()
-    imageOwner.addMember(plant.$jazz.owner)
-
-    console.debug("[createPlantImage] creating image")
-    const image = await createImage(asset.uri as string, {
-      owner: imageOwner,
-      progressive: true,
-      placeholder: "blur",
-      maxSize: 2400,
+    const newPlantImage = await createPlantImage({
+      uri: asset.uri,
+      timestamp: asset.timestamp,
     })
-    console.debug("[createPlantImage] created image")
-
-    const fileCreatedAt = asset.timestamp
-      ? new Date(asset.timestamp).toISOString()
-      : undefined
-
-    const plantImageOwner = Group.create()
-    plantImageOwner.addMember(plant.$jazz.owner)
-    const newPlantImage = PlantImage.create(
-      {
-        image,
-        assetUri: asset.uri,
-        fileCreatedAt,
-      },
-      plantImageOwner
-    )
 
     setPlantImage(newPlantImage)
   }
 
-  const savePlantImage = () => {
+  const save = () => {
     if (!plant || !valid) return
 
     plantImage.$jazz.set("emote", emote)
@@ -99,7 +75,7 @@ export default function AddPlantImageScreen() {
   useEffect(() => {
     navigation.setOptions({
       headerRight: () => (
-        <HeaderRight onSave={valid ? savePlantImage : undefined} />
+        <HeaderRight onSave={valid ? save : undefined} />
       ),
     })
   })
@@ -108,7 +84,7 @@ export default function AddPlantImageScreen() {
     <ScrollableScreenContainer className="px-4 py-6 gap-8">
       <PlantImageSelect
         plantImage={plantImage}
-        createPlantImage={createPlantImage}
+        createPlantImage={createPlantImageFromAsset}
       />
 
       <EmoteSelect value={emote} setValue={setEmote} />
