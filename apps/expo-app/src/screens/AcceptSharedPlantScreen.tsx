@@ -1,14 +1,11 @@
 import { Button, Text } from "@/components/base"
 import ScrollableScreenContainer from "@/components/ScrollableScreenContainer"
 import useNavigation from "@/hooks/useNavigation"
+import { acceptPlantInvite } from "@localplants/jazz"
 import {
-  MyAppAccount,
-  Plant,
-  PlantCollection,
-  type PlantType,
+  MyAppAccount
 } from "@localplants/jazz/schema"
 import { type NativeStackNavigationOptions } from "@react-navigation/native-stack"
-import { Group } from "jazz-tools"
 import { useAccount } from "jazz-tools/expo"
 import { View } from "react-native"
 
@@ -29,43 +26,11 @@ export default function AcceptSharedPlantScreen() {
   const acceptInvite = async () => {
     if (!me) return
 
-    let plant: PlantType | null
-    try {
-      plant = await me.acceptInvite(valueID, inviteSecret, Plant)
-    } catch (error) {
-      console.error("Failed to accept invite", error)
+    const result = await acceptPlantInvite({ me, valueID, inviteSecret, sharerID, sharerName })
+    if (!result) {
+      // TODO: handle invite problem?
       navigation.goBack()
       return
-    }
-
-    if (!plant) {
-      console.debug("Got no plant for invite", { valueID, inviteSecret })
-      navigation.goBack()
-      return
-    }
-
-    const sharerCollection = me.root.collections.find(
-      (collection) => collection.sharedBy?.accountID === sharerID
-    )
-
-    if (sharerCollection) {
-      sharerCollection.plants.$jazz.unshift(plant)
-    } else {
-      const collection = PlantCollection.create(
-        {
-          name: `Shared by ${sharerName || sharerID}`,
-          // TODO: get hemisphere from sender
-          hemisphere: "north",
-          plants: [plant],
-          sharedBy: {
-            name: sharerName,
-            accountID: sharerID,
-            sharedAt: new Date().toISOString(),
-          },
-        },
-        Group.create()
-      )
-      me.root.collections.$jazz.push(collection)
     }
 
     navigation.goBack()
