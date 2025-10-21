@@ -5,6 +5,7 @@ import useNavigation from "@/hooks/useNavigation"
 import { scaleToFit } from "@/lib/imageUtils"
 import {
   MyAppAccount,
+  Plant,
   PlantCollection,
   type PlantType,
 } from "@localplants/jazz/schema"
@@ -13,6 +14,7 @@ import { FlashList } from "@shopify/flash-list/src"
 import * as Haptics from "expo-haptics"
 import { Image, useAccount, useCoState } from "jazz-tools/expo"
 import { Pressable, View } from "react-native"
+import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated'
 
 export const routeOptions: NativeStackNavigationOptions = {
   title: "Your Plants",
@@ -61,7 +63,7 @@ function PlantCollectionView({ collectionId }: { collectionId: string }) {
   const collection = useCoState(PlantCollection, collectionId, {
     resolve: {
       sharedBy: true,
-      plants: { $each: { primaryImage: { image: true } } },
+      plants: { $each: true },
     },
   })
 
@@ -100,75 +102,103 @@ function PlantCollectionView({ collectionId }: { collectionId: string }) {
     navigation.navigate("AddPlant", { collectionId })
   }
 
+  const gap = 8
+  const numCols = 2
+  const itemGap = (gap * (numCols - 1)) / numCols
+
   return (
     <View className="mb-12 gap-3">
-      <Pressable onPress={openCollection} className="group">
-        <Title size="6xl" weight={900} activeColor="primary">
-          {collection?.name || "…"}
-          <View className="pl-2">
-            <IconButton
-              onPress={openAddPlant}
-              name="plus"
-              community
-              className="-mb-[2]"
-            />
-          </View>
-        </Title>
-      </Pressable>
+      <View className="flex flex-row items-start">
+        <Pressable onPress={openCollection} className="group flex-1 flex-shrink">
+          <Title size="5xl" weight={900} activeColor="primary">
+            {collection?.name || "…"}
+          </Title>
+        </Pressable>
+        <View className="pl-2 mt-1.5 flex-shrink-0">
+          <IconButton onPress={openAddPlant} name="plus" community />
+        </View>
+      </View>
 
       <FlashList
         data={collection?.plants}
         keyExtractor={(item, index) => item?.$jazz.id || String(index)}
-        numColumns={2}
-        className="-m-1"
-        style={{ overflow: "hidden" }}
-        renderItem={({ item }) =>
-          item ? (
-            <PlantItem
-              plant={item}
-              onPress={openPlant}
-              onLongPress={openPlantImageModal}
-            />
-          ) : null
-        }
+        numColumns={numCols}
+        renderItem={({ item, index }) => {
+          const marginLeft = ((index % numCols) / (numCols - 1)) * itemGap
+          const marginRight = itemGap - marginLeft
+
+          return (
+            <View
+              style={{
+                flexGrow: 1,
+                marginLeft,
+                marginRight,
+                borderRadius: 8,
+                overflow: "hidden"
+              }}
+            >
+              <PlantListItem
+                plantId={item?.$jazz.id}
+                onPress={openPlant}
+                onLongPress={openPlantImageModal}
+              />
+            </View>
+          )
+        }}
       />
     </View>
   )
 }
 
-function PlantItem({
-  plant,
+function PlantListItem({
+  plantId,
   onPress,
   onLongPress,
 }: {
-  plant: PlantType
+  plantId?: string
   onPress: (plant: PlantType) => void
   onLongPress: (plant: PlantType) => void
 }) {
-  if (!plant.primaryImage?.image) return
+  const opacity = useSharedValue(0)
+  const plant = useCoState(Plant, plantId, {
+    resolve: { primaryImage: { image: true } },
+  })
 
-  const { width, height } = scaleToFit(
-    plant.primaryImage.image.originalSize,
-    500
-  )
+  const animatedStyle = useAnimatedStyle(() => {
+    return { opacity: opacity.value }
+  })
+
+  const fadeIn = () => {
+    opacity.value = withTiming(1, { duration: 1000 })
+  }
+
+  const { width, height } = plant
+    ? scaleToFit(plant.primaryImage.image.originalSize, 500)
+    : { width: 500, height: 500 }
 
   return (
     <Pressable
-      onPress={() => onPress(plant)}
-      onLongPress={() => onLongPress(plant)}
-      className="p-1.5 aspect-square"
+      onPress={() => plant && onPress(plant)}
+      onLongPress={() => plant && onLongPress(plant)}
+      className="aspect-square relative"
     >
-      <Image
-        imageId={plant.primaryImage.image.$jazz.id}
-        resizeMode="cover"
-        style={{
-          width: "100%",
-          height: "100%",
-          borderRadius: 8,
-        }}
-        height={width}
-        width={height}
-      />
-    </Pressable>
+      <Animated.View style={animatedStyle} className="absolute w-full h-full z-10">
+        {plant ? (
+          <Image
+            imageId={plant.primaryImage.image.$jazz.id}
+            resizeMode="cover"
+            style={{
+              width: "100%",
+              height: "100%",
+            }}
+            height={height}
+            width={width}
+            onLoadEnd={fadeIn}
+          />
+        ) : null}
+      </Animated.View>
+
+      <View className="w-full h-full animate-pulse bg-[--card]" />
+    </Pressable >
   )
 }
