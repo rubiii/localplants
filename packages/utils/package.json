@@ -11,6 +11,9 @@
   "scripts": {
     "lint": "tsc -b && eslint"
   },
+  "dependencies": {
+    "@localplants/jazz": "*"
+  },
   "devDependencies": {
     "eslint": "catalog:"
   }

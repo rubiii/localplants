@@ -3,7 +3,8 @@ import HemisphereSelect from "@/components/HemisphereSelect"
 import ScrollableScreenContainer from "@/components/ScrollableScreenContainer"
 import { TextField } from "@/components/base"
 import useNavigation from "@/hooks/useNavigation"
-import { MyAppAccount, PlantCollection } from "@localplants/jazz/schema"
+import { createCollection } from "@localplants/jazz"
+import { MyAppAccount } from "@localplants/jazz/schema"
 import { type Hemisphere } from "@localplants/utils/watering"
 import { type NativeStackNavigationOptions } from "@react-navigation/native-stack"
 import { useAccount } from "jazz-tools/expo"
@@ -45,23 +46,17 @@ export default function AddCollectionScreen() {
   const [hemisphere, setHemisphere] = useState<Hemisphere | undefined>()
   const valid = !!(name && hemisphere)
 
-  const createCollection = () => {
+  const save = () => {
     if (!valid || !me) return
 
-    const collection = PlantCollection.create({
-      name: name.trim(),
-      hemisphere,
-      plants: [],
-    })
-    me.root.collections.$jazz.unshift(collection)
-
+    createCollection({ name, hemisphere, accountRoot: me.root })
     navigation.goBack()
   }
 
   useEffect(() => {
     navigation.setOptions({
       headerRight: () => (
-        <HeaderRight onSave={valid ? createCollection : undefined} />
+        <HeaderRight onSave={valid ? save : undefined} />
       ),
     })
   })

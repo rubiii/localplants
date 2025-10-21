@@ -1,4 +1,8 @@
+
 import { co, Group, z } from "jazz-tools"
+
+const HemisphereEnum = z.enum(["north", "south"])
+export type Hemisphere = z.infer<typeof HemisphereEnum>
 
 export const IdentityResultError = co.map({
   status: z.number(),
@@ -66,7 +70,7 @@ export type PlantImagesType = co.loaded<typeof PlantImages>
 
 export const Plant = co.map({
   name: z.string(),
-  hemisphere: z.optional(z.enum(["north", "south"])),
+  hemisphere: z.optional(HemisphereEnum),
   size: z.enum(["xs", "sm", "md", "lg"]),
   aquiredAt: z.optional(z.date()),
   diedAt: z.optional(z.date()),
@@ -87,7 +91,7 @@ const SharedBy = co.map({
 
 export const PlantCollection = co.map({
   name: z.string(),
-  hemisphere: z.enum(["north", "south"]),
+  hemisphere: HemisphereEnum,
   plants: Plants,
   sharedBy: co.optional(SharedBy),
 })

@@ -29,7 +29,7 @@ export interface WateringRecommendation {
   wateringGroup?: WateringGroup
 }
 
-export type Hemisphere = "north" | "south"
+export { type Hemisphere } from "@localplants/jazz/schema"
 
 export type PlantSize = "xs" | "sm" | "md" | "lg"
 export interface PlantSizeSpec {
