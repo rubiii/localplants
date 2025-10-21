@@ -29,9 +29,11 @@ export interface WateringRecommendation {
   wateringGroup?: WateringGroup
 }
 
+import { type PlantSize } from "@localplants/jazz/schema"
+export { type PlantSize }
+
 export { type Hemisphere } from "@localplants/jazz/schema"
 
-export type PlantSize = "xs" | "sm" | "md" | "lg"
 export interface PlantSizeSpec {
   id: PlantSize
   diameterRangeCm: [number, number] // inclusive range in cm

@@ -4,6 +4,9 @@ import { co, Group, z } from "jazz-tools"
 const HemisphereEnum = z.enum(["north", "south"])
 export type Hemisphere = z.infer<typeof HemisphereEnum>
 
+const PlantSizeEnum = z.enum(["xs", "sm", "md", "lg"])
+export type PlantSize = z.infer<typeof PlantSizeEnum>
+
 export const IdentityResultError = co.map({
   status: z.number(),
   statusText: z.string(),
@@ -71,7 +74,7 @@ export type PlantImagesType = co.loaded<typeof PlantImages>
 export const Plant = co.map({
   name: z.string(),
   hemisphere: z.optional(HemisphereEnum),
-  size: z.enum(["xs", "sm", "md", "lg"]),
+  size: PlantSizeEnum,
   aquiredAt: z.optional(z.date()),
   diedAt: z.optional(z.date()),
   primaryImage: PlantImage,

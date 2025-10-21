@@ -6,18 +6,14 @@ import PlantImageSelect from "@/components/PlantImageSelect"
 import PlantSizeSelect from "@/components/PlantSizeSelect"
 import ScrollableScreenContainer from "@/components/ScrollableScreenContainer"
 import useNavigation from "@/hooks/useNavigation"
-import { createPlantImage } from "@localplants/jazz"
+import { createPlant, createPlantImage } from "@localplants/jazz"
 import {
-    Plant,
-    PlantCollection,
-    PlantIdentity,
-    PlantImages,
-    type PlantImageType
+  PlantCollection,
+  type PlantImageType
 } from "@localplants/jazz/schema"
 import { randomPlantName } from "@localplants/utils"
 import { type Hemisphere, type PlantSize } from "@localplants/utils/watering"
 import { type NativeStackNavigationOptions } from "@react-navigation/native-stack"
-import { Group } from "jazz-tools"
 import { useCoState } from "jazz-tools/expo"
 import { useEffect, useState } from "react"
 import { Platform, Pressable } from "react-native"
@@ -54,7 +50,7 @@ export default function AddPlantScreen() {
   const [size, setSize] = useState<PlantSize>("md")
   const [emote, setEmote] = useState<string>()
   const [note, setNote] = useState<string>()
-  const valid = !!(plantImage && name && size)
+  const valid = !!(plantImage?.image && name && size && hemisphere)
 
   const { navigation, route } = useNavigation<"AddPlant">()
   const { collectionId } = route.params
@@ -74,48 +70,25 @@ export default function AddPlantScreen() {
     setPlantImage(newPlantImage)
   }
 
-  const createPlant = () => {
-    if (!collection || !plantImage?.image) return
+  const save = () => {
+    if (!collection || !valid) return
 
-    const plantOwner = Group.create()
-
-    // Allow members of collection to access all plants
-    plantOwner.addMember(collection.$jazz.owner)
-
-    const plantImages = PlantImages.create([plantImage], Group.create())
-    const identity = PlantIdentity.create({ state: "none" }, Group.create())
-
-    // Add plant owner to subvalues
-    plantImage.$jazz.owner.addMember(plantOwner)
-    plantImage.image.$jazz.owner.addMember(plantOwner)
-    plantImages.$jazz.owner.addMember(plantOwner)
-    identity.$jazz.owner.addMember(plantOwner)
-
-    const plant = Plant.create(
-      {
-        name: name as string,
-        hemisphere: hemisphere,
-        size: size,
-        primaryImage: plantImage,
-        images: plantImages,
-        identity: identity,
-      },
-      plantOwner
-    )
-
-    plant.$jazz.set("size", size)
-    plant.$jazz.set("hemisphere", hemisphere)
-    plantImage.$jazz.set("emote", emote)
-    plantImage.$jazz.set("note", note)
-    collection.plants.$jazz.unshift(plant)
-
+    createPlant({
+      name,
+      hemisphere,
+      size,
+      emote,
+      note,
+      collection,
+      plantImage
+    })
     navigation.goBack()
   }
 
   useEffect(() => {
     navigation.setOptions({
       headerRight: () => (
-        <HeaderRight onSave={valid ? createPlant : undefined} />
+        <HeaderRight onSave={valid ? save : undefined} />
       ),
     })
   })

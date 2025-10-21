@@ -9,9 +9,7 @@ export default function createCollection({
   name: string
   hemisphere: "north" | "south"
 }) {
-  if (!accountRoot.collections) {
-    throw new Error("Expect account collections to be loaded")
-  }
+  if (!accountRoot.collections) throw new Error("account.root.collections must be loaded")
 
   const collection = PlantCollection.create({
     name: name.trim(),
@@ -19,4 +17,6 @@ export default function createCollection({
     plants: [],
   })
   accountRoot.collections.$jazz.unshift(collection)
+
+  return collection
 }
